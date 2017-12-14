@@ -10,7 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "callbackify": "^1.1.0",
-    "postmsg-rpc": "^2.1.1"
+    "postmsg-rpc": "^2.1.1",
+    "realistic-structured-clone": "^1.0.1"
   },
   "devDependencies": {
     "async": "^2.6.0",
