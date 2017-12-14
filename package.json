@@ -1,0 +1,25 @@
+{
+  "name": "ipfs-postmsg-proxy",
+  "version": "0.0.0",
+  "description": "Proxy to an IPFS over window.postMessage",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "standard && mocha"
+  },
+  "author": "Alan Shaw",
+  "license": "MIT",
+  "dependencies": {
+    "callbackify": "^1.1.0",
+    "postmsg-rpc": "^2.1.1"
+  },
+  "devDependencies": {
+    "async": "^2.6.0",
+    "hat": "0.0.3",
+    "interface-ipfs-core": "^0.36.15",
+    "ipfs": "github:ipfs/js-ipfs#v0.27.4",
+    "ipfs-repo": "^0.18.5",
+    "mocha": "^4.0.1",
+    "rimraf": "^2.6.2",
+    "standard": "^10.0.3"
+  }
+}
