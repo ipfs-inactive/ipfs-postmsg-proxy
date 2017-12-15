@@ -1,9 +1,7 @@
 const test = require('interface-ipfs-core')
-const createIpfsClient = require('../lib/client')
-const createIpfsServer = require('../lib/server')
+const { createProxyClient, createProxyServer, closeProxyServer } = require('../lib')
 const IpfsFactory = require('./helpers/ipfs-factory-instance')
 const fakeWindows = require('./helpers/fake-windows')
-const { closeServer } = require('./helpers/server')
 
 let factory
 
@@ -26,7 +24,7 @@ const common = {
 
         const [ serverWin, clientWin ] = fakeWindows()
 
-        const ipfsServer = createIpfsServer(() => ipfs, {
+        const ipfsServer = createProxyServer(() => ipfs, {
           addListener: serverWin.addEventListener,
           removeListener: serverWin.removeEventListener,
           postMessage: serverWin.postMessage
@@ -34,7 +32,7 @@ const common = {
 
         ipfsServers.push(ipfsServer)
 
-        const ipfsClient = createIpfsClient({
+        const ipfsClient = createProxyClient({
           addListener: clientWin.addEventListener,
           removeListener: clientWin.removeEventListener,
           postMessage: clientWin.postMessage
@@ -47,7 +45,7 @@ const common = {
     const dismantle = factory.dismantle
 
     factory.dismantle = (cb) => {
-      ipfsServers.forEach(closeServer)
+      ipfsServers.forEach(closeProxyServer)
       dismantle.call(factory, cb)
     }
 

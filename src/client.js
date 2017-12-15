@@ -1,7 +1,7 @@
-const { caller } = require('postmsg-rpc')
-const callbackify = require('callbackify')
+import { caller } from 'postmsg-rpc'
+import callbackify from 'callbackify'
 
-module.exports = (opts) => {
+export default (opts) => {
   const ipfs = {
     id: callbackify(caller('ipfs.id', opts)),
     version: callbackify(caller('ipfs.version', opts)),

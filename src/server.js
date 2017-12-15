@@ -1,6 +1,6 @@
-const { expose } = require('postmsg-rpc')
+import { expose } from 'postmsg-rpc'
 
-module.exports = (getIpfs, opts) => {
+export default (getIpfs, opts) => {
   return {
     id: expose('ipfs.id', () => getIpfs().id(), opts),
     version: expose('ipfs.version', () => getIpfs().version(), opts),
@@ -70,4 +70,14 @@ module.exports = (getIpfs, opts) => {
       disconnect: expose('ipfs.swarm.disconnect', (...args) => getIpfs().swarm.disconnect(...args), opts)
     }
   }
+}
+
+export function closeProxyServer (obj) {
+  Object.keys(obj).forEach((k) => {
+    if (obj[k].close) {
+      obj[k].close()
+    } else {
+      closeProxyServer(obj[k])
+    }
+  })
 }
