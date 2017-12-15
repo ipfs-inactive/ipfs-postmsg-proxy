@@ -31,7 +31,12 @@ export default (opts) => {
       add: callbackify.variadic(caller('ipfs.files.add', opts)),
       // addReadableStream: callbackify.variadic(caller('ipfs.files.addReadableStream', opts)),
       // addPullStream: callbackify.variadic(caller('ipfs.files.addPullStream', opts)),
-      cat: callbackify.variadic(caller('ipfs.files.cat', opts)),
+      cat: callbackify.variadic(
+        postCall(
+          caller('ipfs.files.cat', opts),
+          (buf) => Buffer.from(buf)
+        )
+      ),
       // catReadableStream: callbackify.variadic(caller('ipfs.files.catReadableStream', opts)),
       // catPullStream: callbackify.variadic(caller('ipfs.files.catPullStream', opts)),
       get: callbackify.variadic(caller('ipfs.files.get', opts))
@@ -84,4 +89,14 @@ export default (opts) => {
   ipfs.add = ipfs.files.add
 
   return ipfs
+}
+
+// Alter the arguments before they are sent to the server
+// function preCall (preFn, callFn) {
+//   return (...args) => callFn(...preFn(args))
+// }
+
+// Alter the repsonse before it is passed back to the caller
+function postCall (callFn, postFn) {
+  return (...args) => callFn().then((res) => postFn(res))
 }

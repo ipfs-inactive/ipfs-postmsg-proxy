@@ -1,4 +1,4 @@
-const structuredClone = o => o // require('realistic-structured-clone')
+const structuredClone = require('realistic-structured-clone')
 
 module.exports = function fakeWindows () {
   const win0 = {

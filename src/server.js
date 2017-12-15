@@ -1,4 +1,5 @@
 import { expose } from 'postmsg-rpc'
+import isTypedArray from 'is-typedarray'
 
 export default (getIpfs, opts) => {
   return {
@@ -27,7 +28,14 @@ export default (getIpfs, opts) => {
       query: expose('ipfs.dht.query', (...args) => getIpfs().dht.query(...args), opts)
     },
     files: {
-      add: expose('ipfs.files.add', (...args) => getIpfs().files.add(...args), opts),
+      add: expose('ipfs.files.add', preCall(
+        (...args) => {
+          // Structured clone converts Buffer to Uint8Array, convert back to buffer
+          args[0] = isTypedArray(args[0]) ? Buffer.from(args[0]) : args[0]
+          return args
+        },
+        (...args) => getIpfs().files.add(...args)
+      ), opts),
       cat: expose('ipfs.files.cat', (...args) => getIpfs().files.cat(...args), opts),
       get: expose('ipfs.files.get', (...args) => getIpfs().files.get(...args), opts)
     },
@@ -80,4 +88,9 @@ export function closeProxyServer (obj) {
       closeProxyServer(obj[k])
     }
   })
+}
+
+// Alter the arguments before they are passed to IPFS
+function preCall (preFn, callFn) {
+  return (...args) => callFn(...preFn(...args))
 }
