@@ -31,5 +31,24 @@
     "realistic-structured-clone": "^1.0.1",
     "rimraf": "^2.6.2",
     "standard": "^10.0.3"
-  }
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tableflip/ipfs-postmsg-proxy.git"
+  },
+  "keywords": [
+    "IPFS",
+    "postMessage",
+    "window.postMessage",
+    "proxy",
+    "rpc"
+  ],
+  "bugs": {
+    "url": "https://github.com/tableflip/ipfs-postmsg-proxy/issues"
+  },
+  "homepage": "https://github.com/tableflip/ipfs-postmsg-proxy#readme"
 }
