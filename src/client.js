@@ -98,5 +98,5 @@ export default (opts) => {
 
 // Alter the repsonse before it is passed back to the caller
 function postCall (callFn, postFn) {
-  return (...args) => callFn().then((res) => postFn(res))
+  return (...args) => callFn(...args).then((res) => postFn(res))
 }
