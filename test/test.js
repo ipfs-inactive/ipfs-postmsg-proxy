@@ -1,6 +1,6 @@
 const test = require('interface-ipfs-core')
-const createIpfsClient = require('../src/client')
-const createIpfsServer = require('../src/server')
+const createIpfsClient = require('../lib/client')
+const createIpfsServer = require('../lib/server')
 const IpfsFactory = require('./helpers/ipfs-factory-instance')
 const fakeWindows = require('./helpers/fake-windows')
 const { closeServer } = require('./helpers/server')
