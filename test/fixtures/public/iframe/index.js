@@ -25,7 +25,7 @@ const Actions = {
     log('start', opts)
     ipfs = await getIpfs(opts)
     proxy = createProxyServer(() => ipfs, {
-      postMessage: (msg, origin) => window.parent.postMessage(msg, origin)
+      postMessage: window.parent.postMessage.bind(window.parent)
     })
 
     window.parent.postMessage({ sender, action: 'started' }, '*')

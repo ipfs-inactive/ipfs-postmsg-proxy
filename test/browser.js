@@ -28,25 +28,24 @@ const common = {
             console.log('SERVER: client is ready')
             iframe.contentWindow.postMessage({
               sender: 'ipfs-postmsg-proxy:test:server',
-              action: 'start',
-              args
+              action: 'start'
             }, '*')
           },
           started () {
             console.log('SERVER: client ipfs is started')
             cb(null, createProxyClient({
-              postMessage: (msg, origin) => iframe.contentWindow.postMessage(msg, origin)
+              postMessage: iframe.contentWindow.postMessage.bind(iframe.contentWindow)
             }))
           },
-          log (msg) {
-            console.log('CLIENT: ' + msg)
+          log () {
+            console.log.apply(console, ['CLIENT:'].concat(Array.from(arguments)))
           }
         }
 
         window.addEventListener('message', onMessage)
 
         const iframe = document.createElement('iframe')
-        iframe.src = 'iframe/index.html'
+        iframe.src = '/base/test/fixtures/public/iframe/index.html'
         document.body.appendChild(iframe)
 
         contexts.push({ iframe, onMessage })
