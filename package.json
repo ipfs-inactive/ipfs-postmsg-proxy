@@ -10,9 +10,12 @@
     "watch:js": "babel src --watch --out-dir lib",
     "test": "run-s build lint test:*",
     "test:node": "mocha test/node.js",
-    "test:browser": "run-s test:browser:*",
+    "test:browser": "run-s test:browser:build test:browser:run",
     "test:browser:build": "browserify test/fixtures/public/iframe/index.js -o test/fixtures/public/iframe/bundle.js",
-    "test:browser:run": "karma start --browsers Chrome",
+    "test:browser:run": "karma start --browsers Chrome --single-run",
+    "test:browser:watch": "npm-run-all test:browser:build --parallel test:browser:watch:*",
+    "test:browser:watch:build": "watchify test/fixtures/public/iframe/index.js -o test/fixtures/public/iframe/bundle.js -v",
+    "test:browser:watch:run": "karma start --browsers Chrome",
     "lint": "standard",
     "clean": "rm -rf lib/**",
     "prepublishOnly": "run-s build"
@@ -21,8 +24,11 @@
   "license": "MIT",
   "dependencies": {
     "callbackify": "^1.1.0",
+    "cids": "^0.5.2",
+    "ipfs-block": "^0.6.1",
     "is-typedarray": "^1.0.0",
-    "postmsg-rpc": "^2.1.1"
+    "postmsg-rpc": "^2.1.1",
+    "realistic-structured-clone": "^1.0.1"
   },
   "devDependencies": {
     "async": "^2.6.0",

@@ -16,6 +16,12 @@ module.exports = (config) => {
     },
     browserify: {
       debug: true
+    },
+    client: {
+      mocha: {
+        // change Karma's debug.html to the mocha web reporter
+        reporter: 'html'
+      }
     }
   })
 }

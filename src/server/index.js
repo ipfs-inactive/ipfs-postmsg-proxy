@@ -1,19 +1,15 @@
 import { expose } from 'postmsg-rpc'
 import isTypedArray from 'is-typedarray'
+import { preCall } from '../fn-call'
+import createBlock from './block'
+import createConfig from './config'
 
 export default (getIpfs, opts) => {
   return {
     id: expose('ipfs.id', () => getIpfs().id(), opts),
     version: expose('ipfs.version', () => getIpfs().version(), opts),
-    block: {
-      put: expose('ipfs.block.put', (...args) => getIpfs().block.put(...args), opts),
-      get: expose('ipfs.block.get', (...args) => getIpfs().block.get(...args), opts),
-      stat: expose('ipfs.block.stat', (...args) => getIpfs().block.stat(...args), opts)
-    },
-    config: {
-      set: expose('ipfs.config.set', (...args) => getIpfs().config.set(...args), opts),
-      get: expose('ipfs.config.get', (...args) => getIpfs().config.get(...args), opts)
-    },
+    block: createBlock(getIpfs, opts),
+    config: createConfig(getIpfs, opts),
     dag: {
       put: expose('ipfs.dag.put', (...args) => getIpfs().dag.put(...args), opts),
       get: expose('ipfs.dag.get', (...args) => getIpfs().dag.get(...args), opts),
@@ -88,9 +84,4 @@ export function closeProxyServer (obj) {
       closeProxyServer(obj[k])
     }
   })
-}
-
-// Alter the arguments before they are passed to IPFS
-function preCall (preFn, callFn) {
-  return (...args) => callFn(...preFn(...args))
 }

@@ -2,12 +2,12 @@ console.log('CLIENT: main')
 
 const Ipfs = require('ipfs')
 const { createProxyServer, closeProxyServer } = require('../../../../lib')
-const sender = 'ipfs-postmsg-proxy:test:client'
+const sender = 'ipfs-postmsg-proxy:test:server'
 
 window.addEventListener('message', (e) => {
   const data = e.data || {}
-  log('received message', data)
-  if (data.sender !== 'ipfs-postmsg-proxy:test:server') return
+  console.log('received message', data)
+  if (data.sender !== 'ipfs-postmsg-proxy:test:client') return
   if (!Actions[data.action]) return console.error(`Unknown action ${data.action}`)
   Actions[data.action].apply(null, data.args || [])
 })
@@ -22,7 +22,7 @@ const getIpfs = (opts) => new Promise((resolve, reject) => {
 
 const Actions = {
   async start (opts) {
-    log('start', opts)
+    console.log('start', opts)
     ipfs = await getIpfs(opts)
     proxy = createProxyServer(() => ipfs, {
       postMessage: window.parent.postMessage.bind(window.parent)
@@ -32,7 +32,7 @@ const Actions = {
   },
 
   dismantle () {
-    log('dismantle')
+    console.log('dismantle')
     if (ipfs && proxy) {
       closeProxyServer(proxy)
       proxy = null
@@ -42,10 +42,26 @@ const Actions = {
   }
 }
 
+// Patch up the logging so we get some useful info in the console from this side
+// of the iframe!
+
+const consoleLog = console.log
+const consoleError = console.error
+
 function log () {
   const args = Array.from(arguments)
-  console.log.apply(console, args)
-  window.parent.postMessage({ sender, action: 'log', args }, '*')
+  consoleLog.apply(console, args)
+  try {
+    window.parent.postMessage({ sender, action: 'log', args }, '*')
+  } catch (err) {
+    consoleError('Failed to post log message', err)
+  }
 }
+
+console.log = log
+console.error = log
+
+window.onerror = (message, source, lineno, colno, error) =>
+  log({ message: error.message, stack: error.stack })
 
 window.parent.postMessage({ sender, action: 'ready' }, '*')

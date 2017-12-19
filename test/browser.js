@@ -11,34 +11,34 @@ const common = {
 
     factory = {
       spawnNode () {
-        console.log('SERVER: spawn node')
+        console.log('CLIENT: spawn node')
         const args = Array.from(arguments)
         const cb = args.pop()
 
         const onMessage = (e) => {
-          console.log('SERVER: received message', e.data)
+          console.log('CLIENT: received message', e.data)
           const data = e.data || {}
-          if (data.sender !== 'ipfs-postmsg-proxy:test:client') return
+          if (data.sender !== 'ipfs-postmsg-proxy:test:server') return
           if (!Actions[data.action]) return console.error(`Unknown action ${data.action}`)
           Actions[data.action].apply(null, data.args || [])
         }
 
         const Actions = {
           ready () {
-            console.log('SERVER: client is ready')
+            console.log('CLIENT: server is ready')
             iframe.contentWindow.postMessage({
-              sender: 'ipfs-postmsg-proxy:test:server',
+              sender: 'ipfs-postmsg-proxy:test:client',
               action: 'start'
             }, '*')
           },
           started () {
-            console.log('SERVER: client ipfs is started')
+            console.log('CLIENT: server ipfs is started')
             cb(null, createProxyClient({
               postMessage: iframe.contentWindow.postMessage.bind(iframe.contentWindow)
             }))
           },
           log () {
-            console.log.apply(console, ['CLIENT:'].concat(Array.from(arguments)))
+            console.log.apply(console, ['SERVER:'].concat(Array.from(arguments)))
           }
         }
 
@@ -52,10 +52,10 @@ const common = {
       },
 
       dismantle (cb) {
-        console.log('SERVER: dismantle')
+        console.log('CLIENT: dismantle')
         contexts.forEach((ctx) => {
           ctx.iframe.contentWindow.postMessage({
-            sender: 'ipfs-postmsg-proxy:test:server',
+            sender: 'ipfs-postmsg-proxy:test:client',
             action: 'dismantle'
           }, '*')
           ctx.iframe.parentNode.removeChild(ctx.iframe)
@@ -75,12 +75,12 @@ const common = {
 
 test.block(common)
 test.config(common)
-test.dag(common)
-test.dht(common)
-test.files(common)
-test.key(common)
-test.miscellaneous(common)
-test.object(common)
-test.pin(common)
-test.pubsub(common)
-test.swarm(common)
+// test.dag(common)
+// test.dht(common)
+// test.files(common)
+// test.key(common)
+// test.miscellaneous(common)
+// test.object(common)
+// test.pin(common)
+// test.pubsub(common)
+// test.swarm(common)

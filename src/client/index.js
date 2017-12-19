@@ -1,19 +1,15 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
+import { postCall } from '../fn-call'
+import createBlock from './block'
+import createConfig from './config'
 
 export default (opts) => {
   const ipfs = {
     id: callbackify(caller('ipfs.id', opts)),
     version: callbackify(caller('ipfs.version', opts)),
-    block: {
-      put: callbackify.variadic(caller('ipfs.block.put', opts)),
-      get: callbackify.variadic(caller('ipfs.block.get', opts)),
-      stat: callbackify.variadic(caller('ipfs.block.stat', opts))
-    },
-    config: {
-      set: callbackify.variadic(caller('ipfs.config.set', opts)),
-      get: callbackify.variadic(caller('ipfs.config.get', opts))
-    },
+    block: createBlock(opts),
+    config: createConfig(opts),
     dag: {
       put: callbackify.variadic(caller('ipfs.dag.put', opts)),
       get: callbackify.variadic(caller('ipfs.dag.get', opts)),
@@ -89,14 +85,4 @@ export default (opts) => {
   ipfs.add = ipfs.files.add
 
   return ipfs
-}
-
-// Alter the arguments before they are sent to the server
-// function preCall (preFn, callFn) {
-//   return (...args) => callFn(...preFn(args))
-// }
-
-// Alter the repsonse before it is passed back to the caller
-function postCall (callFn, postFn) {
-  return (...args) => callFn(...args).then((res) => postFn(res))
 }
