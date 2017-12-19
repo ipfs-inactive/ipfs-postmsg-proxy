@@ -15,9 +15,11 @@ export default function (getIpfs, opts) {
           // otherwise this must be a serialized Block
           args[0] = blockFromJson(args[0])
         }
+
         if (args[1] && args[1].cid) {
           args[1].cid = cidFromJson(args[1].cid)
         }
+
         return args
       },
       postCall(
@@ -30,6 +32,7 @@ export default function (getIpfs, opts) {
         if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
+
         return args
       },
       postCall(
@@ -42,6 +45,7 @@ export default function (getIpfs, opts) {
         if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
+
         return args
       },
       (...args) => getIpfs().block.stat(...args)

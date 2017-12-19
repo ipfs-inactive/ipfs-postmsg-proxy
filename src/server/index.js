@@ -3,6 +3,7 @@ import isTypedArray from 'is-typedarray'
 import { preCall } from '../fn-call'
 import createBlock from './block'
 import createConfig from './config'
+import createDag from './dag'
 
 export default (getIpfs, opts) => {
   return {
@@ -10,11 +11,7 @@ export default (getIpfs, opts) => {
     version: expose('ipfs.version', () => getIpfs().version(), opts),
     block: createBlock(getIpfs, opts),
     config: createConfig(getIpfs, opts),
-    dag: {
-      put: expose('ipfs.dag.put', (...args) => getIpfs().dag.put(...args), opts),
-      get: expose('ipfs.dag.get', (...args) => getIpfs().dag.get(...args), opts),
-      tree: expose('ipfs.dag.tree', (...args) => getIpfs().dag.tree(...args), opts)
-    },
+    dag: createDag(getIpfs, opts),
     dht: {
       put: expose('ipfs.dht.put', (...args) => getIpfs().dht.put(...args), opts),
       get: expose('ipfs.dht.get', (...args) => getIpfs().dht.get(...args), opts),

@@ -3,6 +3,7 @@ import callbackify from 'callbackify'
 import { postCall } from '../fn-call'
 import createBlock from './block'
 import createConfig from './config'
+import createDag from './dag'
 
 export default (opts) => {
   const ipfs = {
@@ -10,11 +11,7 @@ export default (opts) => {
     version: callbackify(caller('ipfs.version', opts)),
     block: createBlock(opts),
     config: createConfig(opts),
-    dag: {
-      put: callbackify.variadic(caller('ipfs.dag.put', opts)),
-      get: callbackify.variadic(caller('ipfs.dag.get', opts)),
-      tree: callbackify.variadic(caller('ipfs.dag.tree', opts))
-    },
+    dag: createDag(opts),
     dht: {
       put: callbackify.variadic(caller('ipfs.dht.put', opts)),
       get: callbackify.variadic(caller('ipfs.dht.get', opts)),
