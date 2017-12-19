@@ -59,7 +59,7 @@ const common = {
 
 test.block(common)
 test.config(common)
-// test.dag(common)
+test.dag(common)
 // test.dht(common)
 // test.files(common)
 // test.key(common)

@@ -2,7 +2,7 @@ import { DAGNode, DAGLink } from 'ipld-dag-pb'
 
 export const dagNodeFromJson = (obj) => {
   return new Promise((resolve, reject) => {
-    const links = obj.links.map(dagLinkFromJson)
+    const links = (obj.links || []).map(dagLinkFromJson)
     DAGNode.create(Buffer.from(obj.data), links, (err, dagNode) => {
       if (err) return reject(err)
       resolve(dagNode)

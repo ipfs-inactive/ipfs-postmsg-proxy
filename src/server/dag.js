@@ -1,8 +1,8 @@
 import { expose } from 'postmsg-rpc'
-import isTypedArray from 'is-typedarray'
-import { isDagNodeJson, dagNodeFromJson } from '../serialization/dag'
-import { cidToJson } from '../serialization/cid'
+import { isDagNodeJson, isDagNode, dagNodeToJson, dagNodeFromJson } from '../serialization/dag'
+import { isCidJson, cidToJson, cidFromJson } from '../serialization/cid'
 import { preCall, postCall } from '../fn-call'
+import { convertTypedArraysToBuffers } from '../converters'
 
 export default function (getIpfs, opts) {
   return {
@@ -17,8 +17,8 @@ export default function (getIpfs, opts) {
         }
 
         // TODO: CBOR node, is this correct?
-        if (args[0] && args[0].data && isTypedArray(args[0].data)) {
-          args[0].data = Buffer.from(args[0].data)
+        if (args[0]) {
+          args[0] = convertTypedArraysToBuffers(args[0])
         }
 
         return args
@@ -28,7 +28,31 @@ export default function (getIpfs, opts) {
         cidToJson
       )
     ), opts),
-    get: expose('ipfs.dag.get', (...args) => getIpfs().dag.get(...args), opts),
-    tree: expose('ipfs.dag.tree', (...args) => getIpfs().dag.tree(...args), opts)
+    get: expose('ipfs.dag.get', preCall(
+      (...args) => {
+        if (isCidJson(args[0])) {
+          args[0] = cidFromJson(args[0])
+        }
+
+        return args
+      },
+      postCall(
+        (...args) => getIpfs().dag.get(...args),
+        (res) => {
+          res.value = isDagNode(res.value) ? dagNodeToJson(res.value) : res.value
+          return res
+        }
+      )
+    ), opts),
+    tree: expose('ipfs.dag.tree', preCall(
+      (...args) => {
+        if (isCidJson(args[0])) {
+          args[0] = cidFromJson(args[0])
+        }
+
+        return args
+      },
+      (...args) => getIpfs().dag.tree(...args)
+    ), opts)
   }
 }
