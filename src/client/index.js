@@ -1,9 +1,10 @@
 import { caller } from 'postmsg-rpc'
+import { preCall } from '../fn-call'
 import callbackify from 'callbackify'
-import { postCall } from '../fn-call'
 import createBlock from './block'
 import createConfig from './config'
 import createDag from './dag'
+import createFiles from './files'
 
 export default (opts) => {
   const ipfs = {
@@ -20,23 +21,20 @@ export default (opts) => {
       provide: callbackify.variadic(caller('ipfs.dht.provide', opts)),
       query: callbackify.variadic(caller('ipfs.dht.query', opts))
     },
-    files: {
-      add: callbackify.variadic(caller('ipfs.files.add', opts)),
-      // addReadableStream: callbackify.variadic(caller('ipfs.files.addReadableStream', opts)),
-      // addPullStream: callbackify.variadic(caller('ipfs.files.addPullStream', opts)),
-      cat: callbackify.variadic(
-        postCall(
-          caller('ipfs.files.cat', opts),
-          (buf) => Buffer.from(buf)
-        )
-      ),
-      // catReadableStream: callbackify.variadic(caller('ipfs.files.catReadableStream', opts)),
-      // catPullStream: callbackify.variadic(caller('ipfs.files.catPullStream', opts)),
-      get: callbackify.variadic(caller('ipfs.files.get', opts))
-    },
+    files: createFiles(opts),
     ls: callbackify.variadic(caller('ipfs.ls', opts)),
-    // lsReadableStream: callbackify.variadic(caller('ipfs.files.catReadableStream', opts)),
-    // lsPullStream: callbackify.variadic(caller('ipfs.files.catPullStream', opts)),
+    lsReadableStream: callbackify.variadic(
+      preCall(
+        () => { throw new Error('Not implemented') },
+        caller('ipfs.lsReadableStream', opts)
+      )
+    ),
+    lsPullStream: callbackify.variadic(
+      preCall(
+        () => { throw new Error('Not implemented') },
+        caller('ipfs.lsPullStream', opts)
+      )
+    ),
     key: {
       gen: callbackify.variadic(caller('ipfs.key.gen', opts)),
       list: callbackify(caller('ipfs.key.list', opts)),

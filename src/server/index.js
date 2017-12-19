@@ -1,9 +1,8 @@
 import { expose } from 'postmsg-rpc'
-import isTypedArray from 'is-typedarray'
-import { preCall } from '../fn-call'
 import createBlock from './block'
 import createConfig from './config'
 import createDag from './dag'
+import createFiles from './files'
 
 export default (getIpfs, opts) => {
   return {
@@ -20,18 +19,7 @@ export default (getIpfs, opts) => {
       provide: expose('ipfs.dht.provide', (...args) => getIpfs().dht.provide(...args), opts),
       query: expose('ipfs.dht.query', (...args) => getIpfs().dht.query(...args), opts)
     },
-    files: {
-      add: expose('ipfs.files.add', preCall(
-        (...args) => {
-          // Structured clone converts Buffer to Uint8Array, convert back to buffer
-          args[0] = isTypedArray(args[0]) ? Buffer.from(args[0]) : args[0]
-          return args
-        },
-        (...args) => getIpfs().files.add(...args)
-      ), opts),
-      cat: expose('ipfs.files.cat', (...args) => getIpfs().files.cat(...args), opts),
-      get: expose('ipfs.files.get', (...args) => getIpfs().files.get(...args), opts)
-    },
+    files: createFiles(getIpfs, opts),
     ls: expose('ipfs.ls', (...args) => getIpfs().ls(...args), opts),
     key: {
       gen: expose('ipfs.key.gen', (...args) => getIpfs().key.gen(...args), opts),

@@ -9,6 +9,13 @@ module.exports = (config) => {
         included: false,
         served: true,
         nocache: false
+      },
+      {
+        pattern: 'node_modules/interface-ipfs-core/test/fixtures/**/*',
+        watched: false,
+        included: false,
+        served: true,
+        nocache: false
       }
     ],
     preprocessors: {
