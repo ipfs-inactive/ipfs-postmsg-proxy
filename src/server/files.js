@@ -7,8 +7,17 @@ export default function (getIpfs, opts) {
     add: expose('ipfs.files.add', preCall(
       (...args) => {
         // Structured clone converts Buffer to Uint8Array, convert back to buffer
-        if (isTypedArray(args[0])) {
+        if (Array.isArray(args[0])) {
+          args[0] = args[0].map((c) => {
+            if (isTypedArray(c.content)) {
+              c.content = Buffer.from(c.content)
+            }
+            return c
+          })
+        } else if (isTypedArray(args[0])) {
           args[0] = Buffer.from(args[0])
+        } else if (isTypedArray(args[0].content)) {
+          args[0].content = Buffer.from(args[0].content)
         }
 
         return args
