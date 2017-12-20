@@ -1,10 +1,12 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import isTypedArray from 'is-typedarray'
+import pull from 'pull-stream'
+import toStream from 'pull-stream-to-stream'
 import { preCall, postCall } from '../fn-call'
 
 export default function (opts) {
-  return {
+  const files = {
     add: callbackify.variadic(
       preCall(
         (...args) => {
@@ -40,18 +42,20 @@ export default function (opts) {
         (buf) => Buffer.from(buf)
       )
     ),
-    catReadableStream: callbackify.variadic(
-      preCall(
-        () => { throw new Error('Not implemented') },
-        caller('ipfs.files.catReadableStream', opts)
+    // FIXME: implement streams properly
+    catReadableStream: function () {
+      const args = Array.from(arguments)
+      return toStream.source(files.catPullStream(...args))
+    },
+    catPullStream: function () {
+      const args = Array.from(arguments)
+      return pull(
+        pull.values([{}]),
+        pull.asyncMap((_, cb) => {
+          files.cat(...args).then((buf) => cb(null, buf)).catch(cb)
+        })
       )
-    ),
-    catPullStream: callbackify.variadic(
-      preCall(
-        () => { throw new Error('Not implemented') },
-        caller('ipfs.files.catPullStream', opts)
-      )
-    ),
+    },
     get: callbackify.variadic(caller('ipfs.files.get', opts)),
     getReadableStream: callbackify.variadic(
       preCall(
@@ -66,4 +70,6 @@ export default function (opts) {
       )
     )
   }
+
+  return files
 }
