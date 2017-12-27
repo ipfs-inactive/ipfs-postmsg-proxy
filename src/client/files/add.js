@@ -4,6 +4,7 @@ import pull from 'pull-stream'
 import toStream from 'pull-stream-to-stream'
 import toPull from 'stream-to-pull-stream'
 import isStream from 'is-stream'
+import buffer from 'pull-buffer'
 import { preCall } from '../../fn-call'
 
 export default function (opts) {
@@ -23,6 +24,8 @@ export default function (opts) {
               pull.values(Array.isArray(args[0]) ? args[0] : [args[0]]),
               pull.map(normalizeContent),
               pull.asyncMap((file, cb) => {
+                if (!file.content) return cb(null, file)
+
                 pull(
                   file.content,
                   pull.collect((err, buffers) => {
@@ -33,7 +36,7 @@ export default function (opts) {
               }),
               pull.collect((err, files) => {
                 if (err) return reject(err)
-                args[0] = files
+                args[0] = files.length === 1 ? files[0] : files
                 resolve(args)
               })
             )
@@ -43,12 +46,12 @@ export default function (opts) {
       )
     ),
     // FIXME: implement streams properly
-    addReadableStream: (opts) => toStream(api.addPullStream(opts)),
-    addPullStream: (opts) => pull(
-      pull.map((content) => Array.isArray(content) ? content : [content]),
-      pull.map(normalizeContent),
-      pull.flatten(),
-      pull.asyncMap((content, cb) => api.add(content, opts, cb))
+    addReadableStream: (...args) => toStream(api.addPullStream.apply(api, args)),
+    addPullStream: (...args) => pull(
+      buffer(),
+      pull.map((data) => data.map(normalizeContent)),
+      pull.asyncMap((content, cb) => api.add.apply(api, [content].concat(args, cb))),
+      pull.flatten()
     )
   }
 
