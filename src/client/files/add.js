@@ -18,7 +18,6 @@ export default function (opts) {
           }
 
           // FIXME: implement streams properly
-          // Buffer all the streaming data into memory
           return new Promise((resolve, reject) => {
             pull(
               pull.values(Array.isArray(args[0]) ? args[0] : [args[0]]),
@@ -26,6 +25,7 @@ export default function (opts) {
               pull.asyncMap((file, cb) => {
                 if (!file.content) return cb(null, file)
 
+                // Buffer all the streaming data into memory
                 pull(
                   file.content,
                   pull.collect((err, buffers) => {

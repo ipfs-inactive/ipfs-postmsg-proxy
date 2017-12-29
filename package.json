@@ -30,6 +30,7 @@
     "is-typedarray": "^1.0.0",
     "postmsg-rpc": "^2.1.1",
     "pull-buffer": "^1.0.0",
+    "pull-defer": "^0.2.2",
     "pull-stream": "^3.6.1",
     "pull-stream-to-stream": "^1.3.4",
     "realistic-structured-clone": "^1.0.1",

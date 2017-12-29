@@ -1,5 +1,6 @@
 import { expose } from 'postmsg-rpc'
 import isTypedArray from 'is-typedarray'
+import { isCidJson, cidFromJson } from '../serialization/cid'
 import { preCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
@@ -25,6 +26,15 @@ export default function (getIpfs, opts) {
       (...args) => getIpfs().files.add(...args)
     ), opts),
     cat: expose('ipfs.files.cat', (...args) => getIpfs().files.cat(...args), opts),
-    get: expose('ipfs.files.get', (...args) => getIpfs().files.get(...args), opts)
+    get: expose('ipfs.files.get', preCall(
+      (...args) => {
+        if (isCidJson(args[0])) {
+          args[0] = cidFromJson(args[0])
+        }
+
+        return args
+      },
+      (...args) => getIpfs().files.get(...args)
+    ), opts)
   }
 }
