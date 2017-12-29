@@ -42,6 +42,7 @@ export default function (opts) {
         )
       )
     },
+    // FIXME: implement streams properly
     getPullStream () {
       const deferred = defer.source()
 

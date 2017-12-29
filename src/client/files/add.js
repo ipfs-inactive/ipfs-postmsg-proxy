@@ -46,7 +46,10 @@ export default function (opts) {
       )
     ),
     // FIXME: implement streams properly
-    addReadableStream: (...args) => toStream(api.addPullStream.apply(api, args)),
+    addReadableStream () {
+      return toStream(api.addPullStream(...arguments))
+    },
+    // FIXME: implement streams properly
     addPullStream: (...args) => pull(
       buffer(),
       pull.map((data) => data.map(normalizeContent)),

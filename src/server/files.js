@@ -35,6 +35,16 @@ export default function (getIpfs, opts) {
         return args
       },
       (...args) => getIpfs().files.get(...args)
+    ), opts),
+    ls: expose('ipfs.files.ls', preCall(
+      (...args) => {
+        if (isCidJson(args[0])) {
+          args[0] = cidFromJson(args[0])
+        }
+
+        return args
+      },
+      (...args) => getIpfs().ls(...args)
     ), opts)
   }
 }

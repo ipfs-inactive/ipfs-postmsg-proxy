@@ -22,19 +22,6 @@ export default (opts) => {
       query: callbackify.variadic(caller('ipfs.dht.query', opts))
     },
     files: createFiles(opts),
-    ls: callbackify.variadic(caller('ipfs.ls', opts)),
-    lsReadableStream: callbackify.variadic(
-      preCall(
-        () => { throw new Error('Not implemented') },
-        caller('ipfs.lsReadableStream', opts)
-      )
-    ),
-    lsPullStream: callbackify.variadic(
-      preCall(
-        () => { throw new Error('Not implemented') },
-        caller('ipfs.lsPullStream', opts)
-      )
-    ),
     key: {
       gen: callbackify.variadic(caller('ipfs.key.gen', opts)),
       list: callbackify(caller('ipfs.key.list', opts)),
@@ -78,6 +65,9 @@ export default (opts) => {
 
   // Aliases
   ipfs.add = ipfs.files.add
+  ipfs.ls = ipfs.files.ls
+  ipfs.lsReadableStream = ipfs.files.lsReadableStream
+  ipfs.lsPullStream = ipfs.files.lsPullStream
 
   return ipfs
 }

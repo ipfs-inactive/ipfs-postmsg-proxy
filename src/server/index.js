@@ -20,7 +20,6 @@ export default (getIpfs, opts) => {
       query: expose('ipfs.dht.query', (...args) => getIpfs().dht.query(...args), opts)
     },
     files: createFiles(getIpfs, opts),
-    ls: expose('ipfs.ls', (...args) => getIpfs().ls(...args), opts),
     key: {
       gen: expose('ipfs.key.gen', (...args) => getIpfs().key.gen(...args), opts),
       list: expose('ipfs.key.list', () => getIpfs().key.list(), opts),
