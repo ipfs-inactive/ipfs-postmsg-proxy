@@ -30,21 +30,17 @@ export default function (opts) {
     ),
     // FIXME: implement streams properly
     getReadableStream () {
-      const deferred = defer.source()
-
-      api.get(...arguments)
-        .then((files) => {
-          files = files.map((file) => {
+      return toStream.source(
+        pull(
+          api.getPullStream(...arguments),
+          pull.map((file) => {
             if (file.content) {
-              file.content = toStream.source(pull.values([file.content]))
+              file.content = toStream.source(file.content)
             }
             return file
           })
-          deferred.resolve(pull.values(files))
-        })
-        .catch((err) => deferred.abort(err))
-
-      return toStream.source(deferred)
+        )
+      )
     },
     getPullStream () {
       const deferred = defer.source()
