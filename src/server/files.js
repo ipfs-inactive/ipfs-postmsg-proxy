@@ -39,7 +39,9 @@ export default function (getIpfs, opts) {
     ), opts),
     get: expose('ipfs.files.get', preCall(
       (...args) => {
-        if (isCidJson(args[0])) {
+        if (isTypedArray(args[0])) {
+          args[0] = Buffer.from(args[0])
+        } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
 
@@ -49,7 +51,9 @@ export default function (getIpfs, opts) {
     ), opts),
     ls: expose('ipfs.files.ls', preCall(
       (...args) => {
-        if (isCidJson(args[0])) {
+        if (isTypedArray(args[0])) {
+          args[0] = Buffer.from(args[0])
+        } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
 
