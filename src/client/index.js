@@ -1,10 +1,10 @@
 import { caller } from 'postmsg-rpc'
-import { preCall } from '../fn-call'
 import callbackify from 'callbackify'
 import createBlock from './block'
 import createConfig from './config'
 import createDag from './dag'
 import createFiles from './files'
+import createObject from './object'
 
 export default (opts) => {
   const ipfs = {
@@ -28,20 +28,7 @@ export default (opts) => {
       rename: callbackify.variadic(caller('ipfs.key.rename', opts)),
       rm: callbackify.variadic(caller('ipfs.key.rm', opts))
     },
-    object: {
-      new: callbackify.variadic(caller('ipfs.object.new', opts)),
-      put: callbackify.variadic(caller('ipfs.object.put', opts)),
-      get: callbackify.variadic(caller('ipfs.object.get', opts)),
-      data: callbackify.variadic(caller('ipfs.object.data', opts)),
-      links: callbackify.variadic(caller('ipfs.object.links', opts)),
-      stat: callbackify.variadic(caller('ipfs.object.stat', opts)),
-      patch: {
-        addLink: callbackify.variadic(caller('ipfs.object.patch.addLink', opts)),
-        rmLink: callbackify.variadic(caller('ipfs.object.patch.rmLink', opts)),
-        appendData: callbackify.variadic(caller('ipfs.object.patch.appendData', opts)),
-        setData: callbackify.variadic(caller('ipfs.object.patch.setData', opts))
-      }
-    },
+    object: createObject(opts),
     pin: {
       add: callbackify.variadic(caller('ipfs.pin.add', opts)),
       rm: callbackify.variadic(caller('ipfs.pin.rm', opts)),
