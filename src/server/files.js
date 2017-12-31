@@ -25,7 +25,18 @@ export default function (getIpfs, opts) {
       },
       (...args) => getIpfs().files.add(...args)
     ), opts),
-    cat: expose('ipfs.files.cat', (...args) => getIpfs().files.cat(...args), opts),
+    cat: expose('ipfs.files.cat', preCall(
+      (...args) => {
+        if (isTypedArray(args[0])) {
+          args[0] = Buffer.from(args[0])
+        } else if (isCidJson(args[0])) {
+          args[0] = cidFromJson(args[0])
+        }
+
+        return args
+      },
+      (...args) => getIpfs().files.cat(...args)
+    ), opts),
     get: expose('ipfs.files.get', preCall(
       (...args) => {
         if (isCidJson(args[0])) {
