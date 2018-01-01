@@ -24,3 +24,6 @@ export const dagLinkToJson = (link) => Object.assign(
   { __ipfsPostMsgProxyType: 'DAGLink' },
   link.toJSON()
 )
+
+export const isDagLink = (obj) => obj && obj.constructor && obj.constructor.name === 'DAGLink'
+export const isDagLinkJson = (obj) => obj && obj.__ipfsPostMsgProxyType === 'DAGLink'

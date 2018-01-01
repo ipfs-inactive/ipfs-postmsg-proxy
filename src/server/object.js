@@ -1,15 +1,14 @@
 import { expose } from 'postmsg-rpc'
 import isTypedArray from 'is-typedarray'
-import { isDagNodeJson, isDagNode, dagNodeToJson, dagNodeFromJson } from '../serialization/dag'
-import { isCidJson, cidToJson, cidFromJson } from '../serialization/cid'
+import { isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkToJson } from '../serialization/dag'
+import { isCidJson, cidFromJson } from '../serialization/cid'
 import { preCall, postCall } from '../fn-call'
-import { convertTypedArraysToBuffers } from '../converters'
 
 export default function (getIpfs, opts) {
   return {
     new: expose('ipfs.object.new', postCall(
       (...args) => getIpfs().object.new(...args),
-      (res) => isDagNode(res) ? dagNodeToJson(res) : res
+      dagNodeToJson
     ), opts),
     put: expose('ipfs.object.put', preCall(
       (...args) => {
@@ -27,7 +26,7 @@ export default function (getIpfs, opts) {
       },
       postCall(
         (...args) => getIpfs().object.put(...args),
-        (res) => isDagNode(res) ? dagNodeToJson(res) : res
+        dagNodeToJson
       )
     ), opts),
     get: expose('ipfs.object.get', preCall(
@@ -42,7 +41,7 @@ export default function (getIpfs, opts) {
       },
       postCall(
         (...args) => getIpfs().object.get(...args),
-        (res) => isDagNode(res) ? dagNodeToJson(res) : res
+        dagNodeToJson
       )
     ), opts),
     data: expose('ipfs.object.data', preCall(
@@ -57,7 +56,21 @@ export default function (getIpfs, opts) {
       },
       (...args) => getIpfs().object.data(...args)
     ), opts),
-    links: expose('ipfs.object.links', (...args) => getIpfs().object.links(...args), opts),
+    links: expose('ipfs.object.links', preCall(
+      (...args) => {
+        if (isTypedArray(args[0])) {
+          args[0] = Buffer.from(args[0])
+        } else if (isCidJson(args[0])) {
+          args[0] = cidFromJson(args[0])
+        }
+
+        return args
+      },
+      postCall(
+        (...args) => getIpfs().object.links(...args),
+        (res) => res.map(dagLinkToJson)
+      )
+    ), opts),
     stat: expose('ipfs.object.stat', (...args) => getIpfs().object.stat(...args), opts),
     patch: {
       addLink: expose('ipfs.object.patch.addLink', (...args) => getIpfs().object.patch.addLink(...args), opts),
