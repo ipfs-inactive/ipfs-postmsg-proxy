@@ -20,6 +20,8 @@ export default function (getIpfs, opts) {
             })
         } else if (args[0] && isTypedArray(args[0].Data)) {
           args[0].Data = Buffer.from(args[0].Data)
+        } else if (isTypedArray(args[0])) {
+          args[0] = Buffer.from(args[0])
         }
 
         return args
