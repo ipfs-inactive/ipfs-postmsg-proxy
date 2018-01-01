@@ -5,6 +5,7 @@ import createConfig from './config'
 import createDag from './dag'
 import createFiles from './files'
 import createObject from './object'
+import createPin from './pin'
 
 export default (opts) => {
   const ipfs = {
@@ -29,11 +30,7 @@ export default (opts) => {
       rm: callbackify.variadic(caller('ipfs.key.rm', opts))
     },
     object: createObject(opts),
-    pin: {
-      add: callbackify.variadic(caller('ipfs.pin.add', opts)),
-      rm: callbackify.variadic(caller('ipfs.pin.rm', opts)),
-      ls: callbackify.variadic(caller('ipfs.pin.ls', opts))
-    },
+    pin: createPin(opts),
     pubsub: {
       publish: callbackify.variadic(caller('ipfs.pubsub.publish', opts)),
       // subscribe: callbackify.variadic(caller('ipfs.pubsub.subscribe', opts)),

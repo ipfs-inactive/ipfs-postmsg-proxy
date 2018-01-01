@@ -4,6 +4,7 @@ import createConfig from './config'
 import createDag from './dag'
 import createFiles from './files'
 import createObject from './object'
+import createPin from './pin'
 
 export default (getIpfs, opts) => {
   return {
@@ -28,11 +29,7 @@ export default (getIpfs, opts) => {
       rm: expose('ipfs.key.rm', (...args) => getIpfs().key.rm(...args), opts)
     },
     object: createObject(getIpfs, opts),
-    pin: {
-      add: expose('ipfs.pin.add', (...args) => getIpfs().pin.add(...args), opts),
-      rm: expose('ipfs.pin.rm', (...args) => getIpfs().pin.rm(...args), opts),
-      ls: expose('ipfs.pin.ls', (...args) => getIpfs().pin.ls(...args), opts)
-    },
+    pin: createPin(getIpfs, opts),
     pubsub: {
       publish: expose('ipfs.pubsub.publish', (...args) => getIpfs().pubsub.publish(...args), opts),
       peers: expose('ipfs.pubsub.peers', () => getIpfs().pubsub.peers(), opts),
