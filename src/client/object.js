@@ -43,7 +43,21 @@ export default function (opts) {
         )
       )
     ),
-    data: callbackify.variadic(caller('ipfs.object.data', opts)),
+    data: callbackify.variadic(
+      preCall(
+        (...args) => {
+          if (isCid(args[0])) {
+            args[0] = cidToJson(args[0])
+          }
+
+          return args
+        },
+        postCall(
+          caller('ipfs.object.data', opts),
+          (res) => Buffer.from(res)
+        )
+      )
+    ),
     links: callbackify.variadic(caller('ipfs.object.links', opts)),
     stat: callbackify.variadic(caller('ipfs.object.stat', opts)),
     patch: {

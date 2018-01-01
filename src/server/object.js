@@ -19,6 +19,8 @@ export default function (getIpfs, opts) {
               args[0] = dagNode
               return args
             })
+        } else if (args[0] && isTypedArray(args[0].Data)) {
+          args[0].Data = Buffer.from(args[0].Data)
         }
 
         return args
@@ -43,7 +45,18 @@ export default function (getIpfs, opts) {
         (res) => isDagNode(res) ? dagNodeToJson(res) : res
       )
     ), opts),
-    data: expose('ipfs.object.data', (...args) => getIpfs().object.data(...args), opts),
+    data: expose('ipfs.object.data', preCall(
+      (...args) => {
+        if (isTypedArray(args[0])) {
+          args[0] = Buffer.from(args[0])
+        } else if (isCidJson(args[0])) {
+          args[0] = cidFromJson(args[0])
+        }
+
+        return args
+      },
+      (...args) => getIpfs().object.data(...args)
+    ), opts),
     links: expose('ipfs.object.links', (...args) => getIpfs().object.links(...args), opts),
     stat: expose('ipfs.object.stat', (...args) => getIpfs().object.stat(...args), opts),
     patch: {
