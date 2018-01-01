@@ -73,7 +73,18 @@ export default function (getIpfs, opts) {
         (res) => res.map(dagLinkToJson)
       )
     ), opts),
-    stat: expose('ipfs.object.stat', (...args) => getIpfs().object.stat(...args), opts),
+    stat: expose('ipfs.object.stat', preCall(
+      (...args) => {
+        if (isTypedArray(args[0])) {
+          args[0] = Buffer.from(args[0])
+        } else if (isCidJson(args[0])) {
+          args[0] = cidFromJson(args[0])
+        }
+
+        return args
+      },
+      (...args) => getIpfs().object.stat(...args)
+    ), opts),
     patch: {
       addLink: expose('ipfs.object.patch.addLink', (...args) => getIpfs().object.patch.addLink(...args), opts),
       rmLink: expose('ipfs.object.patch.rmLink', (...args) => getIpfs().object.patch.rmLink(...args), opts),
