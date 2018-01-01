@@ -1,6 +1,6 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
-import { isDagNode, isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkFromJson } from '../serialization/dag'
+import { isDagNode, isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkToJson, dagLinkFromJson } from '../serialization/dag'
 import { cidToJson, isCid } from '../serialization/cid'
 import { preCall, postCall } from '../fn-call'
 
@@ -85,7 +85,23 @@ export default function (opts) {
       )
     ),
     patch: {
-      addLink: callbackify.variadic(caller('ipfs.object.patch.addLink', opts)),
+      addLink: callbackify.variadic(
+        preCall(
+          (...args) => {
+            if (isCid(args[0])) {
+              args[0] = cidToJson(args[0])
+            }
+
+            args[1] = dagLinkToJson(args[1])
+
+            return args
+          },
+          postCall(
+            caller('ipfs.object.patch.addLink', opts),
+            dagNodeFromJson
+          )
+        )
+      ),
       rmLink: callbackify.variadic(caller('ipfs.object.patch.rmLink', opts)),
       appendData: callbackify.variadic(caller('ipfs.object.patch.appendData', opts)),
       setData: callbackify.variadic(caller('ipfs.object.patch.setData', opts))

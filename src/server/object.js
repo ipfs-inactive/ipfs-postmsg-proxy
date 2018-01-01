@@ -1,6 +1,6 @@
 import { expose } from 'postmsg-rpc'
 import isTypedArray from 'is-typedarray'
-import { isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkToJson } from '../serialization/dag'
+import { isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkToJson, dagLinkFromJson } from '../serialization/dag'
 import { isCidJson, cidFromJson } from '../serialization/cid'
 import { preCall, postCall } from '../fn-call'
 
@@ -86,7 +86,23 @@ export default function (getIpfs, opts) {
       (...args) => getIpfs().object.stat(...args)
     ), opts),
     patch: {
-      addLink: expose('ipfs.object.patch.addLink', (...args) => getIpfs().object.patch.addLink(...args), opts),
+      addLink: expose('ipfs.object.patch.addLink', preCall(
+        (...args) => {
+          if (isTypedArray(args[0])) {
+            args[0] = Buffer.from(args[0])
+          } else if (isCidJson(args[0])) {
+            args[0] = cidFromJson(args[0])
+          }
+
+          args[1] = dagLinkFromJson(args[1])
+
+          return args
+        },
+        postCall(
+          (...args) => getIpfs().object.patch.addLink(...args),
+          dagNodeToJson
+        )
+      ), opts),
       rmLink: expose('ipfs.object.patch.rmLink', (...args) => getIpfs().object.patch.rmLink(...args), opts),
       appendData: expose('ipfs.object.patch.appendData', (...args) => getIpfs().object.patch.appendData(...args), opts),
       setData: expose('ipfs.object.patch.setData', (...args) => getIpfs().object.patch.setData(...args), opts)
