@@ -233,3 +233,13 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
 * key
 * pubsub
 * swarm
+
+## Caveats
+
+### Streaming APIs
+
+The streaming APIs should work as expected _but_ behind the scenes all data is being buffered into memory.
+
+### Progress option
+
+The progress option for `files.add` is currently unavailable and will cause stubs to throw a "Not Implemented" error if used.
