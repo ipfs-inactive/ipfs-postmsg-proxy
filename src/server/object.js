@@ -120,8 +120,44 @@ export default function (getIpfs, opts) {
           dagNodeToJson
         )
       ), opts),
-      appendData: expose('ipfs.object.patch.appendData', (...args) => getIpfs().object.patch.appendData(...args), opts),
-      setData: expose('ipfs.object.patch.setData', (...args) => getIpfs().object.patch.setData(...args), opts)
+      appendData: expose('ipfs.object.patch.appendData', preCall(
+        (...args) => {
+          if (isTypedArray(args[0])) {
+            args[0] = Buffer.from(args[0])
+          } else if (isCidJson(args[0])) {
+            args[0] = cidFromJson(args[0])
+          }
+
+          if (isTypedArray(args[1])) {
+            args[1] = Buffer.from(args[1])
+          }
+
+          return args
+        },
+        postCall(
+          (...args) => getIpfs().object.patch.appendData(...args),
+          dagNodeToJson
+        )
+      ), opts),
+      setData: expose('ipfs.object.patch.setData', preCall(
+        (...args) => {
+          if (isTypedArray(args[0])) {
+            args[0] = Buffer.from(args[0])
+          } else if (isCidJson(args[0])) {
+            args[0] = cidFromJson(args[0])
+          }
+
+          if (isTypedArray(args[1])) {
+            args[1] = Buffer.from(args[1])
+          }
+
+          return args
+        },
+        postCall(
+          (...args) => getIpfs().object.patch.setData(...args),
+          dagNodeToJson
+        )
+      ), opts)
     }
   }
 }

@@ -109,8 +109,6 @@ export default function (opts) {
               args[0] = cidToJson(args[0])
             }
 
-            console.log({'args[1]': args[1]})
-
             args[1] = dagLinkToJson(args[1])
 
             return args
@@ -119,9 +117,38 @@ export default function (opts) {
             caller('ipfs.object.patch.rmLink', opts),
             dagNodeFromJson
           )
-        )),
-      appendData: callbackify.variadic(caller('ipfs.object.patch.appendData', opts)),
-      setData: callbackify.variadic(caller('ipfs.object.patch.setData', opts))
+        )
+      ),
+      appendData: callbackify.variadic(
+        preCall(
+          (...args) => {
+            if (isCid(args[0])) {
+              args[0] = cidToJson(args[0])
+            }
+
+            return args
+          },
+          postCall(
+            caller('ipfs.object.patch.appendData', opts),
+            dagNodeFromJson
+          )
+        )
+      ),
+      setData: callbackify.variadic(
+        preCall(
+          (...args) => {
+            if (isCid(args[0])) {
+              args[0] = cidToJson(args[0])
+            }
+
+            return args
+          },
+          postCall(
+            caller('ipfs.object.patch.setData', opts),
+            dagNodeFromJson
+          )
+        )
+      )
     }
   }
 }
