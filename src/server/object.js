@@ -103,7 +103,23 @@ export default function (getIpfs, opts) {
           dagNodeToJson
         )
       ), opts),
-      rmLink: expose('ipfs.object.patch.rmLink', (...args) => getIpfs().object.patch.rmLink(...args), opts),
+      rmLink: expose('ipfs.object.patch.rmLink', preCall(
+        (...args) => {
+          if (isTypedArray(args[0])) {
+            args[0] = Buffer.from(args[0])
+          } else if (isCidJson(args[0])) {
+            args[0] = cidFromJson(args[0])
+          }
+
+          args[1] = dagLinkFromJson(args[1])
+
+          return args
+        },
+        postCall(
+          (...args) => getIpfs().object.patch.rmLink(...args),
+          dagNodeToJson
+        )
+      ), opts),
       appendData: expose('ipfs.object.patch.appendData', (...args) => getIpfs().object.patch.appendData(...args), opts),
       setData: expose('ipfs.object.patch.setData', (...args) => getIpfs().object.patch.setData(...args), opts)
     }
