@@ -5,6 +5,7 @@ import createDag from './dag'
 import createFiles from './files'
 import createObject from './object'
 import createPin from './pin'
+import createSwarm from './swarm'
 
 export default (getIpfs, opts) => {
   return {
@@ -35,13 +36,7 @@ export default (getIpfs, opts) => {
       peers: expose('ipfs.pubsub.peers', () => getIpfs().pubsub.peers(), opts),
       ls: expose('ipfs.pubsub.ls', (...args) => getIpfs().pubsub.ls(...args), opts)
     },
-    swarm: {
-      peers: expose('ipfs.swarm.peers', (...args) => getIpfs().swarm.peers(...args), opts),
-      addrs: expose('ipfs.swarm.addrs', () => getIpfs().swarm.addrs(), opts),
-      localAddrs: expose('ipfs.swarm.localAddrs', () => getIpfs().swarm.localAddrs(), opts),
-      connect: expose('ipfs.swarm.connect', (...args) => getIpfs().swarm.connect(...args), opts),
-      disconnect: expose('ipfs.swarm.disconnect', (...args) => getIpfs().swarm.disconnect(...args), opts)
-    }
+    swarm: createSwarm(getIpfs, opts)
   }
 }
 

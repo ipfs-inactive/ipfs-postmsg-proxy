@@ -6,6 +6,7 @@ import createDag from './dag'
 import createFiles from './files'
 import createObject from './object'
 import createPin from './pin'
+import createSwarm from './swarm'
 
 export default (opts) => {
   const ipfs = {
@@ -38,13 +39,7 @@ export default (opts) => {
       peers: callbackify.variadic(caller('ipfs.pubsub.peers', opts)),
       ls: callbackify.variadic(caller('ipfs.pubsub.ls', opts))
     },
-    swarm: {
-      peers: callbackify.variadic(caller('ipfs.swarm.peers', opts)),
-      addrs: callbackify(caller('ipfs.swarm.addrs', opts)),
-      localAddrs: callbackify(caller('ipfs.swarm.localAddrs', opts)),
-      connect: callbackify.variadic(caller('ipfs.swarm.connect', opts)),
-      disconnect: callbackify.variadic(caller('ipfs.swarm.disconnect', opts))
-    }
+    swarm: createSwarm(opts)
   }
 
   // Aliases

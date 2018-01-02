@@ -18,6 +18,7 @@ const common = {
         const onMessage = (e) => {
           console.log('CLIENT: received message', e.data)
           const data = e.data || {}
+          if (e.source !== iframe.contentWindow) return
           if (data.sender !== 'ipfs-postmsg-proxy:test:server') return
           if (!Actions[data.action]) return console.error(`Unknown action ${data.action}`)
           Actions[data.action].apply(null, data.args || [])
@@ -83,4 +84,4 @@ test.miscellaneous(common)
 test.object(common)
 test.pin(common)
 // test.pubsub(common)
-// test.swarm(common)
+test.swarm(common)
