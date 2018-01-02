@@ -29,7 +29,8 @@ const common = {
             console.log('CLIENT: server is ready')
             iframe.contentWindow.postMessage({
               sender: 'ipfs-postmsg-proxy:test:client',
-              action: 'start'
+              action: 'start',
+              args
             }, '*')
           },
           started () {
@@ -84,4 +85,4 @@ test.miscellaneous(common)
 test.object(common)
 test.pin(common)
 // test.pubsub(common)
-test.swarm(common)
+// test.swarm(common)
