@@ -251,9 +251,7 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
 ### Disabled suites
 
 * dht
-* key
 * pubsub
-* swarm
 
 ## Caveats
 

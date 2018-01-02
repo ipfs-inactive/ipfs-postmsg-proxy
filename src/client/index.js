@@ -3,6 +3,7 @@ import callbackify from 'callbackify'
 import createBlock from './block'
 import createConfig from './config'
 import createDag from './dag'
+import createDht from './dht'
 import createFiles from './files'
 import createKey from './key'
 import createObject from './object'
@@ -16,14 +17,7 @@ export default (opts) => {
     block: createBlock(opts),
     config: createConfig(opts),
     dag: createDag(opts),
-    dht: {
-      put: callbackify.variadic(caller('ipfs.dht.put', opts)),
-      get: callbackify.variadic(caller('ipfs.dht.get', opts)),
-      findprovs: callbackify.variadic(caller('ipfs.dht.findprovs', opts)),
-      findpeer: callbackify.variadic(caller('ipfs.dht.findpeer', opts)),
-      provide: callbackify.variadic(caller('ipfs.dht.provide', opts)),
-      query: callbackify.variadic(caller('ipfs.dht.query', opts))
-    },
+    dht: createDht(opts),
     files: createFiles(opts),
     key: createKey(opts),
     object: createObject(opts),

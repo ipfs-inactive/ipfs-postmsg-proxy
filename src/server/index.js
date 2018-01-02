@@ -2,6 +2,7 @@ import { expose } from 'postmsg-rpc'
 import createBlock from './block'
 import createConfig from './config'
 import createDag from './dag'
+import createDht from './dht'
 import createFiles from './files'
 import createKey from './key'
 import createObject from './object'
@@ -15,14 +16,7 @@ export default (getIpfs, opts) => {
     block: createBlock(getIpfs, opts),
     config: createConfig(getIpfs, opts),
     dag: createDag(getIpfs, opts),
-    dht: {
-      put: expose('ipfs.dht.put', (...args) => getIpfs().dht.put(...args), opts),
-      get: expose('ipfs.dht.get', (...args) => getIpfs().dht.get(...args), opts),
-      findprovs: expose('ipfs.dht.findprovs', (...args) => getIpfs().dht.findprovs(...args), opts),
-      findpeer: expose('ipfs.dht.findpeer', (...args) => getIpfs().dht.findpeer(...args), opts),
-      provide: expose('ipfs.dht.provide', (...args) => getIpfs().dht.provide(...args), opts),
-      query: expose('ipfs.dht.query', (...args) => getIpfs().dht.query(...args), opts)
-    },
+    dht: createDht(getIpfs, opts),
     files: createFiles(getIpfs, opts),
     key: createKey(getIpfs, opts),
     object: createObject(getIpfs, opts),
