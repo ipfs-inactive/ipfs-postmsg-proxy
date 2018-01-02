@@ -4,6 +4,7 @@ import createBlock from './block'
 import createConfig from './config'
 import createDag from './dag'
 import createFiles from './files'
+import createKey from './key'
 import createObject from './object'
 import createPin from './pin'
 import createSwarm from './swarm'
@@ -24,12 +25,7 @@ export default (opts) => {
       query: callbackify.variadic(caller('ipfs.dht.query', opts))
     },
     files: createFiles(opts),
-    key: {
-      gen: callbackify.variadic(caller('ipfs.key.gen', opts)),
-      list: callbackify(caller('ipfs.key.list', opts)),
-      rename: callbackify.variadic(caller('ipfs.key.rename', opts)),
-      rm: callbackify.variadic(caller('ipfs.key.rm', opts))
-    },
+    key: createKey(opts),
     object: createObject(opts),
     pin: createPin(opts),
     pubsub: {

@@ -3,6 +3,7 @@ import createBlock from './block'
 import createConfig from './config'
 import createDag from './dag'
 import createFiles from './files'
+import createKey from './key'
 import createObject from './object'
 import createPin from './pin'
 import createSwarm from './swarm'
@@ -23,12 +24,7 @@ export default (getIpfs, opts) => {
       query: expose('ipfs.dht.query', (...args) => getIpfs().dht.query(...args), opts)
     },
     files: createFiles(getIpfs, opts),
-    key: {
-      gen: expose('ipfs.key.gen', (...args) => getIpfs().key.gen(...args), opts),
-      list: expose('ipfs.key.list', () => getIpfs().key.list(), opts),
-      rename: expose('ipfs.key.rename', (...args) => getIpfs().key.rename(...args), opts),
-      rm: expose('ipfs.key.rm', (...args) => getIpfs().key.rm(...args), opts)
-    },
+    key: createKey(getIpfs, opts),
     object: createObject(getIpfs, opts),
     pin: createPin(getIpfs, opts),
     pubsub: {
