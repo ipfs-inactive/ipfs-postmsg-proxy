@@ -101,23 +101,23 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
 .files
   .add
     ✓ a Buffer
-    ✓ a BIG buffer (1023ms)
+    ✓ a BIG buffer (995ms)
     1) a BIG buffer with progress enabled
     ✓ a Buffer as tuple
     ✓ add by path fails
     ✓ a Readable Stream
-    ✓ add a nested directory as array of tupples (119ms)
+    ✓ add a nested directory as array of tupples (116ms)
     2) add a nested directory as array of tuppled with progress
     ✓ fails in invalid input
     ✓ Promise test
   .addReadableStream
     3) stream of valid files and dirs
   .addPullStream
-    ✓ stream of valid files and dirs (61ms)
+    ✓ stream of valid files and dirs (68ms)
   .cat
     ✓ with a base58 string encoded multihash
     ✓ with a multihash
-    ✓ streams a large file (370ms)
+    ✓ streams a large file (367ms)
     ✓ with ipfs path
     ✓ with ipfs path, nested value
     ✓ Promise test
@@ -125,14 +125,14 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
     ✓ errors on unknown path
     ✓ errors on dir path
   .catReadableStream
-    ✓ returns a Readable Stream for a cid (375ms)
+    ✓ returns a Readable Stream for a cid (361ms)
   .catPullStream
     ✓ returns a Pull Stream for a cid
   .get
     ✓ with a base58 encoded multihash
     ✓ with a multihash
-    ✓ large file (368ms)
-    ✓ directory (65ms)
+    ✓ large file (344ms)
+    ✓ directory (75ms)
     ✓ with ipfs path, nested value
     ✓ Promise test
     ✓ errors on invalid key
@@ -221,8 +221,29 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
     12) .ls hash
     13) .rm
 
+.swarm
+  callback API
+    ✓ .connect (43ms)
+    ✓ time (1504ms)
+    ✓ .addrs
+    ✓ .localAddrs
+    ✓ .disconnect
+    .peers
+      ✓ default
+      ✓ verbose
+      Shows connected peers only once
+        ✓ Connecting two peers with one address each (1624ms)
+        ✓ Connecting two peers with two addresses each (1640ms)
+  promise API
+    ✓ .connect
+    ✓ time (1506ms)
+    ✓ .peers
+    ✓ .addrs
+    ✓ .localAddrs
+    ✓ .disconnect
 
-117 passing (49s)
+
+132 passing (54s)
 9 pending
 13 failing
 ```
