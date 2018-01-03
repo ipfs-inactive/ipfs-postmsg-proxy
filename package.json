@@ -9,7 +9,7 @@
     "watch": "run-p watch:*",
     "watch:js": "babel src --watch --out-dir lib",
     "test": "run-s build lint test:*",
-    "test:node": "mocha test/node.js",
+    "test:node": "mocha test/node.js --exit",
     "test:browser": "run-s test:browser:build test:browser:run",
     "test:browser:build": "browserify test/fixtures/public/iframe/index.js -o test/fixtures/public/iframe/bundle.js",
     "test:browser:run": "karma start --browsers Chrome --single-run",
