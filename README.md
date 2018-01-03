@@ -100,26 +100,43 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
     ✓ .tree with CID recursive (accross different formats)
     ✓ .tree with CID and path recursive
 
+.dht
+  .get and .put
+    ✓ errors when getting a non-existent key from the DHT
+    - fetches value after it was put on another node
+    ✓ Promises support
+  .findpeer
+    ✓ finds other peers (56ms)
+    - fails to find other peer, if peer doesnt exist()s
+  .provide
+    ✓ regular
+    - recursive
+  findprovs
+    - basic
+    - Promises support
+  .query
+    ✓ returns the other node in the query
+
 .files
   .add
     ✓ a Buffer
-    ✓ a BIG buffer (995ms)
+    ✓ a BIG buffer (1152ms)
     1) a BIG buffer with progress enabled
     ✓ a Buffer as tuple
     ✓ add by path fails
     ✓ a Readable Stream
-    ✓ add a nested directory as array of tupples (116ms)
+    ✓ add a nested directory as array of tupples (141ms)
     2) add a nested directory as array of tuppled with progress
     ✓ fails in invalid input
     ✓ Promise test
   .addReadableStream
     3) stream of valid files and dirs
   .addPullStream
-    ✓ stream of valid files and dirs (68ms)
+    ✓ stream of valid files and dirs (63ms)
   .cat
     ✓ with a base58 string encoded multihash
     ✓ with a multihash
-    ✓ streams a large file (367ms)
+    ✓ streams a large file (358ms)
     ✓ with ipfs path
     ✓ with ipfs path, nested value
     ✓ Promise test
@@ -127,14 +144,14 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
     ✓ errors on unknown path
     ✓ errors on dir path
   .catReadableStream
-    ✓ returns a Readable Stream for a cid (361ms)
+    ✓ returns a Readable Stream for a cid (327ms)
   .catPullStream
     ✓ returns a Pull Stream for a cid
   .get
     ✓ with a base58 encoded multihash
     ✓ with a multihash
-    ✓ large file (344ms)
-    ✓ directory (75ms)
+    ✓ large file (324ms)
+    ✓ directory (69ms)
     ✓ with ipfs path, nested value
     ✓ Promise test
     ✓ errors on invalid key
@@ -150,6 +167,22 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
     ✓ with a base58 encoded CID
   .lsPullStream
     ✓ with a base58 encoded CID
+
+.key
+  .gen
+    4) creates a new rsa key
+  .list
+    5) lists all the keys
+    ✓ contains the created keys
+  .rename
+    6) "before all" hook
+  .rm
+    7) removes a key
+    8) does not contain the removed name
+  exchange
+    9) exports
+    10) imports
+    11) removes
 
 .miscellaneous
   ✓ .id
@@ -210,23 +243,23 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
 
 .pin
   callback API
-    4) .ls type recursive
+    12) .ls type recursive
     - .ls type indirect
-    5) .rm
-    6) .add
-    7) .ls
-    8) .ls type direct
-    9) .ls for a specific hash
-  promise API
-    10) .add
-    11) .ls
-    12) .ls hash
     13) .rm
+    14) .add
+    15) .ls
+    16) .ls type direct
+    17) .ls for a specific hash
+  promise API
+    18) .add
+    19) .ls
+    20) .ls hash
+    21) .rm
 
 .swarm
   callback API
-    ✓ .connect (43ms)
-    ✓ time (1504ms)
+    ✓ .connect
+    ✓ time (1502ms)
     ✓ .addrs
     ✓ .localAddrs
     ✓ .disconnect
@@ -234,25 +267,24 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
       ✓ default
       ✓ verbose
       Shows connected peers only once
-        ✓ Connecting two peers with one address each (1624ms)
-        ✓ Connecting two peers with two addresses each (1640ms)
+        ✓ Connecting two peers with one address each (1889ms)
+        ✓ Connecting two peers with two addresses each (1571ms)
   promise API
     ✓ .connect
-    ✓ time (1506ms)
+    ✓ time (1501ms)
     ✓ .peers
     ✓ .addrs
     ✓ .localAddrs
     ✓ .disconnect
 
 
-132 passing (54s)
-9 pending
-13 failing
+138 passing (56s)
+14 pending
+21 failing
 ```
 
 ### Disabled suites
 
-* dht
 * pubsub
 
 ## Caveats
