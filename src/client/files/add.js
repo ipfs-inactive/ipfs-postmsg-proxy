@@ -12,7 +12,7 @@ export default function (opts) {
     add: callbackify.variadic(
       preCall(
         (...args) => {
-          let progressBytes
+          let progressBytes = 0
           let onProgress
 
           // FIXME: implement progress properly
