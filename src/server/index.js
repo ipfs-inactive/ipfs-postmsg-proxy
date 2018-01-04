@@ -7,6 +7,7 @@ import createFiles from './files'
 import createKey from './key'
 import createObject from './object'
 import createPin from './pin'
+import createPubsub from './pubsub'
 import createSwarm from './swarm'
 
 export default (getIpfs, opts) => {
@@ -21,11 +22,7 @@ export default (getIpfs, opts) => {
     key: createKey(getIpfs, opts),
     object: createObject(getIpfs, opts),
     pin: createPin(getIpfs, opts),
-    pubsub: {
-      publish: expose('ipfs.pubsub.publish', (...args) => getIpfs().pubsub.publish(...args), opts),
-      peers: expose('ipfs.pubsub.peers', () => getIpfs().pubsub.peers(), opts),
-      ls: expose('ipfs.pubsub.ls', (...args) => getIpfs().pubsub.ls(...args), opts)
-    },
+    pubsub: createPubsub(getIpfs, opts),
     swarm: createSwarm(getIpfs, opts)
   }
 }

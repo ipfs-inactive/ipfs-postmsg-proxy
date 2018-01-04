@@ -8,6 +8,7 @@ import createFiles from './files'
 import createKey from './key'
 import createObject from './object'
 import createPin from './pin'
+import createPubsub from './pubsub'
 import createSwarm from './swarm'
 
 export default (opts) => {
@@ -22,13 +23,7 @@ export default (opts) => {
     key: createKey(opts),
     object: createObject(opts),
     pin: createPin(opts),
-    pubsub: {
-      publish: callbackify.variadic(caller('ipfs.pubsub.publish', opts)),
-      // subscribe: callbackify.variadic(caller('ipfs.pubsub.subscribe', opts)),
-      // unsubscribe: callbackify.variadic(caller('ipfs.pubsub.unsubscribe', opts)),
-      peers: callbackify.variadic(caller('ipfs.pubsub.peers', opts)),
-      ls: callbackify.variadic(caller('ipfs.pubsub.ls', opts))
-    },
+    pubsub: createPubsub(opts),
     swarm: createSwarm(opts)
   }
 

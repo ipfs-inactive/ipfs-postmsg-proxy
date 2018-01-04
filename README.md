@@ -106,7 +106,7 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
     - fetches value after it was put on another node
     ✓ Promises support
   .findpeer
-    ✓ finds other peers (59ms)
+    ✓ finds other peers (56ms)
     - fails to find other peer, if peer doesnt exist()s
   .provide
     ✓ regular
@@ -120,23 +120,23 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
 .files
   .add
     ✓ a Buffer
-    ✓ a BIG buffer (1024ms)
+    ✓ a BIG buffer (965ms)
     1) a BIG buffer with progress enabled
     ✓ a Buffer as tuple
     ✓ add by path fails
     ✓ a Readable Stream
-    ✓ add a nested directory as array of tupples (116ms)
+    ✓ add a nested directory as array of tupples (118ms)
     2) add a nested directory as array of tuppled with progress
     ✓ fails in invalid input
     ✓ Promise test
   .addReadableStream
-    ✓ stream of valid files and dirs (55ms)
+    ✓ stream of valid files and dirs
   .addPullStream
-    ✓ stream of valid files and dirs (56ms)
+    ✓ stream of valid files and dirs
   .cat
     ✓ with a base58 string encoded multihash
     ✓ with a multihash
-    ✓ streams a large file (362ms)
+    ✓ streams a large file (348ms)
     ✓ with ipfs path
     ✓ with ipfs path, nested value
     ✓ Promise test
@@ -144,14 +144,14 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
     ✓ errors on unknown path
     ✓ errors on dir path
   .catReadableStream
-    ✓ returns a Readable Stream for a cid (383ms)
+    ✓ returns a Readable Stream for a cid (330ms)
   .catPullStream
     ✓ returns a Pull Stream for a cid
   .get
     ✓ with a base58 encoded multihash
     ✓ with a multihash
-    ✓ large file (342ms)
-    ✓ directory (66ms)
+    ✓ large file (319ms)
+    ✓ directory (68ms)
     ✓ with ipfs path, nested value
     ✓ Promise test
     ✓ errors on invalid key
@@ -167,22 +167,6 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
     ✓ with a base58 encoded CID
   .lsPullStream
     ✓ with a base58 encoded CID
-
-.key
-  .gen
-    3) creates a new rsa key
-  .list
-    4) lists all the keys
-    ✓ contains the created keys
-  .rename
-    5) "before all" hook
-  .rm
-    6) removes a key
-    7) does not contain the removed name
-  exchange
-    8) exports
-    9) imports
-    10) removes
 
 .miscellaneous
   ✓ .id
@@ -241,20 +225,34 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
       ✓ .appendData
       ✓ .setData
 
-.pin
-  callback API
-    11) .ls type recursive
-    - .ls type indirect
-    12) .rm
-    13) .add
-    14) .ls
-    15) .ls type direct
-    16) .ls for a specific hash
-  promise API
-    17) .add
-    18) .ls
-    19) .ls hash
-    20) .rm
+.pubsub
+  single node
+    .publish
+      ✓ errors on string messags
+      ✓ message from buffer
+    .subscribe
+      3) to one topic
+      4) to one topic with Promise
+      5) to one topic with options and Promise
+      6) attaches multiple event listeners
+      7) discover options
+  multiple nodes connected
+    .peers
+      ✓ does not error when not subscribed to a topic
+      8) doesn't return extra peers
+      9) returns peers for a topic - one peer
+      10) lists peers for a topic - multiple peers
+    .ls
+      ✓ empty() list when no topics are subscribed
+      11) list with 1 subscribed topic
+      12) list with 3 subscribed topics
+    multiple nodes
+      13) receive messages from different node
+      14) round trips a non-utf8 binary buffer correctly
+      15) receive multiple messages
+    load tests
+      16) "before all" hook
+      17) "after all" hook
 
 .swarm
   callback API
@@ -267,25 +265,21 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
       ✓ default
       ✓ verbose
       Shows connected peers only once
-        ✓ Connecting two peers with one address each (1438ms)
-        ✓ Connecting two peers with two addresses each (1940ms)
+        ✓ Connecting two peers with one address each (1479ms)
+        ✓ Connecting two peers with two addresses each (1624ms)
   promise API
     ✓ .connect
-    ✓ time (1502ms)
+    ✓ time (1500ms)
     ✓ .peers
     ✓ .addrs
     ✓ .localAddrs
     ✓ .disconnect
 
 
-139 passing (16s)
-14 pending
-20 failing
+142 passing (2m)
+13 pending
+17 failing
 ```
-
-### Disabled suites
-
-* pubsub
 
 ## Caveats
 
@@ -296,3 +290,7 @@ The streaming APIs should work as expected _but_ behind the scenes all data is b
 ### Progress option
 
 Due to the buffering performed in the streaming APIs the progress option for `files.add` currently tracks progress of data buffered into memory, before it is sent to the IPFS node.
+
+### Pubsub
+
+`subscribe` and `unsubscribe` are not yet implemented.
