@@ -1,7 +1,7 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
+import { Transform } from 'stream'
 import pull from 'pull-stream'
-import toStream from 'pull-stream-to-stream'
 import toPull from 'stream-to-pull-stream'
 import isStream from 'is-stream'
 import buffer from 'pull-buffer'
@@ -46,8 +46,22 @@ export default function (opts) {
       )
     ),
     // FIXME: implement streams properly
-    addReadableStream () {
-      return toStream(api.addPullStream(...arguments))
+    addReadableStream (...args) {
+      const content = []
+      return new Transform({
+        objectMode: true,
+        transform (chunk, enc, cb) {
+          content.push(normalizeContent(chunk))
+          cb()
+        },
+        flush (cb) {
+          api.add.apply(api, [content].concat(args, (err, res) => {
+            if (err) return cb(err)
+            res.forEach((file) => this.push(file))
+            cb()
+          }))
+        }
+      })
     },
     // FIXME: implement streams properly
     addPullStream: (...args) => pull(
