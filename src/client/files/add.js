@@ -12,9 +12,13 @@ export default function (opts) {
     add: callbackify.variadic(
       preCall(
         (...args) => {
-          // TODO: handle progress
+          let progressBytes
+          let onProgress
+
+          // FIXME: implement progress properly
           if (args[1] && args[1].progress) {
-            throw new Error('Not implemented')
+            onProgress = args[1].progress
+            delete args[1].progress
           }
 
           // FIXME: implement streams properly
@@ -30,7 +34,15 @@ export default function (opts) {
                   file.content,
                   pull.collect((err, buffers) => {
                     if (err) return cb(err)
-                    cb(null, Object.assign(file, { content: Buffer.concat(buffers) }))
+
+                    const content = Buffer.concat(buffers)
+
+                    if (onProgress) {
+                      progressBytes += content.length
+                      onProgress(progressBytes)
+                    }
+
+                    cb(null, Object.assign(file, { content }))
                   })
                 )
               }),
