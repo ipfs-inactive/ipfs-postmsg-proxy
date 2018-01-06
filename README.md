@@ -81,6 +81,49 @@ window.ipfs = createProxyClient({
 // ipfs.add(new Buffer('HELLO WORLD'), (err, res) => console.log(err, res))
 ```
 
+## API
+
+#### `createProxyServer(getIpfs, [options])`
+
+Create a proxy server to a running IPFS instance.
+
+* `getIpfs` - a function that returns the IPFS instance
+* `options.postMessage` - function that posts a message
+    * default `window.postMessage`
+* `options.targetOrigin` - passed to postMessage (see [postMessage docs](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) for more info)
+    * default `'*'`
+* `options.addListener` - function that adds a listener
+    * default `window.addEventListener`
+* `options.removeListener` - function that removes a listener
+    * default `window.removeEventListener`
+* `options.getMessageData` - a function that extracts data from the event object passed to a `message` event handler
+    * default `(e) => e.data`
+
+Returns an IPFS proxy server instance.
+
+#### `closeProxyServer(server)`
+
+Close the passed proxy server (removes all listeners for `postMessage` message events).
+
+* `server` - a proxy server created by `createProxyServer`
+
+#### `createProxyClient([options])`
+
+Create a proxy client to the proxy server.
+
+* `options.postMessage` - function that posts a message
+    * default `window.postMessage`
+* `options.targetOrigin` - passed to postMessage (see [postMessage docs](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) for more info)
+    * default `'*'`
+* `options.addListener` - function that adds a listener
+    * default `window.addEventListener`
+* `options.removeListener` - function that removes a listener
+    * default `window.removeEventListener`
+* `options.getMessageData` - a function that extracts data from the event object passed to a `message` event handler
+    * default `(e) => e.data`
+
+Returns an IPFS proxy client instance.
+
 ## Current status
 
 ```
