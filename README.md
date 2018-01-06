@@ -37,7 +37,7 @@ The [`fn-call`](./src/fn-call.js) module provides these utility functions.
 
 In this example, IPFS is running in an iframe.
 
-In iframe window where the js-ipfs node is running:
+In iframe window where the js-ipfs node is running, create **iframe.js**:
 
 ```js
 const IPFS = require('ipfs')
@@ -45,20 +45,37 @@ const { createProxyServer, closeProxyServer } = require('ipfs-postmsg-proxy')
 
 const ipfs = new IPFS()
 
+// Create proxy server that talks to the parent window
 const server = createProxyServer(() => ipfs, {
-  postMessage: (data) => window.parent.postMessage(data)
+  postMessage: window.parent.postMessage.bind(window.parent)
 })
 
 // Later, you might want to close the server:
 closeProxyServer(server)
 ```
 
-In the client window:
+Browserify/Webpack **iframe.js** to **bundle.js**.
+
+Create **iframe.html**:
+
+```html
+<!doctype html>
+<script src="bundle.js"></script>
+```
+
+In the client window, add the iframe and create a client to talk to it:
 
 ```js
 const { createProxyClient } = require('ipfs-postmsg-proxy')
 
-window.ipfs = createProxyClient()
+const iframe = document.createElement('iframe')
+iframe.src = 'iframe.html'
+document.body.appendChild(iframe)
+
+// Create proxy client that talks to the iframe
+window.ipfs = createProxyClient({
+  postMessage: iframe.contentWindow.postMessage.bind(iframe.contentWindow)
+})
 
 // You can now interact with IPFS as usual, e.g.
 // ipfs.add(new Buffer('HELLO WORLD'), (err, res) => console.log(err, res))
