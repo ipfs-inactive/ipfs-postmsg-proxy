@@ -197,7 +197,7 @@ Returns an IPFS proxy client instance.
     - fetches value after it was put on another node
     ✓ Promises support
   .findpeer
-    ✓ finds other peers (56ms)
+    ✓ finds other peers (57ms)
     - fails to find other peer, if peer doesnt exist()s
   .provide
     ✓ regular
@@ -211,23 +211,23 @@ Returns an IPFS proxy client instance.
 .files
   .add
     ✓ a Buffer
-    ✓ a BIG buffer (965ms)
-    1) a BIG buffer with progress enabled
+    ✓ a BIG buffer (998ms)
+    ✓ a BIG buffer with progress enabled (509ms)
     ✓ a Buffer as tuple
     ✓ add by path fails
     ✓ a Readable Stream
-    ✓ add a nested directory as array of tupples (118ms)
-    2) add a nested directory as array of tuppled with progress
+    ✓ add a nested directory as array of tupples (127ms)
+    ✓ add a nested directory as array of tuppled with progress (61ms)
     ✓ fails in invalid input
     ✓ Promise test
   .addReadableStream
     ✓ stream of valid files and dirs
   .addPullStream
-    ✓ stream of valid files and dirs
+    ✓ stream of valid files and dirs (57ms)
   .cat
     ✓ with a base58 string encoded multihash
     ✓ with a multihash
-    ✓ streams a large file (348ms)
+    ✓ streams a large file (385ms)
     ✓ with ipfs path
     ✓ with ipfs path, nested value
     ✓ Promise test
@@ -235,14 +235,14 @@ Returns an IPFS proxy client instance.
     ✓ errors on unknown path
     ✓ errors on dir path
   .catReadableStream
-    ✓ returns a Readable Stream for a cid (330ms)
+    ✓ returns a Readable Stream for a cid (359ms)
   .catPullStream
     ✓ returns a Pull Stream for a cid
   .get
     ✓ with a base58 encoded multihash
     ✓ with a multihash
-    ✓ large file (319ms)
-    ✓ directory (68ms)
+    ✓ large file (364ms)
+    ✓ directory (72ms)
     ✓ with ipfs path, nested value
     ✓ Promise test
     ✓ errors on invalid key
@@ -322,33 +322,33 @@ Returns an IPFS proxy client instance.
       ✓ errors on string messags
       ✓ message from buffer
     .subscribe
-      3) to one topic
-      4) to one topic with Promise
-      5) to one topic with options and Promise
-      6) attaches multiple event listeners
-      7) discover options
+      1) to one topic
+      2) to one topic with Promise
+      3) to one topic with options and Promise
+      4) attaches multiple event listeners
+      5) discover options
   multiple nodes connected
     .peers
       ✓ does not error when not subscribed to a topic
-      8) doesn't return extra peers
-      9) returns peers for a topic - one peer
-      10) lists peers for a topic - multiple peers
+      6) doesn't return extra peers
+      7) returns peers for a topic - one peer
+      8) lists peers for a topic - multiple peers
     .ls
       ✓ empty() list when no topics are subscribed
-      11) list with 1 subscribed topic
-      12) list with 3 subscribed topics
+      9) list with 1 subscribed topic
+      10) list with 3 subscribed topics
     multiple nodes
-      13) receive messages from different node
-      14) round trips a non-utf8 binary buffer correctly
-      15) receive multiple messages
+      11) receive messages from different node
+      12) round trips a non-utf8 binary buffer correctly
+      13) receive multiple messages
     load tests
-      16) "before all" hook
-      17) "after all" hook
+      14) "before all" hook
+      15) "after all" hook
 
 .swarm
   callback API
     ✓ .connect
-    ✓ time (1505ms)
+    ✓ time (1504ms)
     ✓ .addrs
     ✓ .localAddrs
     ✓ .disconnect
@@ -356,20 +356,20 @@ Returns an IPFS proxy client instance.
       ✓ default
       ✓ verbose
       Shows connected peers only once
-        ✓ Connecting two peers with one address each (1479ms)
-        ✓ Connecting two peers with two addresses each (1624ms)
+        ✓ Connecting two peers with one address each (1407ms)
+        ✓ Connecting two peers with two addresses each (1689ms)
   promise API
     ✓ .connect
-    ✓ time (1500ms)
+    ✓ time (1503ms)
     ✓ .peers
     ✓ .addrs
     ✓ .localAddrs
     ✓ .disconnect
 
 
-142 passing (2m)
+144 passing (18s)
 13 pending
-17 failing
+15 failing
 ```
 
 ## Caveats
