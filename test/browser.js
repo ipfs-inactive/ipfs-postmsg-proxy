@@ -2,6 +2,7 @@
 
 const test = require('interface-ipfs-core')
 const { createProxyClient } = require('../lib')
+const defaultConfig = { EXPERIMENTAL: { pubsub: true } }
 
 let factory
 
@@ -27,6 +28,7 @@ const common = {
         const Actions = {
           ready () {
             console.log('CLIENT: server is ready')
+            args[0] = Object.assign({}, defaultConfig, args[0])
             iframe.contentWindow.postMessage({
               sender: 'ipfs-postmsg-proxy:test:client',
               action: 'start',
@@ -84,5 +86,5 @@ test.files(common)
 test.miscellaneous(common)
 test.object(common)
 // test.pin(common) // (not implemented yet in js-ipfs)
-// test.pubsub(common) // (disabled for browser)
+// test.pubsub(common)
 // test.swarm(common) // (disabled for browser)

@@ -197,7 +197,7 @@ Returns an IPFS proxy client instance.
     - fetches value after it was put on another node
     ✓ Promises support
   .findpeer
-    ✓ finds other peers (57ms)
+    ✓ finds other peers
     - fails to find other peer, if peer doesnt exist()s
   .provide
     ✓ regular
@@ -211,23 +211,23 @@ Returns an IPFS proxy client instance.
 .files
   .add
     ✓ a Buffer
-    ✓ a BIG buffer (998ms)
-    ✓ a BIG buffer with progress enabled (509ms)
+    ✓ a BIG buffer
+    ✓ a BIG buffer with progress enabled
     ✓ a Buffer as tuple
     ✓ add by path fails
     ✓ a Readable Stream
-    ✓ add a nested directory as array of tupples (127ms)
-    ✓ add a nested directory as array of tuppled with progress (61ms)
+    ✓ add a nested directory as array of tupples
+    ✓ add a nested directory as array of tuppled with progress
     ✓ fails in invalid input
     ✓ Promise test
   .addReadableStream
     ✓ stream of valid files and dirs
   .addPullStream
-    ✓ stream of valid files and dirs (57ms)
+    ✓ stream of valid files and dirs
   .cat
     ✓ with a base58 string encoded multihash
     ✓ with a multihash
-    ✓ streams a large file (385ms)
+    ✓ streams a large file
     ✓ with ipfs path
     ✓ with ipfs path, nested value
     ✓ Promise test
@@ -235,14 +235,14 @@ Returns an IPFS proxy client instance.
     ✓ errors on unknown path
     ✓ errors on dir path
   .catReadableStream
-    ✓ returns a Readable Stream for a cid (359ms)
+    ✓ returns a Readable Stream for a cid
   .catPullStream
     ✓ returns a Pull Stream for a cid
   .get
     ✓ with a base58 encoded multihash
     ✓ with a multihash
-    ✓ large file (364ms)
-    ✓ directory (72ms)
+    ✓ large file
+    ✓ directory
     ✓ with ipfs path, nested value
     ✓ Promise test
     ✓ errors on invalid key
@@ -322,33 +322,36 @@ Returns an IPFS proxy client instance.
       ✓ errors on string messags
       ✓ message from buffer
     .subscribe
-      1) to one topic
-      2) to one topic with Promise
-      3) to one topic with options and Promise
-      4) attaches multiple event listeners
-      5) discover options
+      ✓ to one topic
+      ✓ to one topic with Promise
+      ✓ to one topic with options and Promise
+      ✓ attaches multiple event listeners
+      ✓ discover options
   multiple nodes connected
     .peers
       ✓ does not error when not subscribed to a topic
-      6) doesn't return extra peers
-      7) returns peers for a topic - one peer
-      8) lists peers for a topic - multiple peers
+      ✓ doesn't return extra peers
+      ✓ returns peers for a topic - one peer
+      ✓ lists peers for a topic - multiple peers
     .ls
       ✓ empty() list when no topics are subscribed
-      9) list with 1 subscribed topic
-      10) list with 3 subscribed topics
+      ✓ list with 1 subscribed topic
+      ✓ list with 3 subscribed topics
     multiple nodes
-      11) receive messages from different node
-      12) round trips a non-utf8 binary buffer correctly
-      13) receive multiple messages
+      ✓ receive messages from different node
+      ✓ round trips a non-utf8 binary buffer correctly
+      ✓ receive multiple messages
     load tests
-      14) "before all" hook
-      15) "after all" hook
+      ✓ call publish 1k times
+Send/Receive 10k messages took: 12774 ms, 782 ops / s
+
+      ✓ send/receive 10k messages
+      ✓ call subscribe/unsubscribe 1k times
 
 .swarm
   callback API
     ✓ .connect
-    ✓ time (1504ms)
+    ✓ time
     ✓ .addrs
     ✓ .localAddrs
     ✓ .disconnect
@@ -356,20 +359,19 @@ Returns an IPFS proxy client instance.
       ✓ default
       ✓ verbose
       Shows connected peers only once
-        ✓ Connecting two peers with one address each (1407ms)
-        ✓ Connecting two peers with two addresses each (1689ms)
+        ✓ Connecting two peers with one address each
+        ✓ Connecting two peers with two addresses each
   promise API
     ✓ .connect
-    ✓ time (1503ms)
+    ✓ time
     ✓ .peers
     ✓ .addrs
     ✓ .localAddrs
     ✓ .disconnect
 
 
-144 passing (18s)
+160 passing
 13 pending
-15 failing
 ```
 
 ## Caveats
