@@ -383,7 +383,3 @@ The streaming APIs should work as expected _but_ behind the scenes all data is b
 ### Progress option
 
 Due to the buffering performed in the streaming APIs the progress option for `files.add` currently tracks progress of data buffered into memory, before it is sent to the IPFS node.
-
-### Pubsub
-
-`subscribe` and `unsubscribe` are not yet implemented.
