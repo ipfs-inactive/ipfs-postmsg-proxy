@@ -15,8 +15,12 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['config.set'],
       (...args) => getIpfs().config.set(...args)
     ), opts),
-    get: expose('ipfs.config.get', (...args) => getIpfs().config.get(...args), opts)
+    get: expose('ipfs.config.get', preCall(
+      opts.preCall['config.get'],
+      (...args) => getIpfs().config.get(...args)
+    ), opts)
   }
 }

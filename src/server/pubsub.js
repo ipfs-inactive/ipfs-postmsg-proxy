@@ -25,6 +25,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['pubsub.publish'],
       (...args) => getIpfs().pubsub.publish(...args)
     ), opts),
     subscribe: expose('ipfs.pubsub.subscribe', function (...args) {
@@ -53,6 +54,7 @@ export default function (getIpfs, opts) {
 
           return args
         },
+        opts.preCall['pubsub.subscribe'],
         (...args) => {
           return getIpfs().pubsub.subscribe(...args)
             .catch((err) => {
@@ -74,13 +76,20 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['pubsub.unsubscribe'],
       (...args) => {
         getIpfs().pubsub.unsubscribe(...args)
         return Promise.resolve()
       }
     ), opts),
-    peers: expose('ipfs.pubsub.peers', (...args) => getIpfs().pubsub.peers(...args), opts),
-    ls: expose('ipfs.pubsub.ls', (...args) => getIpfs().pubsub.ls(...args), opts)
+    peers: expose('ipfs.pubsub.peers', preCall(
+      opts.preCall['pubsub.peers'],
+      (...args) => getIpfs().pubsub.peers(...args)
+    ), opts),
+    ls: expose('ipfs.pubsub.ls', preCall(
+      opts.preCall['pubsub.ls'],
+      (...args) => getIpfs().pubsub.ls(...args)
+    ), opts)
   }
 
   return api

@@ -1,4 +1,5 @@
 import { expose } from 'postmsg-rpc'
+import { preCall } from '../fn-call'
 import createBlock from './block'
 import createConfig from './config'
 import createDag from './dag'
@@ -11,9 +12,18 @@ import createPubsub from './pubsub'
 import createSwarm from './swarm'
 
 export default (getIpfs, opts) => {
+  opts = opts || {}
+  opts.preCall = opts.preCall || {}
+
   return {
-    id: expose('ipfs.id', () => getIpfs().id(), opts),
-    version: expose('ipfs.version', () => getIpfs().version(), opts),
+    id: expose('ipfs.id', preCall(
+      opts.preCall.id,
+      () => getIpfs().id()
+    ), opts),
+    version: expose('ipfs.version', preCall(
+      opts.preCall.version,
+      () => getIpfs().version()
+    ), opts),
     block: createBlock(getIpfs, opts),
     config: createConfig(getIpfs, opts),
     dag: createDag(getIpfs, opts),

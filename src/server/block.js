@@ -22,6 +22,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['block.put'],
       postCall(
         (...args) => getIpfs().block.put(...args),
         blockToJson
@@ -37,6 +38,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['block.get'],
       postCall(
         (...args) => getIpfs().block.get(...args),
         blockToJson
@@ -52,6 +54,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['block.stat'],
       (...args) => getIpfs().block.stat(...args)
     ), opts)
   }

@@ -23,6 +23,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['files.add'],
       (...args) => getIpfs().files.add(...args)
     ), opts),
     cat: expose('ipfs.files.cat', preCall(
@@ -35,6 +36,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['files.cat'],
       (...args) => getIpfs().files.cat(...args)
     ), opts),
     get: expose('ipfs.files.get', preCall(
@@ -47,6 +49,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['files.get'],
       (...args) => getIpfs().files.get(...args)
     ), opts),
     ls: expose('ipfs.files.ls', preCall(
@@ -59,6 +62,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['files.ls'],
       (...args) => getIpfs().ls(...args)
     ), opts)
   }

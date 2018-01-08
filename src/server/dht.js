@@ -6,8 +6,14 @@ import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
   return {
-    put: expose('ipfs.dht.put', (...args) => getIpfs().dht.put(...args), opts),
-    get: expose('ipfs.dht.get', (...args) => getIpfs().dht.get(...args), opts),
+    put: expose('ipfs.dht.put', preCall(
+      opts.preCall['dht.put'],
+      (...args) => getIpfs().dht.put(...args)
+    ), opts),
+    get: expose('ipfs.dht.get', preCall(
+      opts.preCall['dht.get'],
+      (...args) => getIpfs().dht.get(...args)
+    ), opts),
     findprovs: expose('ipfs.dht.findprovs', preCall(
       (...args) => {
         if (isTypedArray(args[0])) {
@@ -16,6 +22,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['dht.findprovs'],
       postCall(
         (...args) => getIpfs().dht.findprovs(...args),
         (res) => res.map((item) => isPeerInfo(item) ? peerInfoToJson(item) : item)
@@ -29,6 +36,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['dht.findpeer'],
       postCall(
         (...args) => getIpfs().dht.findpeer(...args),
         (res) => isPeerInfo(res) ? peerInfoToJson(res) : res
@@ -44,6 +52,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['dht.provide'],
       (...args) => getIpfs().dht.provide(...args)
     ), opts),
     query: expose('ipfs.dht.query', preCall(
@@ -54,6 +63,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['dht.query'],
       postCall(
         (...args) => getIpfs().dht.query(...args),
         (res) => res.map((item) => isPeerInfo(item) ? peerInfoToJson(item) : item)

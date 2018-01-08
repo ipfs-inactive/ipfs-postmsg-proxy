@@ -24,6 +24,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['dag.put'],
       postCall(
         (...args) => getIpfs().dag.put(...args),
         cidToJson
@@ -39,6 +40,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['dag.get'],
       postCall(
         (...args) => getIpfs().dag.get(...args),
         (res) => {
@@ -57,6 +59,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['dag.tree'],
       (...args) => getIpfs().dag.tree(...args)
     ), opts)
   }

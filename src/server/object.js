@@ -6,9 +6,12 @@ import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
   return {
-    new: expose('ipfs.object.new', postCall(
-      (...args) => getIpfs().object.new(...args),
-      dagNodeToJson
+    new: expose('ipfs.object.new', preCall(
+      opts.preCall['object.new'],
+      postCall(
+        (...args) => getIpfs().object.new(...args),
+        dagNodeToJson
+      )
     ), opts),
     put: expose('ipfs.object.put', preCall(
       (...args) => {
@@ -26,6 +29,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['object.put'],
       postCall(
         (...args) => getIpfs().object.put(...args),
         dagNodeToJson
@@ -41,6 +45,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['object.get'],
       postCall(
         (...args) => getIpfs().object.get(...args),
         dagNodeToJson
@@ -56,6 +61,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['object.data'],
       (...args) => getIpfs().object.data(...args)
     ), opts),
     links: expose('ipfs.object.links', preCall(
@@ -68,6 +74,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['object.links'],
       postCall(
         (...args) => getIpfs().object.links(...args),
         (res) => res.map(dagLinkToJson)
@@ -83,6 +90,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['object.stat'],
       (...args) => getIpfs().object.stat(...args)
     ), opts),
     patch: {
@@ -98,6 +106,7 @@ export default function (getIpfs, opts) {
 
           return args
         },
+        opts.preCall['object.patch.addLink'],
         postCall(
           (...args) => getIpfs().object.patch.addLink(...args),
           dagNodeToJson
@@ -115,6 +124,7 @@ export default function (getIpfs, opts) {
 
           return args
         },
+        opts.preCall['object.patch.rmLink'],
         postCall(
           (...args) => getIpfs().object.patch.rmLink(...args),
           dagNodeToJson
@@ -134,6 +144,7 @@ export default function (getIpfs, opts) {
 
           return args
         },
+        opts.preCall['object.patch.appendData'],
         postCall(
           (...args) => getIpfs().object.patch.appendData(...args),
           dagNodeToJson
@@ -153,6 +164,7 @@ export default function (getIpfs, opts) {
 
           return args
         },
+        opts.preCall['object.patch.setData'],
         postCall(
           (...args) => getIpfs().object.patch.setData(...args),
           dagNodeToJson

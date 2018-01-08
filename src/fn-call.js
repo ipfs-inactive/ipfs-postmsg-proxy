@@ -1,10 +1,18 @@
+const preCallNoop = (args) => args
+
 // Alter the arguments before they are sent to the server
-export function preCall (preFn, callFn) {
+export function preCall (...args) {
+  if (args.length > 2) {
+    args = [args[0], preCall(...args.slice(1))]
+  }
+
+  const preFn = args[0] || preCallNoop
+  const callFn = args[1]
+
   return (...args) => {
     args = preFn(...args)
     // Args can be a promise which should be resolved before callFn is called
-    if (args.then) return args.then((args) => callFn(...args))
-    return callFn(...args)
+    return Promise.resolve(args).then((args) => callFn(...args))
   }
 }
 

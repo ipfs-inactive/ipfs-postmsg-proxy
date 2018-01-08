@@ -15,6 +15,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['pin.add'],
       (...args) => getIpfs().pin.add(...args)
     ), opts),
     rm: expose('ipfs.pin.rm', preCall(
@@ -27,6 +28,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['pin.rm'],
       (...args) => getIpfs().pin.rm(...args)
     ), opts),
     ls: expose('ipfs.pin.ls', preCall(
@@ -39,6 +41,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
+      opts.preCall['pin.ls'],
       (...args) => getIpfs().pin.ls(...args)
     ), opts)
   }
