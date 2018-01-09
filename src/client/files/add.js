@@ -48,7 +48,6 @@ export default function (opts) {
               }),
               pull.collect((err, files) => {
                 if (err) return reject(err)
-                args[0] = files.length === 1 ? files[0] : files
                 resolve(args)
               })
             )
