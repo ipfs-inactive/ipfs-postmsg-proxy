@@ -2,6 +2,7 @@ import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import { isDagNode, isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkToJson, dagLinkFromJson } from '../serialization/dag'
 import { cidToJson, isCid } from '../serialization/cid'
+import { bufferFromJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
 
 export default function (opts) {
@@ -53,7 +54,7 @@ export default function (opts) {
         },
         postCall(
           caller('ipfs.object.data', opts),
-          (res) => Buffer.from(res)
+          bufferFromJson
         )
       )
     ),

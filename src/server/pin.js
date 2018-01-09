@@ -1,14 +1,14 @@
 import { expose } from 'postmsg-rpc'
-import isTypedArray from 'is-typedarray'
 import { isCidJson, cidFromJson } from '../serialization/cid'
+import { isBufferJson, bufferFromJson } from '../serialization/buffer'
 import { preCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
   return {
     add: expose('ipfs.pin.add', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
@@ -20,8 +20,8 @@ export default function (getIpfs, opts) {
     ), opts),
     rm: expose('ipfs.pin.rm', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
@@ -33,8 +33,8 @@ export default function (getIpfs, opts) {
     ), opts),
     ls: expose('ipfs.pin.ls', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }

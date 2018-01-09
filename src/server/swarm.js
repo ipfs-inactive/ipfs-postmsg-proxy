@@ -1,7 +1,7 @@
 import { expose } from 'postmsg-rpc'
-import isTypedArray from 'is-typedarray'
 import { peerInfoToJson } from '../serialization/peer'
 import { isMultiaddrJson, multiaddrFromJson, multiaddrToJson } from '../serialization/multiaddr'
+import { isBufferJson, bufferFromJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
@@ -33,8 +33,8 @@ export default function (getIpfs, opts) {
     ), opts),
     connect: expose('ipfs.swarm.connect', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isMultiaddrJson(args[0])) {
           args[0] = multiaddrFromJson(args[0])
         }
@@ -46,8 +46,8 @@ export default function (getIpfs, opts) {
     ), opts),
     disconnect: expose('ipfs.swarm.disconnect', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isMultiaddrJson(args[0])) {
           args[0] = multiaddrFromJson(args[0])
         }

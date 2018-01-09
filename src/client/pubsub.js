@@ -1,9 +1,9 @@
 import { caller, expose } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import shortid from 'shortid'
-import isTypedArray from 'is-typedarray'
 import { preCall } from '../fn-call'
 import { functionToJson } from '../serialization/function'
+import { isBufferJson, bufferFromJson } from '../serialization/buffer'
 
 export default function (opts) {
   const subs = [
@@ -45,12 +45,12 @@ export default function (opts) {
               fnName,
               exposedFn: expose(fnName, preCall(
                 (...args) => {
-                  if (isTypedArray(args[0].data)) {
-                    args[0].data = Buffer.from(args[0].data)
+                  if (isBufferJson(args[0].data)) {
+                    args[0].data = bufferFromJson(args[0].data)
                   }
 
-                  if (isTypedArray(args[0].seqno)) {
-                    args[0].seqno = Buffer.from(args[0].data)
+                  if (isBufferJson(args[0].seqno)) {
+                    args[0].seqno = bufferFromJson(args[0].data)
                   }
 
                   return args

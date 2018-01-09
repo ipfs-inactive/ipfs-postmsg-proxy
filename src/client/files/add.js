@@ -6,6 +6,7 @@ import toPull from 'stream-to-pull-stream'
 import isStream from 'is-stream'
 import buffer from 'pull-buffer'
 import { preCall } from '../../fn-call'
+import { bufferToJson } from '../../serialization/buffer'
 
 export default function (opts) {
   const api = {
@@ -42,7 +43,7 @@ export default function (opts) {
                       onProgress(progressBytes)
                     }
 
-                    cb(null, Object.assign(file, { content }))
+                    cb(null, Object.assign(file, { content: bufferToJson(content) }))
                   })
                 )
               }),
@@ -89,13 +90,9 @@ export default function (opts) {
 function normalizeContent (data) {
   if (Buffer.isBuffer(data)) {
     data = { path: '', content: pull.values([data]) }
-  }
-
-  if (isStream.readable(data)) {
+  } else if (isStream.readable(data)) {
     data = { path: '', content: toPull.source(data) }
-  }
-
-  if (data && data.content && typeof data.content !== 'function') {
+  } else if (data && data.content && typeof data.content !== 'function') {
     if (Buffer.isBuffer(data.content)) {
       data.content = pull.values([data.content])
     }

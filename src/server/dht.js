@@ -1,7 +1,7 @@
 import { expose } from 'postmsg-rpc'
-import isTypedArray from 'is-typedarray'
 import { isCidJson, cidFromJson } from '../serialization/cid'
 import { peerIdFromJson, peerInfoToJson, isPeerIdJson, isPeerInfo } from '../serialization/peer'
+import { isBufferJson, bufferFromJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
@@ -16,8 +16,8 @@ export default function (getIpfs, opts) {
     ), opts),
     findprovs: expose('ipfs.dht.findprovs', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         }
 
         return args
@@ -44,8 +44,8 @@ export default function (getIpfs, opts) {
     ), opts),
     provide: expose('ipfs.dht.provide', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }

@@ -1,6 +1,6 @@
 import { expose } from 'postmsg-rpc'
-import isTypedArray from 'is-typedarray'
 import { isCidJson, cidFromJson } from '../serialization/cid'
+import { isBufferJson, bufferFromJson } from '../serialization/buffer'
 import { preCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
@@ -10,15 +10,15 @@ export default function (getIpfs, opts) {
         // Structured clone converts Buffer to Uint8Array, convert back to buffer
         if (Array.isArray(args[0])) {
           args[0] = args[0].map((c) => {
-            if (isTypedArray(c.content)) {
-              c.content = Buffer.from(c.content)
+            if (isBufferJson(c.content)) {
+              c.content = bufferFromJson(c.content)
             }
             return c
           })
-        } else if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
-        } else if (isTypedArray(args[0].content)) {
-          args[0].content = Buffer.from(args[0].content)
+        } else if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
+        } else if (isBufferJson(args[0].content)) {
+          args[0].content = bufferFromJson(args[0].content)
         }
 
         return args
@@ -28,8 +28,8 @@ export default function (getIpfs, opts) {
     ), opts),
     cat: expose('ipfs.files.cat', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
@@ -41,8 +41,8 @@ export default function (getIpfs, opts) {
     ), opts),
     get: expose('ipfs.files.get', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
@@ -54,8 +54,8 @@ export default function (getIpfs, opts) {
     ), opts),
     ls: expose('ipfs.files.ls', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }

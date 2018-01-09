@@ -1,7 +1,7 @@
 import { expose } from 'postmsg-rpc'
-import isTypedArray from 'is-typedarray'
 import { isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkToJson, dagLinkFromJson } from '../serialization/dag'
 import { isCidJson, cidFromJson } from '../serialization/cid'
+import { isBufferJson, bufferFromJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
@@ -21,10 +21,10 @@ export default function (getIpfs, opts) {
               args[0] = dagNode
               return args
             })
-        } else if (args[0] && isTypedArray(args[0].Data)) {
-          args[0].Data = Buffer.from(args[0].Data)
-        } else if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        } else if (args[0] && isBufferJson(args[0].Data)) {
+          args[0].Data = bufferFromJson(args[0].Data)
+        } else if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         }
 
         return args
@@ -37,8 +37,8 @@ export default function (getIpfs, opts) {
     ), opts),
     get: expose('ipfs.object.get', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
@@ -53,8 +53,8 @@ export default function (getIpfs, opts) {
     ), opts),
     data: expose('ipfs.object.data', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
@@ -66,8 +66,8 @@ export default function (getIpfs, opts) {
     ), opts),
     links: expose('ipfs.object.links', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
@@ -82,8 +82,8 @@ export default function (getIpfs, opts) {
     ), opts),
     stat: expose('ipfs.object.stat', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
@@ -96,8 +96,8 @@ export default function (getIpfs, opts) {
     patch: {
       addLink: expose('ipfs.object.patch.addLink', preCall(
         (...args) => {
-          if (isTypedArray(args[0])) {
-            args[0] = Buffer.from(args[0])
+          if (isBufferJson(args[0])) {
+            args[0] = bufferFromJson(args[0])
           } else if (isCidJson(args[0])) {
             args[0] = cidFromJson(args[0])
           }
@@ -114,8 +114,8 @@ export default function (getIpfs, opts) {
       ), opts),
       rmLink: expose('ipfs.object.patch.rmLink', preCall(
         (...args) => {
-          if (isTypedArray(args[0])) {
-            args[0] = Buffer.from(args[0])
+          if (isBufferJson(args[0])) {
+            args[0] = bufferFromJson(args[0])
           } else if (isCidJson(args[0])) {
             args[0] = cidFromJson(args[0])
           }
@@ -132,14 +132,14 @@ export default function (getIpfs, opts) {
       ), opts),
       appendData: expose('ipfs.object.patch.appendData', preCall(
         (...args) => {
-          if (isTypedArray(args[0])) {
-            args[0] = Buffer.from(args[0])
+          if (isBufferJson(args[0])) {
+            args[0] = bufferFromJson(args[0])
           } else if (isCidJson(args[0])) {
             args[0] = cidFromJson(args[0])
           }
 
-          if (isTypedArray(args[1])) {
-            args[1] = Buffer.from(args[1])
+          if (isBufferJson(args[1])) {
+            args[1] = bufferFromJson(args[1])
           }
 
           return args
@@ -152,14 +152,14 @@ export default function (getIpfs, opts) {
       ), opts),
       setData: expose('ipfs.object.patch.setData', preCall(
         (...args) => {
-          if (isTypedArray(args[0])) {
-            args[0] = Buffer.from(args[0])
+          if (isBufferJson(args[0])) {
+            args[0] = bufferFromJson(args[0])
           } else if (isCidJson(args[0])) {
             args[0] = cidFromJson(args[0])
           }
 
-          if (isTypedArray(args[1])) {
-            args[1] = Buffer.from(args[1])
+          if (isBufferJson(args[1])) {
+            args[1] = bufferFromJson(args[1])
           }
 
           return args

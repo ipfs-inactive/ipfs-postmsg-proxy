@@ -1,7 +1,7 @@
 import { expose } from 'postmsg-rpc'
-import isTypedArray from 'is-typedarray'
 import { isDagNodeJson, isDagNode, dagNodeToJson, dagNodeFromJson } from '../serialization/dag'
 import { isCidJson, cidToJson, cidFromJson } from '../serialization/cid'
+import { isBufferJson, bufferFromJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
 import { convertTypedArraysToBuffers } from '../converters'
 
@@ -32,8 +32,8 @@ export default function (getIpfs, opts) {
     ), opts),
     get: expose('ipfs.dag.get', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }
@@ -51,8 +51,8 @@ export default function (getIpfs, opts) {
     ), opts),
     tree: expose('ipfs.dag.tree', preCall(
       (...args) => {
-        if (isTypedArray(args[0])) {
-          args[0] = Buffer.from(args[0])
+        if (isBufferJson(args[0])) {
+          args[0] = bufferFromJson(args[0])
         } else if (isCidJson(args[0])) {
           args[0] = cidFromJson(args[0])
         }

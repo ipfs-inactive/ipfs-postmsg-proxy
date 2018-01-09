@@ -1,15 +1,16 @@
 import Block from 'ipfs-block'
 import { cidFromJson, cidToJson } from './cid'
+import { bufferFromJson, bufferToJson } from './buffer'
 
 export const blockToJson = (block) => ({
   __ipfsPostMsgProxyType: 'Block',
   cid: cidToJson(block.cid),
-  data: block.data
+  data: bufferToJson(block.data)
 })
 
 export const blockFromJson = (obj) => {
   const cid = cidFromJson(obj.cid)
-  const data = Buffer.from(obj.data)
+  const data = bufferFromJson(obj.data)
   return new Block(data, cid)
 }
 

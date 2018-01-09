@@ -4,6 +4,7 @@ import pull from 'pull-stream'
 import toStream from 'pull-stream-to-stream'
 import { preCall, postCall } from '../../fn-call'
 import { cidToJson, isCid } from '../../serialization/cid'
+import { bufferFromJson } from '../../serialization/buffer'
 
 export default function (opts) {
   const api = {
@@ -18,7 +19,7 @@ export default function (opts) {
         },
         postCall(
           caller('ipfs.files.cat', opts),
-          (buf) => Buffer.from(buf)
+          bufferFromJson
         )
       )
     ),

@@ -1,7 +1,7 @@
 import { expose, caller } from 'postmsg-rpc'
-import isTypedArray from 'is-typedarray'
 import { preCall } from '../fn-call'
 import { isFunctionJson } from '../serialization/function'
+import { isBufferJson, bufferFromJson } from '../serialization/buffer'
 
 export default function (getIpfs, opts) {
   const subs = [
@@ -19,8 +19,8 @@ export default function (getIpfs, opts) {
   const api = {
     publish: expose('ipfs.pubsub.publish', preCall(
       (...args) => {
-        if (isTypedArray(args[1])) {
-          args[1] = Buffer.from(args[1])
+        if (isBufferJson(args[1])) {
+          args[1] = bufferFromJson(args[1])
         }
 
         return args
