@@ -8,7 +8,8 @@ module.exports = function fakeWindows () {
       win0.listeners = win0.listeners.filter(l => l !== listener)
     },
     postMessage (data) {
-      process.nextTick(() => win1.listeners.forEach(l => l({ data: structuredClone(data) })))
+      data = structuredClone(data)
+      process.nextTick(() => win1.listeners.forEach(l => l({ data })))
     }
   }
 
@@ -19,7 +20,8 @@ module.exports = function fakeWindows () {
       win1.listeners = win1.listeners.filter(l => l !== listener)
     },
     postMessage (data) {
-      process.nextTick(() => win0.listeners.forEach(l => l({ data: structuredClone(data) })))
+      data = structuredClone(data)
+      process.nextTick(() => win0.listeners.forEach(l => l({ data })))
     }
   }
 
