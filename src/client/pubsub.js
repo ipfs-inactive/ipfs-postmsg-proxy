@@ -3,7 +3,7 @@ import callbackify from 'callbackify'
 import shortid from 'shortid'
 import { preCall } from '../fn-call'
 import { functionToJson } from '../serialization/function'
-import { isBufferJson, bufferFromJson } from '../serialization/buffer'
+import { isBuffer, isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
 
 export default function (opts) {
   const subs = [
@@ -20,7 +20,18 @@ export default function (opts) {
   ]
 
   const api = {
-    publish: callbackify.variadic(caller('ipfs.pubsub.publish', opts)),
+    publish: callbackify.variadic(
+      preCall(
+        (...args) => {
+          if (isBuffer(args[1])) {
+            args[1] = bufferToJson(args[1])
+          }
+
+          return args
+        },
+        caller('ipfs.pubsub.publish', opts)
+      )
+    ),
     subscribe: function (topic, options, handler, cb) {
       let sub
 
@@ -33,9 +44,6 @@ export default function (opts) {
       const stub = preCall(
         (...args) => {
           const handlerIndex = args.length === 3 ? 2 : 1
-
-          subs[topic] = subs[topic] || []
-
           const fnName = `ipfs.pubsub.subscribe.handler.${shortid()}`
 
           sub = {

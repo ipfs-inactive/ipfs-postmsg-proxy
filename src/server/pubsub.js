@@ -77,16 +77,22 @@ export default function (getIpfs, opts) {
         return args
       },
       opts.preCall['pubsub.unsubscribe'],
-      (...args) => {
+      (...args) => new Promise((resolve) => {
         getIpfs().pubsub.unsubscribe(...args)
-        return Promise.resolve()
-      }
+        resolve()
+      })
     ), opts),
     peers: expose('ipfs.pubsub.peers', preCall(
       opts.preCall['pubsub.peers'],
       (...args) => getIpfs().pubsub.peers(...args)
     ), opts),
     ls: expose('ipfs.pubsub.ls', preCall(
+      // FIXME: The interface-ipfs-core tests call ls straight after unsubscribe.
+      //
+      // Unsubscribe in js-ipfs is synchronous but it HAS to be async in the
+      // proxy partly because of the way it is coded but mostly because
+      // window.postMessage is asynchronous.
+      (...args) => new Promise((resolve) => setTimeout(() => resolve(args))),
       opts.preCall['pubsub.ls'],
       (...args) => getIpfs().pubsub.ls(...args)
     ), opts)

@@ -1,9 +1,9 @@
 import { expose } from 'postmsg-rpc'
 import { isDagNodeJson, isDagNode, dagNodeToJson, dagNodeFromJson } from '../serialization/dag'
 import { isCidJson, cidToJson, cidFromJson } from '../serialization/cid'
-import { isBufferJson, bufferFromJson } from '../serialization/buffer'
+import { isBuffer, isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
-import { convertTypedArraysToBuffers } from '../converters'
+import { convertValues } from '../converters'
 
 export default function (getIpfs, opts) {
   return {
@@ -19,7 +19,7 @@ export default function (getIpfs, opts) {
 
         // TODO: CBOR node, is this correct?
         if (args[0]) {
-          args[0] = convertTypedArraysToBuffers(args[0])
+          args[0] = convertValues(args[0], isBufferJson, bufferFromJson)
         }
 
         return args
@@ -44,7 +44,12 @@ export default function (getIpfs, opts) {
       postCall(
         (...args) => getIpfs().dag.get(...args),
         (res) => {
-          res.value = isDagNode(res.value) ? dagNodeToJson(res.value) : res.value
+          if (isDagNode(res.value)) {
+            res.value = dagNodeToJson(res.value)
+          } else {
+            res.value = convertValues(res.value, isBuffer, bufferToJson)
+          }
+
           return res
         }
       )

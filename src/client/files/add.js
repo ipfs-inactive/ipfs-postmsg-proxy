@@ -4,9 +4,10 @@ import { Transform } from 'stream'
 import pull from 'pull-stream'
 import toPull from 'stream-to-pull-stream'
 import isStream from 'is-stream'
+import { isSource } from 'is-pull-stream'
 import buffer from 'pull-buffer'
 import { preCall } from '../../fn-call'
-import { bufferToJson } from '../../serialization/buffer'
+import { isBuffer, bufferToJson } from '../../serialization/buffer'
 
 export default function (opts) {
   const api = {
@@ -49,6 +50,7 @@ export default function (opts) {
               }),
               pull.collect((err, files) => {
                 if (err) return reject(err)
+                args[0] = files
                 resolve(args)
               })
             )
@@ -88,19 +90,17 @@ export default function (opts) {
 }
 
 function normalizeContent (data) {
-  if (Buffer.isBuffer(data)) {
-    data = { path: '', content: pull.values([data]) }
-  } else if (isStream.readable(data)) {
-    data = { path: '', content: toPull.source(data) }
-  } else if (data && data.content && typeof data.content !== 'function') {
-    if (Buffer.isBuffer(data.content)) {
-      data.content = pull.values([data.content])
-    }
-
-    if (isStream.readable(data.content)) {
-      data.content = toPull.source(data.content)
-    }
+  if (isBuffer(data)) {  // Buffer
+    return { path: '', content: pull.values([data]) }
+  } else if (isStream.readable(data)) { // Node stream
+    return { path: '', content: toPull.source(data) }
+  } else if (isSource(data)) { // Pull stream
+    return { path: '', content: data }
+  } else if (data && data.content) { // Object { path?, content }
+    return Object.assign({}, data, { content: normalizeContent(data.content).content })
+  } else if (data && data.path) { // Object { path }
+    return data
   }
 
-  return data
+  throw new Error('Invalid arguments, data must be an Array, Buffer, readable stream or source pull stream')
 }

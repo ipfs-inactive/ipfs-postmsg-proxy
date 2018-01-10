@@ -1,7 +1,7 @@
 import { expose } from 'postmsg-rpc'
 import { isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkToJson, dagLinkFromJson } from '../serialization/dag'
 import { isCidJson, cidFromJson } from '../serialization/cid'
-import { isBufferJson, bufferFromJson } from '../serialization/buffer'
+import { isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
@@ -62,7 +62,10 @@ export default function (getIpfs, opts) {
         return args
       },
       opts.preCall['object.data'],
-      (...args) => getIpfs().object.data(...args)
+      postCall(
+        (...args) => getIpfs().object.data(...args),
+        bufferToJson
+      )
     ), opts),
     links: expose('ipfs.object.links', preCall(
       (...args) => {

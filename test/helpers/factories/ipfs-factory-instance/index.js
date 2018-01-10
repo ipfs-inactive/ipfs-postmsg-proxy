@@ -10,17 +10,13 @@ const defaultConfig = require('./default-config.json')
 const IPFS = require('ipfs')
 const createTempRepo = require('../create-repo-nodejs')
 
-module.exports = Factory
-
-function Factory () {
-  if (!(this instanceof Factory)) {
-    return new Factory()
+class Factory {
+  constructor () {
+    this.nodes = []
   }
 
-  const nodes = []
-
   /* yields a new started node instance */
-  this.spawnNode = (repoPath, suppliedConfig, callback) => {
+  spawnNode (repoPath, suppliedConfig, callback) {
     if (typeof repoPath === 'function') {
       callback = repoPath
       repoPath = undefined
@@ -49,15 +45,17 @@ function Factory () {
     })
 
     node.once('ready', () => {
-      nodes.push({ repo: repo, ipfs: node })
+      this.nodes.push({ repo: repo, ipfs: node })
       callback(null, node)
     })
   }
 
-  this.dismantle = function (callback) {
+  dismantle (callback) {
     series([
-      (cb) => each(nodes, (el, cb) => el.ipfs.stop(cb), cb),
-      (cb) => each(nodes, (el, cb) => el.repo.teardown(cb), cb)
+      (cb) => each(this.nodes, (el, cb) => el.ipfs.stop(cb), cb),
+      (cb) => each(this.nodes, (el, cb) => el.repo.teardown(cb), cb)
     ], callback)
   }
 }
+
+module.exports = Factory

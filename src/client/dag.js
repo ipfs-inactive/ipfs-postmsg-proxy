@@ -2,8 +2,9 @@ import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import { isDagNode, isDagNodeJson, dagNodeToJson, dagNodeFromJson } from '../serialization/dag'
 import { cidFromJson, cidToJson, isCid } from '../serialization/cid'
+import { isBuffer, isBufferJson, bufferToJson, bufferFromJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
-import { convertTypedArraysToBuffers } from '../converters'
+import { convertValues } from '../converters'
 
 export default function (opts) {
   return {
@@ -12,6 +13,8 @@ export default function (opts) {
         (...args) => {
           if (isDagNode(args[0])) {
             args[0] = dagNodeToJson(args[0])
+          } else if (args[0]) {
+            args[0] = convertValues(args[0], isBuffer, bufferToJson)
           }
 
           return args
@@ -25,7 +28,9 @@ export default function (opts) {
     get: callbackify.variadic(
       preCall(
         (...args) => {
-          if (isCid(args[0])) {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          } else if (isCid(args[0])) {
             args[0] = cidToJson(args[0])
           }
 
@@ -40,7 +45,7 @@ export default function (opts) {
 
             // TODO: CBOR node, is this correct?
             if (res.value) {
-              res.value = convertTypedArraysToBuffers(res.value)
+              res.value = convertValues(res.value, isBufferJson, bufferFromJson)
             }
 
             return res
@@ -51,7 +56,9 @@ export default function (opts) {
     tree: callbackify.variadic(
       preCall(
         (...args) => {
-          if (isCid(args[0])) {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          } else if (isCid(args[0])) {
             args[0] = cidToJson(args[0])
           }
 

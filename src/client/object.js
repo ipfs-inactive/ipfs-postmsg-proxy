@@ -1,8 +1,8 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
-import { isDagNode, isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkToJson, dagLinkFromJson } from '../serialization/dag'
+import { isDagNode, isDagNodeJson, dagNodeToJson, dagNodeFromJson, isDagLink, dagLinkToJson, dagLinkFromJson } from '../serialization/dag'
 import { cidToJson, isCid } from '../serialization/cid'
-import { bufferFromJson } from '../serialization/buffer'
+import { isBuffer, bufferFromJson, bufferToJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
 
 export default function (opts) {
@@ -18,6 +18,10 @@ export default function (opts) {
         (...args) => {
           if (isDagNode(args[0])) {
             args[0] = dagNodeToJson(args[0])
+          } else if (args[0] && isBuffer(args[0].Data)) {
+            args[0] = Object.assign({}, args[0], { Data: bufferToJson(args[0].Data) })
+          } else if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
           }
 
           return args
@@ -31,7 +35,9 @@ export default function (opts) {
     get: callbackify.variadic(
       preCall(
         (...args) => {
-          if (isCid(args[0])) {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          } else if (isCid(args[0])) {
             args[0] = cidToJson(args[0])
           }
 
@@ -46,7 +52,9 @@ export default function (opts) {
     data: callbackify.variadic(
       preCall(
         (...args) => {
-          if (isCid(args[0])) {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          } else if (isCid(args[0])) {
             args[0] = cidToJson(args[0])
           }
 
@@ -61,7 +69,9 @@ export default function (opts) {
     links: callbackify.variadic(
       preCall(
         (...args) => {
-          if (isCid(args[0])) {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          } else if (isCid(args[0])) {
             args[0] = cidToJson(args[0])
           }
 
@@ -76,7 +86,9 @@ export default function (opts) {
     stat: callbackify.variadic(
       preCall(
         (...args) => {
-          if (isCid(args[0])) {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          } else if (isCid(args[0])) {
             args[0] = cidToJson(args[0])
           }
 
@@ -89,11 +101,15 @@ export default function (opts) {
       addLink: callbackify.variadic(
         preCall(
           (...args) => {
-            if (isCid(args[0])) {
+            if (isBuffer(args[0])) {
+              args[0] = bufferToJson(args[0])
+            } else if (isCid(args[0])) {
               args[0] = cidToJson(args[0])
             }
 
-            args[1] = dagLinkToJson(args[1])
+            if (isDagLink(args[1])) {
+              args[1] = dagLinkToJson(args[1])
+            }
 
             return args
           },
@@ -106,11 +122,15 @@ export default function (opts) {
       rmLink: callbackify.variadic(
         preCall(
           (...args) => {
-            if (isCid(args[0])) {
+            if (isBuffer(args[0])) {
+              args[0] = bufferToJson(args[0])
+            } else if (isCid(args[0])) {
               args[0] = cidToJson(args[0])
             }
 
-            args[1] = dagLinkToJson(args[1])
+            if (isDagLink(args[1])) {
+              args[1] = dagLinkToJson(args[1])
+            }
 
             return args
           },
@@ -123,7 +143,9 @@ export default function (opts) {
       appendData: callbackify.variadic(
         preCall(
           (...args) => {
-            if (isCid(args[0])) {
+            if (isBuffer(args[0])) {
+              args[0] = bufferToJson(args[0])
+            } else if (isCid(args[0])) {
               args[0] = cidToJson(args[0])
             }
 
@@ -138,7 +160,9 @@ export default function (opts) {
       setData: callbackify.variadic(
         preCall(
           (...args) => {
-            if (isCid(args[0])) {
+            if (isBuffer(args[0])) {
+              args[0] = bufferToJson(args[0])
+            } else if (isCid(args[0])) {
               args[0] = cidToJson(args[0])
             }
 

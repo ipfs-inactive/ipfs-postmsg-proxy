@@ -1,13 +1,12 @@
 import { expose } from 'postmsg-rpc'
 import { isCidJson, cidFromJson } from '../serialization/cid'
-import { isBufferJson, bufferFromJson } from '../serialization/buffer'
-import { preCall } from '../fn-call'
+import { isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
+import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
   return {
     add: expose('ipfs.files.add', preCall(
       (...args) => {
-        // Structured clone converts Buffer to Uint8Array, convert back to buffer
         if (Array.isArray(args[0])) {
           args[0] = args[0].map((c) => {
             if (isBufferJson(c.content)) {
@@ -37,7 +36,10 @@ export default function (getIpfs, opts) {
         return args
       },
       opts.preCall['files.cat'],
-      (...args) => getIpfs().files.cat(...args)
+      postCall(
+        (...args) => getIpfs().files.cat(...args),
+        bufferToJson
+      )
     ), opts),
     get: expose('ipfs.files.get', preCall(
       (...args) => {
@@ -50,7 +52,16 @@ export default function (getIpfs, opts) {
         return args
       },
       opts.preCall['files.get'],
-      (...args) => getIpfs().files.get(...args)
+      postCall(
+        (...args) => getIpfs().files.get(...args),
+        (files) => files.map((file) => {
+          if (file.content) {
+            file.content = bufferToJson(file.content)
+          }
+
+          return file
+        })
+      )
     ), opts),
     ls: expose('ipfs.files.ls', preCall(
       (...args) => {

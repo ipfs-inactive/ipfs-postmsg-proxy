@@ -2,6 +2,7 @@ import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import { cidToJson, isCid } from '../serialization/cid'
 import { peerIdToJson, peerInfoFromJson, isPeerId, isPeerInfo } from '../serialization/peer'
+import { isBuffer, bufferToJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
 
 export default function (opts) {
@@ -9,10 +10,19 @@ export default function (opts) {
     put: callbackify.variadic(caller('ipfs.dht.put', opts)),
     get: callbackify.variadic(caller('ipfs.dht.get', opts)),
     findprovs: callbackify.variadic(
-      postCall(
-        caller('ipfs.dht.findprovs', opts),
-        (res) => Promise.all(
-          res.map((item) => isPeerInfo(item) ? peerInfoFromJson(item) : Promise.resolve(item))
+      preCall(
+        (...args) => {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          }
+
+          return args
+        },
+        postCall(
+          caller('ipfs.dht.findprovs', opts),
+          (res) => Promise.all(
+            res.map((item) => isPeerInfo(item) ? peerInfoFromJson(item) : Promise.resolve(item))
+          )
         )
       )
     ),
@@ -34,7 +44,9 @@ export default function (opts) {
     provide: callbackify.variadic(
       preCall(
         (...args) => {
-          if (isCid(args[0])) {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          } else if (isCid(args[0])) {
             args[0] = cidToJson(args[0])
           }
 

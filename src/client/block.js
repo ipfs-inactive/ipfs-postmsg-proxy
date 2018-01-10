@@ -2,6 +2,7 @@ import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import { blockToJson, blockFromJson, isBlock } from '../serialization/block'
 import { cidToJson, isCid } from '../serialization/cid'
+import { isBuffer, bufferToJson } from '../serialization/buffer'
 import { preCall, postCall } from '../fn-call'
 
 export default function (opts) {
@@ -9,12 +10,16 @@ export default function (opts) {
     put: callbackify.variadic(
       preCall(
         (...args) => {
-          if (isBlock(args[0])) {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          } else if (isBlock(args[0])) {
             args[0] = blockToJson(args[0])
           }
+
           if (args[1] && args[1].cid) {
             args[1].cid = cidToJson(args[1].cid)
           }
+
           return args
         },
         postCall(
@@ -26,9 +31,12 @@ export default function (opts) {
     get: callbackify.variadic(
       preCall(
         (...args) => {
-          if (isCid(args[0])) {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          } else if (isCid(args[0])) {
             args[0] = cidToJson(args[0])
           }
+
           return args
         },
         postCall(
@@ -40,7 +48,9 @@ export default function (opts) {
     stat: callbackify.variadic(
       preCall(
         (...args) => {
-          if (isCid(args[0])) {
+          if (isBuffer(args[0])) {
+            args[0] = bufferToJson(args[0])
+          } else if (isCid(args[0])) {
             args[0] = cidToJson(args[0])
           }
           return args

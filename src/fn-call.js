@@ -1,4 +1,4 @@
-const preCallNoop = (args) => args
+const preCallNoop = (...args) => args
 
 // Alter the arguments before they are sent to the server
 export function preCall (...args) {

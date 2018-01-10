@@ -2,7 +2,7 @@ export const bufferFromJson = (obj) => Buffer.from(obj.data)
 
 export const bufferToJson = (buf) => ({
   __ipfsPostMsgProxyType: 'Buffer',
-  data: JSON.stringify(buf).data
+  data: Array.from(buf)
 })
 
 export const isBuffer = Buffer.isBuffer

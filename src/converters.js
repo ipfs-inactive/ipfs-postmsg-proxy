@@ -1,12 +1,22 @@
-import isTypedArray from 'is-typedarray'
+// Convert object or array values
+export function convertValues (obj, detect, convert) {
+  if (!isObjectOrArray(obj)) return obj
 
-export function convertTypedArraysToBuffers (obj) {
-  Object.keys(obj).forEach((key) => {
-    if (isTypedArray(obj[key])) {
-      obj[key] = Buffer.from(obj[key])
-    } else if (Object.prototype.toString.call(obj[key]) === '[object Object]') {
-      obj[key] = convertTypedArraysToBuffers(obj[key])
+  if (Array.isArray(obj)) {
+    return obj.map((value) => detect(value) ? convert(value) : convertValues(value))
+  }
+
+  return Object.keys(obj).reduce((clone, key) => {
+    if (detect(obj[key])) {
+      clone[key] = convert(obj[key])
+    } else {
+      clone[key] = convertValues(obj[key], detect, convert)
     }
-  })
-  return obj
+    return clone
+  }, {})
+}
+
+function isObjectOrArray (obj) {
+  const type = Object.prototype.toString.call(obj)
+  return type === '[object Object]' || type === '[object Array]'
 }

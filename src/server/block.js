@@ -9,7 +9,6 @@ export default function (getIpfs, opts) {
     put: expose('ipfs.block.put', preCall(
       (...args) => {
         if (isBufferJson(args[0])) {
-          // Structured clone converts Buffer to Uint8Array, convert back to buffer
           args[0] = bufferFromJson(args[0])
         } else if (isBlockJson(args[0])) {
           // otherwise this must be a serialized Block
