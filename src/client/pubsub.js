@@ -1,7 +1,7 @@
 import { caller, expose } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import shortid from 'shortid'
-import { preCall } from '../fn-call'
+import { pre } from 'prepost'
 import { functionToJson } from '../serialization/function'
 import { isBuffer, isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
 
@@ -21,7 +21,7 @@ export default function (opts) {
 
   const api = {
     publish: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[1])) {
             args[1] = bufferToJson(args[1])
@@ -41,7 +41,7 @@ export default function (opts) {
         options = {}
       }
 
-      const stub = preCall(
+      const stub = pre(
         (...args) => {
           const handlerIndex = args.length === 3 ? 2 : 1
           const fnName = `ipfs.pubsub.subscribe.handler.${shortid()}`
@@ -51,7 +51,7 @@ export default function (opts) {
             handler,
             rpc: {
               fnName,
-              exposedFn: expose(fnName, preCall(
+              exposedFn: expose(fnName, pre(
                 (...args) => {
                   if (isBufferJson(args[0].data)) {
                     args[0].data = bufferFromJson(args[0].data)
@@ -96,7 +96,7 @@ export default function (opts) {
         return stub(topic, options, handler)
       }
     },
-    unsubscribe: preCall(
+    unsubscribe: pre(
       (...args) => {
         const topic = args[0]
         const sub = subs.find((s) => s.topic === topic && s.handler === args[1])

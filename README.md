@@ -31,7 +31,7 @@ In the web page, we serialize arguments we know cannot be handled by the structu
 
 In the browser extension we serialize return values after exposed functions are called and deserialize them in the web page after stubs are called.
 
-The [`fn-call`](./src/fn-call.js) module provides these utility functions.
+The [`prepost`](https://www.npmjs.com/package/prepost) module provides these utility functions.
 
 ## Usage
 
@@ -98,11 +98,11 @@ Create a proxy server to a running IPFS instance.
     * default `window.removeEventListener`
 * `options.getMessageData` - a function that extracts data from the event object passed to a `message` event handler
     * default `(e) => e.data`
-* `options.preCall` - an object whose values are functions to call prior to invoking functions on the exposed IPFS node. The pre-call functions are passed arguments as they they would be passed to the exposed IPFS node and are expected to return an array of possibly altered arguments or a promise that resolves to the arguments array. The keys for this object identify the function name on the IPFS node that this function should be run before. e.g.
+* `options.pre` - an object whose values are functions to call prior to invoking functions on the exposed IPFS node. The pre-functions are passed arguments as they they would be passed to the exposed IPFS node and are expected to return an array of possibly altered arguments or a promise that resolves to the arguments array. The keys for this object identify the function name on the IPFS node that this function should be run before. e.g.
 
     ```js
     createProxyServer(getIpfs, {
-      preCall: {
+      pre: {
         'files.add' (...args) {
           // Alter the args in some way...
           return args

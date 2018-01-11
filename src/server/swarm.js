@@ -1,14 +1,14 @@
 import { expose } from 'postmsg-rpc'
+import { pre, post } from 'prepost'
 import { peerInfoToJson } from '../serialization/peer'
 import { isMultiaddrJson, multiaddrFromJson, multiaddrToJson } from '../serialization/multiaddr'
 import { isBufferJson, bufferFromJson } from '../serialization/buffer'
-import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
   return {
-    peers: expose('ipfs.swarm.peers', preCall(
-      opts.preCall['swarm.peers'],
-      postCall(
+    peers: expose('ipfs.swarm.peers', pre(
+      opts.pre['swarm.peers'],
+      post(
         (...args) => getIpfs().swarm.peers(...args),
         (res) => res.map((item) => {
           item.addr = multiaddrToJson(item.addr)
@@ -17,21 +17,21 @@ export default function (getIpfs, opts) {
         })
       )
     ), opts),
-    addrs: expose('ipfs.swarm.addrs', preCall(
-      opts.preCall['swarm.addrs'],
-      postCall(
+    addrs: expose('ipfs.swarm.addrs', pre(
+      opts.pre['swarm.addrs'],
+      post(
         () => getIpfs().swarm.addrs(),
         (res) => res.map(peerInfoToJson)
       )
     ), opts),
-    localAddrs: expose('ipfs.swarm.localAddrs', preCall(
-      opts.preCall['swarm.localAddrs'],
-      postCall(
+    localAddrs: expose('ipfs.swarm.localAddrs', pre(
+      opts.pre['swarm.localAddrs'],
+      post(
         () => getIpfs().swarm.localAddrs(),
         (res) => res.map(multiaddrToJson)
       )
     ), opts),
-    connect: expose('ipfs.swarm.connect', preCall(
+    connect: expose('ipfs.swarm.connect', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -41,10 +41,10 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['swarm.connect'],
+      opts.pre['swarm.connect'],
       (...args) => getIpfs().swarm.connect(...args)
     ), opts),
-    disconnect: expose('ipfs.swarm.disconnect', preCall(
+    disconnect: expose('ipfs.swarm.disconnect', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -54,7 +54,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['swarm.disconnect'],
+      opts.pre['swarm.disconnect'],
       (...args) => getIpfs().swarm.disconnect(...args)
     ), opts)
   }

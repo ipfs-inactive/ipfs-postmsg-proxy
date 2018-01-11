@@ -1,16 +1,16 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
+import { pre, post } from 'prepost'
 import { cidToJson, isCid } from '../serialization/cid'
 import { peerIdToJson, peerInfoFromJson, isPeerId, isPeerInfo } from '../serialization/peer'
 import { isBuffer, bufferToJson } from '../serialization/buffer'
-import { preCall, postCall } from '../fn-call'
 
 export default function (opts) {
   return {
     put: callbackify.variadic(caller('ipfs.dht.put', opts)),
     get: callbackify.variadic(caller('ipfs.dht.get', opts)),
     findprovs: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])
@@ -18,7 +18,7 @@ export default function (opts) {
 
           return args
         },
-        postCall(
+        post(
           caller('ipfs.dht.findprovs', opts),
           (res) => Promise.all(
             res.map((item) => isPeerInfo(item) ? peerInfoFromJson(item) : Promise.resolve(item))
@@ -27,7 +27,7 @@ export default function (opts) {
       )
     ),
     findpeer: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isPeerId(args[0])) {
             args[0] = peerIdToJson(args[0])
@@ -35,14 +35,14 @@ export default function (opts) {
 
           return args
         },
-        postCall(
+        post(
           caller('ipfs.dht.findpeer', opts),
           (res) => isPeerInfo(res) ? peerInfoFromJson(res) : res
         )
       )
     ),
     provide: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])
@@ -56,7 +56,7 @@ export default function (opts) {
       )
     ),
     query: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isPeerId(args[0])) {
             args[0] = peerIdToJson(args[0])
@@ -64,7 +64,7 @@ export default function (opts) {
 
           return args
         },
-        postCall(
+        post(
           caller('ipfs.dht.query', opts),
           (res) => Promise.all(
             res.map((item) => isPeerInfo(item) ? peerInfoFromJson(item) : Promise.resolve(item))

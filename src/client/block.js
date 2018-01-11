@@ -1,14 +1,14 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
+import { pre, post } from 'prepost'
 import { blockToJson, blockFromJson, isBlock } from '../serialization/block'
 import { cidToJson, isCid } from '../serialization/cid'
 import { isBuffer, bufferToJson } from '../serialization/buffer'
-import { preCall, postCall } from '../fn-call'
 
 export default function (opts) {
   return {
     put: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])
@@ -22,14 +22,14 @@ export default function (opts) {
 
           return args
         },
-        postCall(
+        post(
           caller('ipfs.block.put', opts),
           blockFromJson
         )
       )
     ),
     get: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])
@@ -39,14 +39,14 @@ export default function (opts) {
 
           return args
         },
-        postCall(
+        post(
           caller('ipfs.block.get', opts),
           blockFromJson
         )
       )
     ),
     stat: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])

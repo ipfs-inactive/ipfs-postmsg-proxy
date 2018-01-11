@@ -3,14 +3,14 @@ import callbackify from 'callbackify'
 import defer from 'pull-defer'
 import pull from 'pull-stream'
 import toStream from 'pull-stream-to-stream'
-import { preCall } from '../../fn-call'
+import { pre } from 'prepost'
 import { cidToJson, isCid } from '../../serialization/cid'
 import { isBuffer, bufferToJson } from '../../serialization/buffer'
 
 export default function (opts) {
   const api = {
     ls: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])

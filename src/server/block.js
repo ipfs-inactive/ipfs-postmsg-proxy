@@ -1,12 +1,12 @@
 import { expose } from 'postmsg-rpc'
+import { pre, post } from 'prepost'
 import { blockToJson, blockFromJson, isBlockJson } from '../serialization/block'
 import { cidFromJson, isCidJson } from '../serialization/cid'
 import { isBufferJson, bufferFromJson } from '../serialization/buffer'
-import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
   return {
-    put: expose('ipfs.block.put', preCall(
+    put: expose('ipfs.block.put', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -21,13 +21,13 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['block.put'],
-      postCall(
+      opts.pre['block.put'],
+      post(
         (...args) => getIpfs().block.put(...args),
         blockToJson
       )
     ), opts),
-    get: expose('ipfs.block.get', preCall(
+    get: expose('ipfs.block.get', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -37,13 +37,13 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['block.get'],
-      postCall(
+      opts.pre['block.get'],
+      post(
         (...args) => getIpfs().block.get(...args),
         blockToJson
       )
     ), opts),
-    stat: expose('ipfs.block.stat', preCall(
+    stat: expose('ipfs.block.stat', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -53,7 +53,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['block.stat'],
+      opts.pre['block.stat'],
       (...args) => getIpfs().block.stat(...args)
     ), opts)
   }

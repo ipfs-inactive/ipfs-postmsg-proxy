@@ -1,15 +1,15 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
+import { pre, post } from 'prepost'
 import { isDagNode, isDagNodeJson, dagNodeToJson, dagNodeFromJson } from '../serialization/dag'
 import { cidFromJson, cidToJson, isCid } from '../serialization/cid'
 import { isBuffer, isBufferJson, bufferToJson, bufferFromJson } from '../serialization/buffer'
-import { preCall, postCall } from '../fn-call'
 import { convertValues } from '../converters'
 
 export default function (opts) {
   return {
     put: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isDagNode(args[0])) {
             args[0] = dagNodeToJson(args[0])
@@ -19,14 +19,14 @@ export default function (opts) {
 
           return args
         },
-        postCall(
+        post(
           caller('ipfs.dag.put', opts),
           cidFromJson
         )
       )
     ),
     get: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])
@@ -36,7 +36,7 @@ export default function (opts) {
 
           return args
         },
-        postCall(
+        post(
           caller('ipfs.dag.get', opts),
           (res) => {
             if (isDagNodeJson(res.value)) {
@@ -54,7 +54,7 @@ export default function (opts) {
       )
     ),
     tree: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])

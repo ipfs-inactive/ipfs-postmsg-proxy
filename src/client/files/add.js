@@ -6,13 +6,13 @@ import toPull from 'stream-to-pull-stream'
 import isStream from 'is-stream'
 import { isSource } from 'is-pull-stream'
 import buffer from 'pull-buffer'
-import { preCall } from '../../fn-call'
+import { pre } from 'prepost'
 import { isBuffer, bufferToJson } from '../../serialization/buffer'
 
 export default function (opts) {
   const api = {
     add: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           let progressBytes = 0
           let onProgress

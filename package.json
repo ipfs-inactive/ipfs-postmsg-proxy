@@ -31,6 +31,7 @@
     "peer-id": "^0.10.4",
     "peer-info": "^0.11.4",
     "postmsg-rpc": "^2.1.1",
+    "prepost": "^1.0.0",
     "pull-buffer": "^1.0.0",
     "pull-defer": "^0.2.2",
     "pull-stream": "^3.6.1",

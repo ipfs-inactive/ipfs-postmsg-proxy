@@ -2,14 +2,14 @@ import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import pull from 'pull-stream'
 import toStream from 'pull-stream-to-stream'
-import { preCall, postCall } from '../../fn-call'
+import { pre, post } from 'prepost'
 import { cidToJson, isCid } from '../../serialization/cid'
 import { isBuffer, bufferToJson, bufferFromJson } from '../../serialization/buffer'
 
 export default function (opts) {
   const api = {
     cat: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])
@@ -19,7 +19,7 @@ export default function (opts) {
 
           return args
         },
-        postCall(
+        post(
           caller('ipfs.files.cat', opts),
           bufferFromJson
         )

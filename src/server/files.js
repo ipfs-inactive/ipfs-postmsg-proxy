@@ -1,11 +1,11 @@
 import { expose } from 'postmsg-rpc'
+import { pre, post } from 'prepost'
 import { isCidJson, cidFromJson } from '../serialization/cid'
 import { isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
-import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
   return {
-    add: expose('ipfs.files.add', preCall(
+    add: expose('ipfs.files.add', pre(
       (...args) => {
         if (Array.isArray(args[0])) {
           args[0] = args[0].map((c) => {
@@ -22,10 +22,10 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['files.add'],
+      opts.pre['files.add'],
       (...args) => getIpfs().files.add(...args)
     ), opts),
-    cat: expose('ipfs.files.cat', preCall(
+    cat: expose('ipfs.files.cat', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -35,13 +35,13 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['files.cat'],
-      postCall(
+      opts.pre['files.cat'],
+      post(
         (...args) => getIpfs().files.cat(...args),
         bufferToJson
       )
     ), opts),
-    get: expose('ipfs.files.get', preCall(
+    get: expose('ipfs.files.get', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -51,8 +51,8 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['files.get'],
-      postCall(
+      opts.pre['files.get'],
+      post(
         (...args) => getIpfs().files.get(...args),
         (files) => files.map((file) => {
           if (file.content) {
@@ -63,7 +63,7 @@ export default function (getIpfs, opts) {
         })
       )
     ), opts),
-    ls: expose('ipfs.files.ls', preCall(
+    ls: expose('ipfs.files.ls', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -73,7 +73,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['files.ls'],
+      opts.pre['files.ls'],
       (...args) => getIpfs().ls(...args)
     ), opts)
   }

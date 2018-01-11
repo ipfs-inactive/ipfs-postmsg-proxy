@@ -1,19 +1,19 @@
 import { expose } from 'postmsg-rpc'
+import { pre, post } from 'prepost'
 import { isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkToJson, dagLinkFromJson } from '../serialization/dag'
 import { isCidJson, cidFromJson } from '../serialization/cid'
 import { isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
-import { preCall, postCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
   return {
-    new: expose('ipfs.object.new', preCall(
-      opts.preCall['object.new'],
-      postCall(
+    new: expose('ipfs.object.new', pre(
+      opts.pre['object.new'],
+      post(
         (...args) => getIpfs().object.new(...args),
         dagNodeToJson
       )
     ), opts),
-    put: expose('ipfs.object.put', preCall(
+    put: expose('ipfs.object.put', pre(
       (...args) => {
         if (isDagNodeJson(args[0])) {
           return dagNodeFromJson(args[0])
@@ -29,13 +29,13 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['object.put'],
-      postCall(
+      opts.pre['object.put'],
+      post(
         (...args) => getIpfs().object.put(...args),
         dagNodeToJson
       )
     ), opts),
-    get: expose('ipfs.object.get', preCall(
+    get: expose('ipfs.object.get', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -45,13 +45,13 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['object.get'],
-      postCall(
+      opts.pre['object.get'],
+      post(
         (...args) => getIpfs().object.get(...args),
         dagNodeToJson
       )
     ), opts),
-    data: expose('ipfs.object.data', preCall(
+    data: expose('ipfs.object.data', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -61,13 +61,13 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['object.data'],
-      postCall(
+      opts.pre['object.data'],
+      post(
         (...args) => getIpfs().object.data(...args),
         bufferToJson
       )
     ), opts),
-    links: expose('ipfs.object.links', preCall(
+    links: expose('ipfs.object.links', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -77,13 +77,13 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['object.links'],
-      postCall(
+      opts.pre['object.links'],
+      post(
         (...args) => getIpfs().object.links(...args),
         (res) => res.map(dagLinkToJson)
       )
     ), opts),
-    stat: expose('ipfs.object.stat', preCall(
+    stat: expose('ipfs.object.stat', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -93,11 +93,11 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['object.stat'],
+      opts.pre['object.stat'],
       (...args) => getIpfs().object.stat(...args)
     ), opts),
     patch: {
-      addLink: expose('ipfs.object.patch.addLink', preCall(
+      addLink: expose('ipfs.object.patch.addLink', pre(
         (...args) => {
           if (isBufferJson(args[0])) {
             args[0] = bufferFromJson(args[0])
@@ -109,13 +109,13 @@ export default function (getIpfs, opts) {
 
           return args
         },
-        opts.preCall['object.patch.addLink'],
-        postCall(
+        opts.pre['object.patch.addLink'],
+        post(
           (...args) => getIpfs().object.patch.addLink(...args),
           dagNodeToJson
         )
       ), opts),
-      rmLink: expose('ipfs.object.patch.rmLink', preCall(
+      rmLink: expose('ipfs.object.patch.rmLink', pre(
         (...args) => {
           if (isBufferJson(args[0])) {
             args[0] = bufferFromJson(args[0])
@@ -127,13 +127,13 @@ export default function (getIpfs, opts) {
 
           return args
         },
-        opts.preCall['object.patch.rmLink'],
-        postCall(
+        opts.pre['object.patch.rmLink'],
+        post(
           (...args) => getIpfs().object.patch.rmLink(...args),
           dagNodeToJson
         )
       ), opts),
-      appendData: expose('ipfs.object.patch.appendData', preCall(
+      appendData: expose('ipfs.object.patch.appendData', pre(
         (...args) => {
           if (isBufferJson(args[0])) {
             args[0] = bufferFromJson(args[0])
@@ -147,13 +147,13 @@ export default function (getIpfs, opts) {
 
           return args
         },
-        opts.preCall['object.patch.appendData'],
-        postCall(
+        opts.pre['object.patch.appendData'],
+        post(
           (...args) => getIpfs().object.patch.appendData(...args),
           dagNodeToJson
         )
       ), opts),
-      setData: expose('ipfs.object.patch.setData', preCall(
+      setData: expose('ipfs.object.patch.setData', pre(
         (...args) => {
           if (isBufferJson(args[0])) {
             args[0] = bufferFromJson(args[0])
@@ -167,8 +167,8 @@ export default function (getIpfs, opts) {
 
           return args
         },
-        opts.preCall['object.patch.setData'],
-        postCall(
+        opts.pre['object.patch.setData'],
+        post(
           (...args) => getIpfs().object.patch.setData(...args),
           dagNodeToJson
         )

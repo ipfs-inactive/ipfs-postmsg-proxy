@@ -1,5 +1,5 @@
 import { expose, caller } from 'postmsg-rpc'
-import { preCall } from '../fn-call'
+import { pre } from 'prepost'
 import { isFunctionJson } from '../serialization/function'
 import { isBufferJson, bufferFromJson } from '../serialization/buffer'
 
@@ -17,7 +17,7 @@ export default function (getIpfs, opts) {
   ]
 
   const api = {
-    publish: expose('ipfs.pubsub.publish', preCall(
+    publish: expose('ipfs.pubsub.publish', pre(
       (...args) => {
         if (isBufferJson(args[1])) {
           args[1] = bufferFromJson(args[1])
@@ -25,13 +25,13 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['pubsub.publish'],
+      opts.pre['pubsub.publish'],
       (...args) => getIpfs().pubsub.publish(...args)
     ), opts),
     subscribe: expose('ipfs.pubsub.subscribe', function (...args) {
       let sub
 
-      return preCall(
+      return pre(
         (...args) => {
           const topic = args[0]
           const handlerIndex = args.length === 3 ? 2 : 1
@@ -54,7 +54,7 @@ export default function (getIpfs, opts) {
 
           return args
         },
-        opts.preCall['pubsub.subscribe'],
+        opts.pre['pubsub.subscribe'],
         (...args) => {
           return getIpfs().pubsub.subscribe(...args)
             .catch((err) => {
@@ -64,7 +64,7 @@ export default function (getIpfs, opts) {
         }
       )(...args)
     }, opts),
-    unsubscribe: expose('ipfs.pubsub.unsubscribe', preCall(
+    unsubscribe: expose('ipfs.pubsub.unsubscribe', pre(
       (...args) => {
         const topic = args[0]
 
@@ -76,24 +76,24 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['pubsub.unsubscribe'],
+      opts.pre['pubsub.unsubscribe'],
       (...args) => new Promise((resolve) => {
         getIpfs().pubsub.unsubscribe(...args)
         resolve()
       })
     ), opts),
-    peers: expose('ipfs.pubsub.peers', preCall(
-      opts.preCall['pubsub.peers'],
+    peers: expose('ipfs.pubsub.peers', pre(
+      opts.pre['pubsub.peers'],
       (...args) => getIpfs().pubsub.peers(...args)
     ), opts),
-    ls: expose('ipfs.pubsub.ls', preCall(
+    ls: expose('ipfs.pubsub.ls', pre(
       // FIXME: The interface-ipfs-core tests call ls straight after unsubscribe.
       //
       // Unsubscribe in js-ipfs is synchronous but it HAS to be async in the
       // proxy partly because of the way it is coded but mostly because
       // window.postMessage is asynchronous.
       (...args) => new Promise((resolve) => setTimeout(() => resolve(args))),
-      opts.preCall['pubsub.ls'],
+      opts.pre['pubsub.ls'],
       (...args) => getIpfs().pubsub.ls(...args)
     ), opts)
   }

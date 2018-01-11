@@ -1,13 +1,13 @@
 import { expose } from 'postmsg-rpc'
+import { pre, post } from 'prepost'
 import { isDagNodeJson, isDagNode, dagNodeToJson, dagNodeFromJson } from '../serialization/dag'
 import { isCidJson, cidToJson, cidFromJson } from '../serialization/cid'
 import { isBuffer, isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
-import { preCall, postCall } from '../fn-call'
 import { convertValues } from '../converters'
 
 export default function (getIpfs, opts) {
   return {
-    put: expose('ipfs.dag.put', preCall(
+    put: expose('ipfs.dag.put', pre(
       (...args) => {
         if (isDagNodeJson(args[0])) {
           return dagNodeFromJson(args[0])
@@ -24,13 +24,13 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['dag.put'],
-      postCall(
+      opts.pre['dag.put'],
+      post(
         (...args) => getIpfs().dag.put(...args),
         cidToJson
       )
     ), opts),
-    get: expose('ipfs.dag.get', preCall(
+    get: expose('ipfs.dag.get', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -40,8 +40,8 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['dag.get'],
-      postCall(
+      opts.pre['dag.get'],
+      post(
         (...args) => getIpfs().dag.get(...args),
         (res) => {
           if (isDagNode(res.value)) {
@@ -54,7 +54,7 @@ export default function (getIpfs, opts) {
         }
       )
     ), opts),
-    tree: expose('ipfs.dag.tree', preCall(
+    tree: expose('ipfs.dag.tree', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -64,7 +64,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['dag.tree'],
+      opts.pre['dag.tree'],
       (...args) => getIpfs().dag.tree(...args)
     ), opts)
   }

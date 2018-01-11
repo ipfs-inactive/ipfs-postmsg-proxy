@@ -1,11 +1,11 @@
 import { expose } from 'postmsg-rpc'
+import { pre } from 'prepost'
 import { isCidJson, cidFromJson } from '../serialization/cid'
 import { isBufferJson, bufferFromJson } from '../serialization/buffer'
-import { preCall } from '../fn-call'
 
 export default function (getIpfs, opts) {
   return {
-    add: expose('ipfs.pin.add', preCall(
+    add: expose('ipfs.pin.add', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -15,10 +15,10 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['pin.add'],
+      opts.pre['pin.add'],
       (...args) => getIpfs().pin.add(...args)
     ), opts),
-    rm: expose('ipfs.pin.rm', preCall(
+    rm: expose('ipfs.pin.rm', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -28,10 +28,10 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['pin.rm'],
+      opts.pre['pin.rm'],
       (...args) => getIpfs().pin.rm(...args)
     ), opts),
-    ls: expose('ipfs.pin.ls', preCall(
+    ls: expose('ipfs.pin.ls', pre(
       (...args) => {
         if (isBufferJson(args[0])) {
           args[0] = bufferFromJson(args[0])
@@ -41,7 +41,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.preCall['pin.ls'],
+      opts.pre['pin.ls'],
       (...args) => getIpfs().pin.ls(...args)
     ), opts)
   }

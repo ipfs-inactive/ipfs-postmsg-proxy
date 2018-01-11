@@ -1,13 +1,13 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
+import { pre } from 'prepost'
 import { cidToJson, isCid } from '../serialization/cid'
 import { isBuffer, bufferToJson } from '../serialization/buffer'
-import { preCall } from '../fn-call'
 
 export default function (opts) {
   return {
     add: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])
@@ -21,7 +21,7 @@ export default function (opts) {
       )
     ),
     rm: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])
@@ -35,7 +35,7 @@ export default function (opts) {
       )
     ),
     ls: callbackify.variadic(
-      preCall(
+      pre(
         (...args) => {
           if (isBuffer(args[0])) {
             args[0] = bufferToJson(args[0])
