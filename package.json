@@ -43,7 +43,7 @@
     "babel-preset-env": "^1.6.1",
     "browserify": "^14.5.0",
     "hat": "0.0.3",
-    "interface-ipfs-core": "^0.38.0",
+    "interface-ipfs-core": "^0.39.0",
     "ipfs": "^0.27.5",
     "ipfs-repo": "^0.18.5",
     "karma": "^2.0.0",

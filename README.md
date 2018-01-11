@@ -274,8 +274,10 @@ Returns an IPFS proxy client instance.
 .miscellaneous
   ✓ .id
   ✓ .version
+  1) .dns
   ✓ .id Promises support
   ✓ .version Promises support
+  2) .dns Promises support
 
 .object
   callback API
@@ -355,8 +357,6 @@ Returns an IPFS proxy client instance.
       ✓ receive multiple messages
     load tests
       ✓ call publish 1k times
-Send/Receive 10k messages took: 12774 ms, 782 ops / s
-
       ✓ send/receive 10k messages
       ✓ call subscribe/unsubscribe 1k times
 
@@ -384,6 +384,7 @@ Send/Receive 10k messages took: 12774 ms, 782 ops / s
 
 160 passing
 13 pending
+2 failing
 ```
 
 ## Caveats

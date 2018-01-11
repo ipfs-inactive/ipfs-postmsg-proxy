@@ -24,6 +24,10 @@ export default (getIpfs, opts) => {
       opts.preCall.version,
       () => getIpfs().version()
     ), opts),
+    dns: expose('ipfs.dns', preCall(
+      opts.preCall.dns,
+      (...args) => getIpfs().dns(...args)
+    ), opts),
     block: createBlock(getIpfs, opts),
     config: createConfig(getIpfs, opts),
     dag: createDag(getIpfs, opts),

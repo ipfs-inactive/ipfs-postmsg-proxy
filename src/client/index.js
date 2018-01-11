@@ -15,6 +15,7 @@ export default (opts) => {
   const ipfs = {
     id: callbackify(caller('ipfs.id', opts)),
     version: callbackify(caller('ipfs.version', opts)),
+    dns: callbackify.variadic(caller('ipfs.dns', opts)),
     block: createBlock(opts),
     config: createConfig(opts),
     dag: createDag(opts),
