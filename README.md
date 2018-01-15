@@ -33,6 +33,12 @@ In the browser extension we serialize return values after exposed functions are 
 
 The [`prepost`](https://www.npmjs.com/package/prepost) module provides these utility functions.
 
+## Install
+
+```sh
+npm install ipfs-postmsg-proxy
+```
+
 ## Usage
 
 In this example, IPFS is running in an iframe.
