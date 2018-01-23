@@ -409,7 +409,7 @@ The unsubscribe function is not synchronous as is in js-ipfs. Instead it returns
 
 ## Contribute
 
-Feel free to dive in! [Open an issue](https://github.com/tableflip/mem-storage-area/issues/new) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/tableflip/ipfs-postmsg-proxy/issues/new) or submit PRs.
 
 ## License
 
