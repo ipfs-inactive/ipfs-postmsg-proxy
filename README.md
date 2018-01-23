@@ -406,3 +406,12 @@ Due to the buffering performed in the streaming APIs the progress option for `fi
 ### Pubsub unsubscribe
 
 The unsubscribe function is not synchronous as is in js-ipfs. Instead it returns a promise that you can use to run code after the unsubscribe has happened.
+
+## Contribute
+
+Feel free to dive in! [Open an issue](https://github.com/tableflip/mem-storage-area/issues/new) or submit PRs.
+
+## License
+
+[MIT](LICENSE) © Alan Shaw
+
