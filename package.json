@@ -34,8 +34,10 @@
     "prepost": "^1.0.0",
     "pull-buffer": "^1.0.0",
     "pull-defer": "^0.2.2",
+    "pull-postmsg-stream": "^1.1.2",
     "pull-stream": "^3.6.1",
     "pull-stream-to-stream": "^1.3.4",
+    "shortid": "^2.2.8",
     "stream-to-pull-stream": "^1.7.2"
   },
   "devDependencies": {
