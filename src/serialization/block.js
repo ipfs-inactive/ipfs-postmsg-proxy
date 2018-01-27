@@ -16,3 +16,21 @@ export const blockFromJson = (obj) => {
 
 export const isBlock = (obj) => obj && Block.isBlock(obj)
 export const isBlockJson = (obj) => obj && obj.__ipfsPostMsgProxyType === 'Block'
+
+export const preBlockFromJson = (index) => {
+  return (...args) => {
+    if (isBlockJson(args[index])) {
+      args[index] = blockFromJson(args[index])
+    }
+    return args
+  }
+}
+
+export const preBlockToJson = (index) => {
+  return (...args) => {
+    if (isBlock(args[index])) {
+      args[index] = blockToJson(args[index])
+    }
+    return args
+  }
+}

@@ -1,9 +1,9 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import { pre, post } from 'prepost'
-import { cidToJson, isCid } from '../serialization/cid'
-import { peerIdToJson, peerInfoFromJson, isPeerId, isPeerInfo } from '../serialization/peer'
-import { isBuffer, bufferToJson } from '../serialization/buffer'
+import { preCidToJson } from '../serialization/cid'
+import { prePeerIdToJson, peerInfoFromJson, isPeerInfo } from '../serialization/peer'
+import { preBufferToJson } from '../serialization/buffer'
 
 export default function (opts) {
   return {
@@ -11,13 +11,7 @@ export default function (opts) {
     get: callbackify.variadic(caller('ipfs.dht.get', opts)),
     findprovs: callbackify.variadic(
       pre(
-        (...args) => {
-          if (isBuffer(args[0])) {
-            args[0] = bufferToJson(args[0])
-          }
-
-          return args
-        },
+        preBufferToJson(0),
         post(
           caller('ipfs.dht.findprovs', opts),
           (res) => Promise.all(
@@ -28,13 +22,7 @@ export default function (opts) {
     ),
     findpeer: callbackify.variadic(
       pre(
-        (...args) => {
-          if (isPeerId(args[0])) {
-            args[0] = peerIdToJson(args[0])
-          }
-
-          return args
-        },
+        prePeerIdToJson(0),
         post(
           caller('ipfs.dht.findpeer', opts),
           (res) => isPeerInfo(res) ? peerInfoFromJson(res) : res
@@ -43,27 +31,14 @@ export default function (opts) {
     ),
     provide: callbackify.variadic(
       pre(
-        (...args) => {
-          if (isBuffer(args[0])) {
-            args[0] = bufferToJson(args[0])
-          } else if (isCid(args[0])) {
-            args[0] = cidToJson(args[0])
-          }
-
-          return args
-        },
+        preBufferToJson(0),
+        preCidToJson(0),
         caller('ipfs.dht.provide', opts)
       )
     ),
     query: callbackify.variadic(
       pre(
-        (...args) => {
-          if (isPeerId(args[0])) {
-            args[0] = peerIdToJson(args[0])
-          }
-
-          return args
-        },
+        prePeerIdToJson(0),
         post(
           caller('ipfs.dht.query', opts),
           (res) => Promise.all(

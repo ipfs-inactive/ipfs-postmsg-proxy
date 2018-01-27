@@ -2,8 +2,8 @@ import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import { pre, post } from 'prepost'
 import { peerInfoFromJson } from '../serialization/peer'
-import { isMultiaddr, multiaddrToJson, multiaddrFromJson } from '../serialization/multiaddr'
-import { isBuffer, bufferToJson } from '../serialization/buffer'
+import { preMultiaddrToJson, multiaddrFromJson } from '../serialization/multiaddr'
+import { preBufferToJson } from '../serialization/buffer'
 
 export default function (opts) {
   return {
@@ -35,29 +35,15 @@ export default function (opts) {
       )),
     connect: callbackify.variadic(
       pre(
-        (...args) => {
-          if (isBuffer(args[0])) {
-            args[0] = bufferToJson(args[0])
-          } else if (isMultiaddr(args[0])) {
-            args[0] = multiaddrToJson(args[0])
-          }
-
-          return args
-        },
+        preBufferToJson(0),
+        preMultiaddrToJson(0),
         caller('ipfs.swarm.connect', opts)
       )
     ),
     disconnect: callbackify.variadic(
       pre(
-        (...args) => {
-          if (isBuffer(args[0])) {
-            args[0] = bufferToJson(args[0])
-          } else if (isMultiaddr(args[0])) {
-            args[0] = multiaddrToJson(args[0])
-          }
-
-          return args
-        },
+        preBufferToJson(0),
+        preMultiaddrToJson(0),
         caller('ipfs.swarm.disconnect', opts)
       )
     )

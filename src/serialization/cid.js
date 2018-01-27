@@ -12,3 +12,21 @@ export const cidToJson = (cid) => ({
 
 export const isCid = CID.isCID
 export const isCidJson = (obj) => obj && obj.__ipfsPostMsgProxyType === 'CID'
+
+export const preCidFromJson = (index) => {
+  return (...args) => {
+    if (isCidJson(args[index])) {
+      args[index] = cidFromJson(args[index])
+    }
+    return args
+  }
+}
+
+export const preCidToJson = (index) => {
+  return (...args) => {
+    if (isCid(args[index])) {
+      args[index] = cidToJson(args[index])
+    }
+    return args
+  }
+}

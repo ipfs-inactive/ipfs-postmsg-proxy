@@ -4,22 +4,15 @@ import defer from 'pull-defer'
 import pull from 'pull-stream'
 import toStream from 'pull-stream-to-stream'
 import { pre } from 'prepost'
-import { cidToJson, isCid } from '../../serialization/cid'
-import { isBuffer, bufferToJson } from '../../serialization/buffer'
+import { preCidToJson } from '../../serialization/cid'
+import { preBufferToJson } from '../../serialization/buffer'
 
 export default function (opts) {
   const api = {
     ls: callbackify.variadic(
       pre(
-        (...args) => {
-          if (isBuffer(args[0])) {
-            args[0] = bufferToJson(args[0])
-          } else if (isCid(args[0])) {
-            args[0] = cidToJson(args[0])
-          }
-
-          return args
-        },
+        preBufferToJson(0),
+        preCidToJson(0),
         caller('ipfs.files.ls', opts)
       )
     ),

@@ -3,7 +3,7 @@ import callbackify from 'callbackify'
 import shortid from 'shortid'
 import { pre } from 'prepost'
 import { functionToJson } from '../serialization/function'
-import { isBuffer, isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
+import { isBufferJson, bufferFromJson, preBufferToJson } from '../serialization/buffer'
 
 export default function (opts) {
   const subs = [
@@ -22,13 +22,7 @@ export default function (opts) {
   const api = {
     publish: callbackify.variadic(
       pre(
-        (...args) => {
-          if (isBuffer(args[1])) {
-            args[1] = bufferToJson(args[1])
-          }
-
-          return args
-        },
+        preBufferToJson(1),
         caller('ipfs.pubsub.publish', opts)
       )
     ),

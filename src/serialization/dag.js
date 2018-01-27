@@ -20,6 +20,28 @@ export const dagNodeToJson = (dagNode) => ({
 export const isDagNode = (obj) => obj && obj.constructor && obj.constructor.name === 'DAGNode'
 export const isDagNodeJson = (obj) => obj && obj.__ipfsPostMsgProxyType === 'DAGNode'
 
+export const preDagNodeFromJson = (index) => {
+  return (...args) => {
+    if (isDagNodeJson(args[index])) {
+      return dagNodeFromJson(args[index])
+        .then((dagNode) => {
+          args[index] = dagNode
+          return args
+        })
+    }
+    return args
+  }
+}
+
+export const preDagNodeToJson = (index) => {
+  return (...args) => {
+    if (isDagNode(args[index])) {
+      args[index] = dagNodeToJson(args[index])
+    }
+    return args
+  }
+}
+
 export const dagLinkFromJson = (obj) => new DAGLink(obj.name, obj.size, obj.multihash)
 
 export const dagLinkToJson = (link) => Object.assign(
@@ -29,3 +51,21 @@ export const dagLinkToJson = (link) => Object.assign(
 
 export const isDagLink = (obj) => obj && obj.constructor && obj.constructor.name === 'DAGLink'
 export const isDagLinkJson = (obj) => obj && obj.__ipfsPostMsgProxyType === 'DAGLink'
+
+export const preDagLinkFromJson = (index) => {
+  return (...args) => {
+    if (isDagLinkJson(args[index])) {
+      args[index] = dagLinkFromJson(args[index])
+    }
+    return args
+  }
+}
+
+export const preDagLinkToJson = (index) => {
+  return (...args) => {
+    if (isDagLink(args[index])) {
+      args[index] = dagLinkToJson(args[index])
+    }
+    return args
+  }
+}

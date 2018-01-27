@@ -31,6 +31,24 @@ export const peerInfoToJson = (peerInfo) => ({
 export const isPeerInfo = PeerInfo.isPeerInfo
 export const isPeerInfoJson = (obj) => obj && obj.__ipfsPostMsgProxyType === 'PeerInfo'
 
+export const prePeerInfoFromJson = (index) => {
+  return (...args) => {
+    if (isPeerInfoJson(args[index])) {
+      args[index] = peerInfoFromJson(args[index])
+    }
+    return args
+  }
+}
+
+export const prePeerInfoToJson = (index) => {
+  return (...args) => {
+    if (isPeerInfo(args[index])) {
+      args[index] = peerInfoToJson(args[index])
+    }
+    return args
+  }
+}
+
 export const peerIdFromJson = (obj) => new Promise((resolve, reject) => {
   PeerId.createFromJSON(obj, (err, peerId) => {
     if (err) return reject(err)
@@ -45,3 +63,21 @@ export const peerIdToJson = (peerId) => Object.assign(
 
 export const isPeerId = PeerId.isPeerId
 export const isPeerIdJson = (obj) => obj && obj.__ipfsPostMsgProxyType === 'PeerId'
+
+export const prePeerIdFromJson = (index) => {
+  return (...args) => {
+    if (isPeerIdJson(args[index])) {
+      args[index] = peerIdFromJson(args[index])
+    }
+    return args
+  }
+}
+
+export const prePeerIdToJson = (index) => {
+  return (...args) => {
+    if (isPeerId(args[index])) {
+      args[index] = peerIdToJson(args[index])
+    }
+    return args
+  }
+}
