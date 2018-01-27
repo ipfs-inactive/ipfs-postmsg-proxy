@@ -59,6 +59,7 @@ export default function (opts) {
                   }
                 }))
               }
+
               return file
             })
           )
