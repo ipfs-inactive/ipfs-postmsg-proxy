@@ -3,9 +3,9 @@ import { pre, post } from 'prepost'
 import pull from 'pull-stream'
 import PMS from 'pull-postmsg-stream'
 import shortid from 'shortid'
-import { isCidJson, cidFromJson } from '../serialization/cid'
-import { isBuffer, isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
-import { functionToJson } from '../serialization/function'
+import { isCidJson, cidFromJson } from '../../serialization/cid'
+import { isBuffer, isBufferJson, bufferFromJson, bufferToJson } from '../../serialization/buffer'
+import { functionToJson } from '../../serialization/function'
 
 export default function (getIpfs, opts) {
   return {

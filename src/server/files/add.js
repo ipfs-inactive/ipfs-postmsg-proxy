@@ -1,6 +1,6 @@
 import { expose } from 'postmsg-rpc'
 import { pre } from 'prepost'
-import { isBufferJson, bufferFromJson } from '../serialization/buffer'
+import { isBufferJson, bufferFromJson } from '../../serialization/buffer'
 
 export default function (getIpfs, opts) {
   return {

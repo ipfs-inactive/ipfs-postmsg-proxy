@@ -1,7 +1,7 @@
 import { expose } from 'postmsg-rpc'
 import { pre, post } from 'prepost'
-import { isCidJson, cidFromJson } from '../serialization/cid'
-import { isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
+import { isCidJson, cidFromJson } from '../../serialization/cid'
+import { isBufferJson, bufferFromJson, bufferToJson } from '../../serialization/buffer'
 
 export default function (getIpfs, opts) {
   return {
