@@ -19,7 +19,6 @@ export default function (opts) {
         )
       )
     ),
-    // FIXME: implement streams properly
     catReadableStream () {
       return toStream.source(api.catPullStream(...arguments))
     },
@@ -30,7 +29,7 @@ export default function (opts) {
         post(
           caller('ipfs.files.catPullStream', opts),
           (res) => PMS.source(res.name, Object.assign({}, opts, {
-            post: (res) => {
+            post (res) {
               if (isBufferJson(res.data)) {
                 res.data = bufferFromJson(res.data)
               }
