@@ -1,8 +1,8 @@
 import { expose } from 'postmsg-rpc'
 import { pre, post } from 'prepost'
 import { peerInfoToJson } from '../serialization/peer'
-import { isMultiaddrJson, multiaddrFromJson, multiaddrToJson } from '../serialization/multiaddr'
-import { isBufferJson, bufferFromJson } from '../serialization/buffer'
+import { preMultiaddrFromJson, multiaddrToJson } from '../serialization/multiaddr'
+import { preBufferFromJson } from '../serialization/buffer'
 
 export default function (getIpfs, opts) {
   return {
@@ -32,28 +32,14 @@ export default function (getIpfs, opts) {
       )
     ), opts),
     connect: expose('ipfs.swarm.connect', pre(
-      (...args) => {
-        if (isBufferJson(args[0])) {
-          args[0] = bufferFromJson(args[0])
-        } else if (isMultiaddrJson(args[0])) {
-          args[0] = multiaddrFromJson(args[0])
-        }
-
-        return args
-      },
+      preBufferFromJson(0),
+      preMultiaddrFromJson(0),
       opts.pre['swarm.connect'],
       (...args) => getIpfs().swarm.connect(...args)
     ), opts),
     disconnect: expose('ipfs.swarm.disconnect', pre(
-      (...args) => {
-        if (isBufferJson(args[0])) {
-          args[0] = bufferFromJson(args[0])
-        } else if (isMultiaddrJson(args[0])) {
-          args[0] = multiaddrFromJson(args[0])
-        }
-
-        return args
-      },
+      preBufferFromJson(0),
+      preMultiaddrFromJson(0),
       opts.pre['swarm.disconnect'],
       (...args) => getIpfs().swarm.disconnect(...args)
     ), opts)

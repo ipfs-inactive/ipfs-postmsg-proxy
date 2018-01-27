@@ -1,8 +1,8 @@
 import { expose } from 'postmsg-rpc'
 import { pre, post } from 'prepost'
-import { isDagNodeJson, dagNodeToJson, dagNodeFromJson, dagLinkToJson, dagLinkFromJson } from '../serialization/dag'
-import { isCidJson, cidFromJson } from '../serialization/cid'
-import { isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
+import { dagNodeToJson, preDagNodeFromJson, dagLinkToJson, preDagLinkFromJson } from '../serialization/dag'
+import { preCidFromJson } from '../serialization/cid'
+import { isBufferJson, bufferFromJson, preBufferFromJson, bufferToJson } from '../serialization/buffer'
 
 export default function (getIpfs, opts) {
   return {
@@ -14,17 +14,11 @@ export default function (getIpfs, opts) {
       )
     ), opts),
     put: expose('ipfs.object.put', pre(
+      preDagNodeFromJson(0),
+      preBufferFromJson(0),
       (...args) => {
-        if (isDagNodeJson(args[0])) {
-          return dagNodeFromJson(args[0])
-            .then((dagNode) => {
-              args[0] = dagNode
-              return args
-            })
-        } else if (args[0] && isBufferJson(args[0].Data)) {
+        if (args[0] && isBufferJson(args[0].Data)) {
           args[0].Data = bufferFromJson(args[0].Data)
-        } else if (isBufferJson(args[0])) {
-          args[0] = bufferFromJson(args[0])
         }
 
         return args
@@ -36,15 +30,8 @@ export default function (getIpfs, opts) {
       )
     ), opts),
     get: expose('ipfs.object.get', pre(
-      (...args) => {
-        if (isBufferJson(args[0])) {
-          args[0] = bufferFromJson(args[0])
-        } else if (isCidJson(args[0])) {
-          args[0] = cidFromJson(args[0])
-        }
-
-        return args
-      },
+      preBufferFromJson(0),
+      preCidFromJson(0),
       opts.pre['object.get'],
       post(
         (...args) => getIpfs().object.get(...args),
@@ -52,15 +39,8 @@ export default function (getIpfs, opts) {
       )
     ), opts),
     data: expose('ipfs.object.data', pre(
-      (...args) => {
-        if (isBufferJson(args[0])) {
-          args[0] = bufferFromJson(args[0])
-        } else if (isCidJson(args[0])) {
-          args[0] = cidFromJson(args[0])
-        }
-
-        return args
-      },
+      preBufferFromJson(0),
+      preCidFromJson(0),
       opts.pre['object.data'],
       post(
         (...args) => getIpfs().object.data(...args),
@@ -68,15 +48,8 @@ export default function (getIpfs, opts) {
       )
     ), opts),
     links: expose('ipfs.object.links', pre(
-      (...args) => {
-        if (isBufferJson(args[0])) {
-          args[0] = bufferFromJson(args[0])
-        } else if (isCidJson(args[0])) {
-          args[0] = cidFromJson(args[0])
-        }
-
-        return args
-      },
+      preBufferFromJson(0),
+      preCidFromJson(0),
       opts.pre['object.links'],
       post(
         (...args) => getIpfs().object.links(...args),
@@ -84,31 +57,16 @@ export default function (getIpfs, opts) {
       )
     ), opts),
     stat: expose('ipfs.object.stat', pre(
-      (...args) => {
-        if (isBufferJson(args[0])) {
-          args[0] = bufferFromJson(args[0])
-        } else if (isCidJson(args[0])) {
-          args[0] = cidFromJson(args[0])
-        }
-
-        return args
-      },
+      preBufferFromJson(0),
+      preCidFromJson(0),
       opts.pre['object.stat'],
       (...args) => getIpfs().object.stat(...args)
     ), opts),
     patch: {
       addLink: expose('ipfs.object.patch.addLink', pre(
-        (...args) => {
-          if (isBufferJson(args[0])) {
-            args[0] = bufferFromJson(args[0])
-          } else if (isCidJson(args[0])) {
-            args[0] = cidFromJson(args[0])
-          }
-
-          args[1] = dagLinkFromJson(args[1])
-
-          return args
-        },
+        preBufferFromJson(0),
+        preCidFromJson(0),
+        preDagLinkFromJson(1),
         opts.pre['object.patch.addLink'],
         post(
           (...args) => getIpfs().object.patch.addLink(...args),
@@ -116,17 +74,9 @@ export default function (getIpfs, opts) {
         )
       ), opts),
       rmLink: expose('ipfs.object.patch.rmLink', pre(
-        (...args) => {
-          if (isBufferJson(args[0])) {
-            args[0] = bufferFromJson(args[0])
-          } else if (isCidJson(args[0])) {
-            args[0] = cidFromJson(args[0])
-          }
-
-          args[1] = dagLinkFromJson(args[1])
-
-          return args
-        },
+        preBufferFromJson(0),
+        preCidFromJson(0),
+        preDagLinkFromJson(1),
         opts.pre['object.patch.rmLink'],
         post(
           (...args) => getIpfs().object.patch.rmLink(...args),
@@ -134,19 +84,9 @@ export default function (getIpfs, opts) {
         )
       ), opts),
       appendData: expose('ipfs.object.patch.appendData', pre(
-        (...args) => {
-          if (isBufferJson(args[0])) {
-            args[0] = bufferFromJson(args[0])
-          } else if (isCidJson(args[0])) {
-            args[0] = cidFromJson(args[0])
-          }
-
-          if (isBufferJson(args[1])) {
-            args[1] = bufferFromJson(args[1])
-          }
-
-          return args
-        },
+        preBufferFromJson(0),
+        preCidFromJson(0),
+        preBufferFromJson(1),
         opts.pre['object.patch.appendData'],
         post(
           (...args) => getIpfs().object.patch.appendData(...args),
@@ -154,19 +94,9 @@ export default function (getIpfs, opts) {
         )
       ), opts),
       setData: expose('ipfs.object.patch.setData', pre(
-        (...args) => {
-          if (isBufferJson(args[0])) {
-            args[0] = bufferFromJson(args[0])
-          } else if (isCidJson(args[0])) {
-            args[0] = cidFromJson(args[0])
-          }
-
-          if (isBufferJson(args[1])) {
-            args[1] = bufferFromJson(args[1])
-          }
-
-          return args
-        },
+        preBufferFromJson(0),
+        preCidFromJson(0),
+        preBufferFromJson(1),
         opts.pre['object.patch.setData'],
         post(
           (...args) => getIpfs().object.patch.setData(...args),

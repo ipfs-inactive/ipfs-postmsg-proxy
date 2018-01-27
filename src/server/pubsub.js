@@ -1,7 +1,7 @@
 import { expose, caller } from 'postmsg-rpc'
 import { pre } from 'prepost'
 import { isFunctionJson } from '../serialization/function'
-import { isBufferJson, bufferFromJson } from '../serialization/buffer'
+import { preBufferFromJson } from '../serialization/buffer'
 
 export default function (getIpfs, opts) {
   const subs = [
@@ -18,13 +18,7 @@ export default function (getIpfs, opts) {
 
   const api = {
     publish: expose('ipfs.pubsub.publish', pre(
-      (...args) => {
-        if (isBufferJson(args[1])) {
-          args[1] = bufferFromJson(args[1])
-        }
-
-        return args
-      },
+      preBufferFromJson(1),
       opts.pre['pubsub.publish'],
       (...args) => getIpfs().pubsub.publish(...args)
     ), opts),

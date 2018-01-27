@@ -1,24 +1,17 @@
 import { expose } from 'postmsg-rpc'
 import { pre, post } from 'prepost'
-import { isDagNodeJson, isDagNode, dagNodeToJson, dagNodeFromJson } from '../serialization/dag'
-import { isCidJson, cidToJson, cidFromJson } from '../serialization/cid'
-import { isBuffer, isBufferJson, bufferFromJson, bufferToJson } from '../serialization/buffer'
+import { isDagNode, dagNodeToJson, preDagNodeFromJson } from '../serialization/dag'
+import { cidToJson, preCidFromJson } from '../serialization/cid'
+import { isBuffer, isBufferJson, bufferFromJson, preBufferFromJson, bufferToJson } from '../serialization/buffer'
 import { convertValues } from '../converters'
 
 export default function (getIpfs, opts) {
   return {
     put: expose('ipfs.dag.put', pre(
+      preDagNodeFromJson(0),
       (...args) => {
-        if (isDagNodeJson(args[0])) {
-          return dagNodeFromJson(args[0])
-            .then((dagNode) => {
-              args[0] = dagNode
-              return args
-            })
-        }
-
         // TODO: CBOR node, is this correct?
-        if (args[0]) {
+        if (args[0] && !isDagNode(args[0])) {
           args[0] = convertValues(args[0], isBufferJson, bufferFromJson)
         }
 
@@ -31,15 +24,8 @@ export default function (getIpfs, opts) {
       )
     ), opts),
     get: expose('ipfs.dag.get', pre(
-      (...args) => {
-        if (isBufferJson(args[0])) {
-          args[0] = bufferFromJson(args[0])
-        } else if (isCidJson(args[0])) {
-          args[0] = cidFromJson(args[0])
-        }
-
-        return args
-      },
+      preBufferFromJson(0),
+      preCidFromJson(0),
       opts.pre['dag.get'],
       post(
         (...args) => getIpfs().dag.get(...args),
@@ -55,15 +41,8 @@ export default function (getIpfs, opts) {
       )
     ), opts),
     tree: expose('ipfs.dag.tree', pre(
-      (...args) => {
-        if (isBufferJson(args[0])) {
-          args[0] = bufferFromJson(args[0])
-        } else if (isCidJson(args[0])) {
-          args[0] = cidFromJson(args[0])
-        }
-
-        return args
-      },
+      preBufferFromJson(0),
+      preCidFromJson(0),
       opts.pre['dag.tree'],
       (...args) => getIpfs().dag.tree(...args)
     ), opts)
