@@ -3,9 +3,10 @@ import callbackify from 'callbackify'
 import defer from 'pull-defer'
 import pull from 'pull-stream'
 import toStream from 'pull-stream-to-stream'
+import PMS from 'pull-postmsg-stream'
 import { pre, post } from 'prepost'
 import { preCidToJson } from '../../serialization/cid'
-import { preBufferToJson, bufferFromJson } from '../../serialization/buffer'
+import { isBufferJson, preBufferToJson, bufferFromJson } from '../../serialization/buffer'
 
 export default function (opts) {
   const api = {
@@ -25,7 +26,6 @@ export default function (opts) {
         )
       )
     ),
-    // FIXME: implement streams properly
     getReadableStream () {
       return toStream.source(
         pull(
@@ -39,24 +39,43 @@ export default function (opts) {
         )
       )
     },
-    // FIXME: implement streams properly
-    getPullStream () {
-      const deferred = defer.source()
+    getPullStream: (() => {
+      const getPullStream = pre(
+        preBufferToJson(0),
+        preCidToJson(0),
+        post(
+          caller('ipfs.files.getPullStream', opts),
+          (res) => pull(
+            PMS.source(res.name, opts),
+            pull.map(file => {
+              if (file.content) {
+                file.content = PMS.source(file.content.name, Object.assign({}, opts, {
+                  post (res) {
+                    if (isBufferJson(res.data)) {
+                      res.data = bufferFromJson(res.data)
+                    }
 
-      api.get(...arguments)
-        .then((files) => {
-          files = files.map((file) => {
-            if (file.content) {
-              file.content = pull.values([file.content])
-            }
-            return file
-          })
-          deferred.resolve(pull.values(files))
-        })
-        .catch((err) => deferred.abort(err))
+                    return res
+                  }
+                }))
+              }
+              return file
+            })
+          )
+        )
+      )
 
-      return deferred
-    }
+      return function () {
+        const args = Array.from(arguments)
+        const deferred = defer.source()
+
+        getPullStream(...args)
+          .then((res) => deferred.resolve(res))
+          .catch((err) => deferred.abort(err))
+
+        return deferred
+      }
+    })()
   }
 
   return api
