@@ -40,8 +40,7 @@ export default function (opts) {
         )
       )
 
-      return function () {
-        const args = Array.from(arguments)
+      return (...args) => {
         const deferred = defer.source()
 
         catPullStream(...args)

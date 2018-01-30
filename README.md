@@ -395,17 +395,13 @@ Returns an IPFS proxy client instance.
 
 ## Caveats
 
-### Streaming APIs
-
-The streaming APIs should work as expected _but_ behind the scenes all data is being buffered into memory.
-
 ### Progress option
 
-Due to the buffering performed in the streaming APIs the progress option for `files.add` currently tracks progress of data buffered into memory, before it is sent to the IPFS node.
+The progress option for `files.add` currently tracks progress of data streamed to the IPFS node.
 
 ### Pubsub unsubscribe
 
-The unsubscribe function is not synchronous as is in js-ipfs. Instead it returns a promise that you can use to run code after the unsubscribe has happened.
+The unsubscribe function is not synchronous as it is in js-ipfs. Instead it returns a promise that you can use to run code after the unsubscribe has happened.
 
 ## Contribute
 
@@ -414,4 +410,3 @@ Feel free to dive in! [Open an issue](https://github.com/tableflip/ipfs-postmsg-
 ## License
 
 [MIT](LICENSE) © Alan Shaw
-

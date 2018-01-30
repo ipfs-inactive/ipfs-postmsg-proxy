@@ -1,28 +1,74 @@
 import { expose } from 'postmsg-rpc'
 import { pre } from 'prepost'
+import pull from 'pull-stream'
+import PMS from 'pull-postmsg-stream'
+import shortid from 'shortid'
 import { isBufferJson, bufferFromJson } from '../../serialization/buffer'
+import { isFunctionJson, functionToJson } from '../../serialization/function'
 
 export default function (getIpfs, opts) {
   return {
     add: expose('ipfs.files.add', pre(
       (...args) => {
-        if (Array.isArray(args[0])) {
-          args[0] = args[0].map((c) => {
-            if (isBufferJson(c.content)) {
-              c.content = bufferFromJson(c.content)
-            }
-            return c
-          })
-        } else if (isBufferJson(args[0])) {
-          args[0] = bufferFromJson(args[0])
-        } else if (isBufferJson(args[0].content)) {
-          args[0].content = bufferFromJson(args[0].content)
-        }
+        const fileFromJsonOpts = { pms: opts }
+
+        args[0] = Array.isArray(args[0])
+          ? args[0].map(file => fileFromJson(file, fileFromJsonOpts))
+          : fileFromJson(args[0], fileFromJsonOpts)
 
         return args
       },
       opts.pre['files.add'],
       (...args) => getIpfs().files.add(...args)
+    ), opts),
+    addPullStream: expose('ipfs.files.addPullStream', pre(
+      opts.pre['files.addPullStream'],
+      (...args) => {
+        const sourceReadFnName = shortid()
+        const sinkReadFnName = shortid()
+
+        pull(
+          PMS.source(sourceReadFnName, opts),
+          pull.map(obj => fileFromJson(obj, { pms: opts })),
+          getIpfs().files.addPullStream(...args),
+          PMS.sink(sinkReadFnName, opts)
+        )
+
+        return {
+          source: functionToJson(sourceReadFnName),
+          sink: functionToJson(sinkReadFnName)
+        }
+      }
     ), opts)
   }
+}
+
+function fileFromJson (obj, opts) {
+  opts = opts || {}
+
+  if (isBufferJson(obj)) { // Buffer
+    return bufferFromJson(obj)
+  } else if (isFunctionJson(obj)) { // Pull stream
+    return pullStreamFromJson(obj, opts)
+  } else if (obj && obj.content) { // Object { path?, content }
+    return Object.assign({}, obj, { content: fileFromJson(obj.content, opts) })
+  } else if (obj && obj.path) { // Object { path }
+    return obj
+  }
+
+  throw new Error('Invalid arguments, must be an Array, Buffer, readable stream or source pull stream')
+}
+
+function pullStreamFromJson (obj, opts) {
+  opts = opts || {}
+
+  return PMS.source(obj.name, Object.assign({}, opts.pms, {
+    post (res) {
+      if (isBufferJson(res.data)) {
+        res.data = bufferFromJson(res.data)
+      }
+
+      return res
+    }
+  }))
 }
