@@ -18,7 +18,6 @@ export default function (opts) {
     add: callbackify.variadic(
       pre(
         (...args) => {
-          console.log(args)
           const fileToJsonOpts = { pms: opts }
 
           // FIXME: implement progress properly
@@ -108,8 +107,6 @@ function createOnProgressIncrement (onProgress) {
 
 function fileToJson (file, opts) {
   opts = opts || {}
-
-  console.log('fileToJson', file)
 
   if (isBuffer(file)) { // Buffer
     if (opts.onProgressIncrement) opts.onProgressIncrement(file.length)
