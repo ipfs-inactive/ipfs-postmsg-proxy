@@ -9,7 +9,7 @@ import { isSource } from 'is-pull-stream'
 import shortid from 'shortid'
 import { pre } from 'prepost'
 import defer from 'pull-defer'
-import abort from 'pull-abortable'
+import Abortable from 'pull-abortable'
 import { isBuffer, bufferToJson } from '../../serialization/buffer'
 import { functionToJson } from '../../serialization/function'
 
@@ -18,6 +18,7 @@ export default function (opts) {
     add: callbackify.variadic(
       pre(
         (...args) => {
+          console.log(args)
           const fileToJsonOpts = { pms: opts }
 
           // FIXME: implement progress properly
@@ -57,8 +58,8 @@ export default function (opts) {
       const addPullStream = caller('ipfs.files.addPullStream', opts)
 
       return (...args) => {
-        const deferred = defer.through()
-        const abortable = abort()
+        const deferred = defer.source()
+        const abortable = Abortable()
         const fileToJsonOpts = { pms: opts }
 
         // FIXME: implement progress properly
@@ -67,20 +68,26 @@ export default function (opts) {
           delete args[0].progress
         }
 
-        addPullStream(...args)
-          .then((res) => {
-            const through = function (read) {
-              PMS.sink(res.source.name, opts)(read)
-              return PMS.source(res.sink.name, opts)
-            }
+        const readFnName = shortid()
 
-            deferred.resolve(through)
-          })
+        // Create the through stream what will connect the client to the
+        // server, our source is deferred, until the server responds to tell
+        // us the name of the read function we can use to pull added file
+        // info from.
+        const through = function (read) {
+          PMS.sink(readFnName, opts)(read)
+          return deferred
+        }
+
+        // Call addPullStream on the server, sending the name of the read
+        // function it can use to pull files to add from.
+        addPullStream(functionToJson(readFnName), ...args)
+          .then((res) => deferred.resolve(PMS.source(res.name, opts)))
           .catch((err) => abortable.abort(err))
 
         return pull(
           pull.map(file => fileToJson(file, fileToJsonOpts)),
-          deferred,
+          through,
           abortable
         )
       }
@@ -101,6 +108,8 @@ function createOnProgressIncrement (onProgress) {
 
 function fileToJson (file, opts) {
   opts = opts || {}
+
+  console.log('fileToJson', file)
 
   if (isBuffer(file)) { // Buffer
     if (opts.onProgressIncrement) opts.onProgressIncrement(file.length)

@@ -24,20 +24,16 @@ export default function (getIpfs, opts) {
     addPullStream: expose('ipfs.files.addPullStream', pre(
       opts.pre['files.addPullStream'],
       (...args) => {
-        const sourceReadFnName = shortid()
-        const sinkReadFnName = shortid()
+        const readFnName = shortid()
 
         pull(
-          PMS.source(sourceReadFnName, opts),
+          PMS.source(args[0].name, opts),
           pull.map(obj => fileFromJson(obj, { pms: opts })),
-          getIpfs().files.addPullStream(...args),
-          PMS.sink(sinkReadFnName, opts)
+          getIpfs().files.addPullStream(...args.slice(1)),
+          PMS.sink(readFnName, opts)
         )
 
-        return {
-          source: functionToJson(sourceReadFnName),
-          sink: functionToJson(sinkReadFnName)
-        }
+        return functionToJson(readFnName)
       }
     ), opts)
   }
