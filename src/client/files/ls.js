@@ -1,9 +1,9 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import defer from 'pull-defer'
-import pull from 'pull-stream'
 import toStream from 'pull-stream-to-stream'
-import { pre } from 'prepost'
+import PMS from 'pull-postmsg-stream'
+import { pre, post } from 'prepost'
 import { preCidToJson } from '../../serialization/cid'
 import { preBufferToJson } from '../../serialization/buffer'
 
@@ -16,20 +16,29 @@ export default function (opts) {
         caller('ipfs.files.ls', opts)
       )
     ),
-    // FIXME: implement streams properly
     lsReadableStream () {
       return toStream.source(api.lsPullStream(...arguments))
     },
-    // FIXME: implement streams properly
-    lsPullStream () {
-      const deferred = defer.source()
+    lsPullStream: (() => {
+      const lsPullStream = pre(
+        preBufferToJson(0),
+        preCidToJson(0),
+        post(
+          caller('ipfs.files.lsPullStream', opts),
+          (res) => PMS.source(res.name, opts)
+        )
+      )
 
-      api.ls(...arguments)
-        .then((listing) => deferred.resolve(pull.values(listing)))
-        .catch((err) => deferred.abort(err))
+      return (...args) => {
+        const deferred = defer.source()
 
-      return deferred
-    }
+        lsPullStream(...args)
+          .then((res) => deferred.resolve(res))
+          .catch((err) => deferred.abort(err))
+
+        return deferred
+      }
+    })()
   }
 
   return api
