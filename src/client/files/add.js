@@ -117,11 +117,9 @@ function fileToJson (file, opts) {
     return pullStreamToJson(file, opts)
   } else if (file && file.content) { // Object { path?, content }
     return Object.assign({}, file, { content: fileToJson(file.content, opts) })
-  } else if (file && file.path) { // Object { path }
-    return file
   }
 
-  throw new Error('Invalid arguments, must be an Array, Buffer, readable stream or source pull stream')
+  return file // Object { path } maybe, but could be anything
 }
 
 const pullStreamToJson = (source, opts) => {

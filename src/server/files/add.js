@@ -48,11 +48,9 @@ function fileFromJson (obj, opts) {
     return pullStreamFromJson(obj, opts)
   } else if (obj && obj.content) { // Object { path?, content }
     return Object.assign({}, obj, { content: fileFromJson(obj.content, opts) })
-  } else if (obj && obj.path) { // Object { path }
-    return obj
   }
 
-  throw new Error('Invalid arguments, must be an Array, Buffer, readable stream or source pull stream')
+  return obj // Object { path } maybe, but could be anything
 }
 
 function pullStreamFromJson (obj, opts) {
