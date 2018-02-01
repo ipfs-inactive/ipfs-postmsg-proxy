@@ -17,7 +17,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.pre['dag.put'],
+      opts.pre('dag.put'),
       post(
         (...args) => getIpfs().dag.put(...args),
         cidToJson
@@ -26,7 +26,7 @@ export default function (getIpfs, opts) {
     get: expose('ipfs.dag.get', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['dag.get'],
+      opts.pre('dag.get'),
       post(
         (...args) => getIpfs().dag.get(...args),
         (res) => {
@@ -43,7 +43,7 @@ export default function (getIpfs, opts) {
     tree: expose('ipfs.dag.tree', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['dag.tree'],
+      opts.pre('dag.tree'),
       (...args) => getIpfs().dag.tree(...args)
     ), opts)
   }

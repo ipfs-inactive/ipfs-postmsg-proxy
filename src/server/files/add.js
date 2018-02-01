@@ -18,11 +18,11 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.pre['files.add'],
+      opts.pre('files.add'),
       (...args) => getIpfs().files.add(...args)
     ), opts),
     addPullStream: expose('ipfs.files.addPullStream', pre(
-      opts.pre['files.addPullStream'],
+      opts.pre('files.addPullStream'),
       (...args) => {
         const readFnName = shortid()
 

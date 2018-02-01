@@ -12,13 +12,13 @@ export default function (getIpfs, opts) {
     ls: expose('ipfs.files.ls', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['files.ls'],
+      opts.pre('files.ls'),
       (...args) => getIpfs().ls(...args)
     ), opts),
     lsPullStream: expose('ipfs.files.lsPullStream', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['files.lsPullStream'],
+      opts.pre('files.lsPullStream'),
       post(
         (...args) => getIpfs().lsPullStream(...args),
         (res) => new Promise(resolve => {

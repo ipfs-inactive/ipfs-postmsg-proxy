@@ -19,7 +19,7 @@ export default function (getIpfs, opts) {
   const api = {
     publish: expose('ipfs.pubsub.publish', pre(
       preBufferFromJson(1),
-      opts.pre['pubsub.publish'],
+      opts.pre('pubsub.publish'),
       (...args) => getIpfs().pubsub.publish(...args)
     ), opts),
     subscribe: expose('ipfs.pubsub.subscribe', function (...args) {
@@ -48,7 +48,7 @@ export default function (getIpfs, opts) {
 
           return args
         },
-        opts.pre['pubsub.subscribe'],
+        opts.pre('pubsub.subscribe'),
         (...args) => {
           return getIpfs().pubsub.subscribe(...args)
             .catch((err) => {
@@ -70,14 +70,14 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.pre['pubsub.unsubscribe'],
+      opts.pre('pubsub.unsubscribe'),
       (...args) => new Promise((resolve) => {
         getIpfs().pubsub.unsubscribe(...args)
         resolve()
       })
     ), opts),
     peers: expose('ipfs.pubsub.peers', pre(
-      opts.pre['pubsub.peers'],
+      opts.pre('pubsub.peers'),
       (...args) => getIpfs().pubsub.peers(...args)
     ), opts),
     ls: expose('ipfs.pubsub.ls', pre(
@@ -87,7 +87,7 @@ export default function (getIpfs, opts) {
       // proxy partly because of the way it is coded but mostly because
       // window.postMessage is asynchronous.
       (...args) => new Promise((resolve) => setTimeout(() => resolve(args))),
-      opts.pre['pubsub.ls'],
+      opts.pre('pubsub.ls'),
       (...args) => getIpfs().pubsub.ls(...args)
     ), opts)
   }

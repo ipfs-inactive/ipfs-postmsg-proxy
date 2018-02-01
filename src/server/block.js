@@ -16,7 +16,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.pre['block.put'],
+      opts.pre('block.put'),
       post(
         (...args) => getIpfs().block.put(...args),
         blockToJson
@@ -25,7 +25,7 @@ export default function (getIpfs, opts) {
     get: expose('ipfs.block.get', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['block.get'],
+      opts.pre('block.get'),
       post(
         (...args) => getIpfs().block.get(...args),
         blockToJson
@@ -34,7 +34,7 @@ export default function (getIpfs, opts) {
     stat: expose('ipfs.block.stat', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['block.stat'],
+      opts.pre('block.stat'),
       (...args) => getIpfs().block.stat(...args)
     ), opts)
   }

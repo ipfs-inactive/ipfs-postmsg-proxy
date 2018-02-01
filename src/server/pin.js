@@ -8,19 +8,19 @@ export default function (getIpfs, opts) {
     add: expose('ipfs.pin.add', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['pin.add'],
+      opts.pre('pin.add'),
       (...args) => getIpfs().pin.add(...args)
     ), opts),
     rm: expose('ipfs.pin.rm', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['pin.rm'],
+      opts.pre('pin.rm'),
       (...args) => getIpfs().pin.rm(...args)
     ), opts),
     ls: expose('ipfs.pin.ls', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['pin.ls'],
+      opts.pre('pin.ls'),
       (...args) => getIpfs().pin.ls(...args)
     ), opts)
   }

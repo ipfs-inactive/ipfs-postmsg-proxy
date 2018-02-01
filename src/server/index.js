@@ -13,19 +13,23 @@ import createSwarm from './swarm'
 
 export default (getIpfs, opts) => {
   opts = opts || {}
-  opts.pre = opts.pre || {}
+
+  if (typeof opts.pre !== 'function') {
+    const preObj = opts.pre || {}
+    opts.pre = (fnName) => preObj[fnName]
+  }
 
   return {
     id: expose('ipfs.id', pre(
-      opts.pre.id,
+      opts.pre('id'),
       () => getIpfs().id()
     ), opts),
     version: expose('ipfs.version', pre(
-      opts.pre.version,
+      opts.pre('version'),
       () => getIpfs().version()
     ), opts),
     dns: expose('ipfs.dns', pre(
-      opts.pre.dns,
+      opts.pre('dns'),
       (...args) => getIpfs().dns(...args)
     ), opts),
     block: createBlock(getIpfs, opts),

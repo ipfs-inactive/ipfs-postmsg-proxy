@@ -12,7 +12,7 @@ export default function (getIpfs, opts) {
     cat: expose('ipfs.files.cat', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['files.cat'],
+      opts.pre('files.cat'),
       post(
         (...args) => getIpfs().files.cat(...args),
         bufferToJson
@@ -21,7 +21,7 @@ export default function (getIpfs, opts) {
     catPullStream: expose('ipfs.files.catPullStream', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['files.catPullStream'],
+      opts.pre('files.catPullStream'),
       post(
         (...args) => getIpfs().files.catPullStream(...args),
         (res) => new Promise(resolve => {

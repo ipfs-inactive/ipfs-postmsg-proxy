@@ -12,7 +12,7 @@ export default function (getIpfs, opts) {
     get: expose('ipfs.files.get', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['files.get'],
+      opts.pre('files.get'),
       post(
         (...args) => getIpfs().files.get(...args),
         (files) => files.map((file) => {
@@ -27,7 +27,7 @@ export default function (getIpfs, opts) {
     getPullStream: expose('ipfs.files.getPullStream', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['files.getPullStream'],
+      opts.pre('files.getPullStream'),
       post(
         (...args) => getIpfs().files.getPullStream(...args),
         (res) => new Promise(resolve => {

@@ -7,7 +7,7 @@ import { isBufferJson, bufferFromJson, preBufferFromJson, bufferToJson } from '.
 export default function (getIpfs, opts) {
   return {
     new: expose('ipfs.object.new', pre(
-      opts.pre['object.new'],
+      opts.pre('object.new'),
       post(
         (...args) => getIpfs().object.new(...args),
         dagNodeToJson
@@ -23,7 +23,7 @@ export default function (getIpfs, opts) {
 
         return args
       },
-      opts.pre['object.put'],
+      opts.pre('object.put'),
       post(
         (...args) => getIpfs().object.put(...args),
         dagNodeToJson
@@ -32,7 +32,7 @@ export default function (getIpfs, opts) {
     get: expose('ipfs.object.get', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['object.get'],
+      opts.pre('object.get'),
       post(
         (...args) => getIpfs().object.get(...args),
         dagNodeToJson
@@ -41,7 +41,7 @@ export default function (getIpfs, opts) {
     data: expose('ipfs.object.data', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['object.data'],
+      opts.pre('object.data'),
       post(
         (...args) => getIpfs().object.data(...args),
         bufferToJson
@@ -50,7 +50,7 @@ export default function (getIpfs, opts) {
     links: expose('ipfs.object.links', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['object.links'],
+      opts.pre('object.links'),
       post(
         (...args) => getIpfs().object.links(...args),
         (res) => res.map(dagLinkToJson)
@@ -59,7 +59,7 @@ export default function (getIpfs, opts) {
     stat: expose('ipfs.object.stat', pre(
       preBufferFromJson(0),
       preCidFromJson(0),
-      opts.pre['object.stat'],
+      opts.pre('object.stat'),
       (...args) => getIpfs().object.stat(...args)
     ), opts),
     patch: {
@@ -67,7 +67,7 @@ export default function (getIpfs, opts) {
         preBufferFromJson(0),
         preCidFromJson(0),
         preDagLinkFromJson(1),
-        opts.pre['object.patch.addLink'],
+        opts.pre('object.patch.addLink'),
         post(
           (...args) => getIpfs().object.patch.addLink(...args),
           dagNodeToJson
@@ -77,7 +77,7 @@ export default function (getIpfs, opts) {
         preBufferFromJson(0),
         preCidFromJson(0),
         preDagLinkFromJson(1),
-        opts.pre['object.patch.rmLink'],
+        opts.pre('object.patch.rmLink'),
         post(
           (...args) => getIpfs().object.patch.rmLink(...args),
           dagNodeToJson
@@ -87,7 +87,7 @@ export default function (getIpfs, opts) {
         preBufferFromJson(0),
         preCidFromJson(0),
         preBufferFromJson(1),
-        opts.pre['object.patch.appendData'],
+        opts.pre('object.patch.appendData'),
         post(
           (...args) => getIpfs().object.patch.appendData(...args),
           dagNodeToJson
@@ -97,7 +97,7 @@ export default function (getIpfs, opts) {
         preBufferFromJson(0),
         preCidFromJson(0),
         preBufferFromJson(1),
-        opts.pre['object.patch.setData'],
+        opts.pre('object.patch.setData'),
         post(
           (...args) => getIpfs().object.patch.setData(...args),
           dagNodeToJson

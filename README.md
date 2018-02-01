@@ -104,7 +104,7 @@ Create a proxy server to a running IPFS instance.
     * default `window.removeEventListener`
 * `options.getMessageData` - a function that extracts data from the event object passed to a `message` event handler
     * default `(e) => e.data`
-* `options.pre` - an object whose values are functions to call prior to invoking functions on the exposed IPFS node. The pre-functions are passed arguments as they they would be passed to the exposed IPFS node and are expected to return an array of possibly altered arguments or a promise that resolves to the arguments array. The keys for this object identify the function name on the IPFS node that this function should be run before. e.g.
+* `options.pre` - an object or a function. If an object, it's values are functions to call prior to invoking functions on the exposed IPFS node. The pre-functions are passed arguments as they would be passed to the exposed IPFS node and are expected to return an array of possibly altered arguments or a promise that resolves to the arguments array. The keys for this object identify the function name on the IPFS node that this function should be run before. e.g.
 
     ```js
     createProxyServer(getIpfs, {
@@ -113,6 +113,17 @@ Create a proxy server to a running IPFS instance.
           // Alter the args in some way...
           return args
         }
+      }
+    })
+    ```
+
+    If `options.pre` is a function it should create and return a pre-function (or `null`) for the passed function name. e.g.
+
+    ```js
+    createProxyServer(getIpfs, {
+      pre: (fnName) => (...args) => {
+        // Alter the args in some way...
+        return args
       }
     })
     ```
