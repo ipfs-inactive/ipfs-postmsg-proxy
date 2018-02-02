@@ -30,6 +30,8 @@ export default (opts) => {
 
   // Aliases
   ipfs.add = ipfs.files.add
+  ipfs.get = ipfs.files.get
+  ipfs.cat = ipfs.files.cat
   ipfs.ls = ipfs.files.ls
   ipfs.lsReadableStream = ipfs.files.lsReadableStream
   ipfs.lsPullStream = ipfs.files.lsPullStream
