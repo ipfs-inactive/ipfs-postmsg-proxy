@@ -1,11 +1,13 @@
 const { createProxyClient, createProxyServer, closeProxyServer } = require('../../../lib')
-const IpfsFactory = require('./ipfs-factory-instance')
 const fakeWindows = require('../fake-windows')
+const IPFS = require('ipfs')
+const Async = require('async')
+const DaemonFactory = require('ipfsd-ctl')
 
-class NodeIpfsFactory extends IpfsFactory {
+class NodeIpfsFactory {
   constructor () {
-    super()
-    this.ipfsServers = []
+    this.df = DaemonFactory.create({ type: 'proc', exec: IPFS })
+    this.handles = []
   }
 
   // When we spawn a new node, we give back ipfsClient
@@ -14,18 +16,29 @@ class NodeIpfsFactory extends IpfsFactory {
     const args = Array.from(arguments)
     const cb = args.pop()
 
-    super.spawnNode.apply(this, args.concat((err, ipfs) => {
+    this.df.spawn({
+      EXPERIMENTAL: {
+        dht: true,
+        pubsub: true
+      },
+      relay: {
+        enabled: true,
+        hop: {
+          enabled: true
+        }
+      }
+    }, (err, ipfsd) => {
       if (err) return cb(err)
 
       const [ serverWin, clientWin ] = fakeWindows()
 
-      const ipfsServer = createProxyServer(() => ipfs, {
+      const ipfsServer = createProxyServer(() => ipfsd.api, {
         addListener: serverWin.addEventListener,
         removeListener: serverWin.removeEventListener,
         postMessage: serverWin.postMessage
       })
 
-      this.ipfsServers.push(ipfsServer)
+      this.handles.push({ ipfsd, ipfsServer })
 
       const ipfsClient = createProxyClient({
         addListener: clientWin.addEventListener,
@@ -34,12 +47,14 @@ class NodeIpfsFactory extends IpfsFactory {
       })
 
       cb(null, ipfsClient)
-    }))
+    })
   }
 
   dismantle (cb) {
-    this.ipfsServers.forEach(closeProxyServer)
-    super.dismantle(cb)
+    Async.each(this.handles, (handle, cb) => {
+      closeProxyServer(handle.ipfsServer)
+      handle.ipfsd.stop(cb)
+    }, cb)
   }
 }
 
