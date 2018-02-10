@@ -25,7 +25,8 @@ export default (opts) => {
     object: createObject(opts),
     pin: createPin(opts),
     pubsub: createPubsub(opts),
-    swarm: createSwarm(opts)
+    swarm: createSwarm(opts),
+    stop: callbackify(caller('ipfs.stop', opts))
   }
 
   // Aliases

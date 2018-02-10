@@ -41,7 +41,11 @@ export default (getIpfs, opts) => {
     object: createObject(getIpfs, opts),
     pin: createPin(getIpfs, opts),
     pubsub: createPubsub(getIpfs, opts),
-    swarm: createSwarm(getIpfs, opts)
+    swarm: createSwarm(getIpfs, opts),
+    stop: expose('ipfs.stop', pre(
+      opts.pre('stop'),
+      () => getIpfs().stop()
+    ), opts)
   }
 }
 
