@@ -288,13 +288,81 @@ Returns an IPFS proxy client instance.
   .lsPullStream
     ✓ with a base58 encoded CID
 
+.files (MFS Specific)
+  .mkdir
+Not supported in js-ipfs yet
+    ✓ make directory on root
+Not supported in js-ipfs yet
+    ✓ make directory and its parents
+Not supported in js-ipfs yet
+    ✓ make already existent directory
+  .write
+Not supported in js-ipfs yet
+    ✓ expect error
+Not supported in js-ipfs yet
+    ✓ expect no error
+  .cp
+Not supported in js-ipfs yet
+    ✓ copy file, expect error
+Not supported in js-ipfs yet
+    ✓ copy file, expect no error
+Not supported in js-ipfs yet
+    ✓ copy dir, expect error
+Not supported in js-ipfs yet
+    ✓ copy dir, expect no error
+  .mv
+Not supported in js-ipfs yet
+    ✓ move file, expect error
+Not supported in js-ipfs yet
+    ✓ move file, expect no error
+Not supported in js-ipfs yet
+    ✓ move dir, expect error
+Not supported in js-ipfs yet
+    ✓ move dir, expect no error
+  .rm
+Not supported in js-ipfs yet
+    ✓ remove file, expect error
+Not supported in js-ipfs yet
+    ✓ remove file, expect no error
+Not supported in js-ipfs yet
+    ✓ remove dir, expect error
+Not supported in js-ipfs yet
+    ✓ remove dir, expect no error
+  .stat
+Not supported in js-ipfs yet
+    ✓ stat not found, expect error
+Not supported in js-ipfs yet
+    ✓ stat file
+Not supported in js-ipfs yet
+    ✓ stat dir
+  .read
+Not supported in js-ipfs yet
+    ✓ read not found, expect error
+Not supported in js-ipfs yet
+    ✓ read file
+  .ls
+Not supported in js-ipfs yet
+    ✓ ls not found, expect error
+Not supported in js-ipfs yet
+    ✓ ls directory
+Not supported in js-ipfs yet
+    ✓ ls -l directory
+  .flush
+Not supported in js-ipfs yet
+    ✓ flush not found, expect error
+Not supported in js-ipfs yet
+    ✓ flush root
+Not supported in js-ipfs yet
+    ✓ flush specific dir
+
 .miscellaneous
   ✓ .id
   ✓ .version
-  1) .dns
+  ✓ .dns
   ✓ .id Promises support
   ✓ .version Promises support
-  2) .dns Promises support
+  ✓ .dns Promises support
+  1) .stop
 
 .object
   callback API
@@ -388,7 +456,7 @@ Returns an IPFS proxy client instance.
       ✓ default
       ✓ verbose
       Shows connected peers only once
-        ✓ Connecting two peers with one address each
+        2) Connecting two peers with one address each
         ✓ Connecting two peers with two addresses each
   promise API
     ✓ .connect
@@ -399,7 +467,7 @@ Returns an IPFS proxy client instance.
     ✓ .disconnect
 
 
-160 passing
+189 passing
 13 pending
 2 failing
 ```
