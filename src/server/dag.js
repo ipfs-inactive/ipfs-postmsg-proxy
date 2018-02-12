@@ -3,7 +3,7 @@ import { pre, post } from 'prepost'
 import { isDagNode, dagNodeToJson, preDagNodeFromJson } from '../serialization/dag'
 import { cidToJson, preCidFromJson } from '../serialization/cid'
 import { isBuffer, isBufferJson, bufferFromJson, preBufferFromJson, bufferToJson } from '../serialization/buffer'
-import convertValues from '../serialization/utils/serialize-values'
+import convertValues from '../serialization/utils/convert-values'
 
 export default function (getIpfs, opts) {
   return {
