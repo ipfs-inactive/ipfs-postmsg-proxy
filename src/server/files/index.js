@@ -5,6 +5,7 @@ import createFilesGet from './get'
 import createFilesLs from './ls'
 import createFilesMkdir from './mkdir'
 import createFilesMv from './mv'
+import createFilesRead from './read'
 import createFilesRm from './rm'
 import createFilesStat from './stat'
 import createFilesWrite from './write'
@@ -18,6 +19,7 @@ export default function (getIpfs, opts) {
     createFilesLs(getIpfs, opts),
     createFilesMkdir(getIpfs, opts),
     createFilesMv(getIpfs, opts),
+    createFilesRead(getIpfs, opts),
     createFilesRm(getIpfs, opts),
     createFilesStat(getIpfs, opts),
     createFilesWrite(getIpfs, opts)
