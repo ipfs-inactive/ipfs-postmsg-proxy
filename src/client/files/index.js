@@ -1,6 +1,7 @@
 import createFilesAdd from './add'
 import createFilesCat from './cat'
 import createFilesCp from './cp'
+import createFilesFlush from './flush'
 import createFilesGet from './get'
 import createFilesLs from './ls'
 import createFilesMkdir from './mkdir'
@@ -15,6 +16,7 @@ export default function (opts) {
     createFilesAdd(opts),
     createFilesCat(opts),
     createFilesCp(opts),
+    createFilesFlush(opts),
     createFilesGet(opts),
     createFilesLs(opts),
     createFilesMkdir(opts),
