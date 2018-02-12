@@ -4,6 +4,7 @@ import createFilesCp from './cp'
 import createFilesGet from './get'
 import createFilesLs from './ls'
 import createFilesMkdir from './mkdir'
+import createFilesMv from './mv'
 import createFilesWrite from './write'
 
 export default function (opts) {
@@ -14,6 +15,7 @@ export default function (opts) {
     createFilesGet(opts),
     createFilesLs(opts),
     createFilesMkdir(opts),
+    createFilesMv(opts),
     createFilesWrite(opts)
   )
 }
