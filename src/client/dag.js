@@ -4,7 +4,7 @@ import { pre, post } from 'prepost'
 import { isDagNodeJson, preDagNodeToJson, dagNodeFromJson } from '../serialization/dag'
 import { cidFromJson, preCidToJson } from '../serialization/cid'
 import { isBuffer, isBufferJson, preBufferToJson, bufferToJson, bufferFromJson } from '../serialization/buffer'
-import { convertValues } from '../converters'
+import convertValues from '../serialization/utils/serialize-values'
 
 export default function (opts) {
   return {

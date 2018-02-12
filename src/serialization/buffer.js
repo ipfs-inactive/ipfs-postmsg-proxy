@@ -1,3 +1,5 @@
+import preArrayOf from './utils/pre-array-of'
+
 export const bufferFromJson = (obj) => Buffer.from(obj.data)
 
 export const bufferToJson = (buf) => ({
@@ -25,3 +27,6 @@ export const preBufferToJson = (index) => {
     return args
   }
 }
+
+export const preArrayOfBufferToJson = (index) => preArrayOf(index, isBuffer, bufferToJson)
+export const preArrayOfBufferFromJson = (index) => preArrayOf(index, isBufferJson, bufferFromJson)

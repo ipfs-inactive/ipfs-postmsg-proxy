@@ -1,9 +1,9 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import { pre, post } from 'prepost'
-import { preCidToJson } from '../serialization/cid'
+import { preCidToJson, preArrayOfCidToJson } from '../serialization/cid'
 import { prePeerIdToJson, peerInfoFromJson, isPeerInfo } from '../serialization/peer'
-import { preBufferToJson } from '../serialization/buffer'
+import { preBufferToJson, preArrayOfBufferToJson } from '../serialization/buffer'
 
 export default function (opts) {
   return {
@@ -32,7 +32,9 @@ export default function (opts) {
     provide: callbackify.variadic(
       pre(
         preBufferToJson(0),
+        preArrayOfBufferToJson(0),
         preCidToJson(0),
+        preArrayOfCidToJson(0),
         caller('ipfs.dht.provide', opts)
       )
     ),

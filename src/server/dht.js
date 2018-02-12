@@ -1,8 +1,8 @@
 import { expose } from 'postmsg-rpc'
 import { pre, post } from 'prepost'
-import { preCidFromJson } from '../serialization/cid'
+import { preCidFromJson, preArrayOfCidFromJson } from '../serialization/cid'
 import { prePeerIdFromJson, peerInfoToJson, isPeerInfo } from '../serialization/peer'
-import { preBufferFromJson } from '../serialization/buffer'
+import { preBufferFromJson, preArrayOfBufferFromJson } from '../serialization/buffer'
 
 export default function (getIpfs, opts) {
   return {
@@ -32,7 +32,9 @@ export default function (getIpfs, opts) {
     ), opts),
     provide: expose('ipfs.dht.provide', pre(
       preBufferFromJson(0),
+      preArrayOfBufferFromJson(0),
       preCidFromJson(0),
+      preArrayOfCidFromJson(0),
       opts.pre('dht.provide'),
       (...args) => getIpfs().dht.provide(...args)
     ), opts),

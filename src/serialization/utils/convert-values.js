@@ -1,5 +1,5 @@
 // Convert object or array values
-export function convertValues (obj, detect, convert) {
+export default function convertValues (obj, detect, convert) {
   if (!isObjectOrArray(obj)) return obj
 
   if (Array.isArray(obj)) {
