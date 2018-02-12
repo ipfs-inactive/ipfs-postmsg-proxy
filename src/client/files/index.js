@@ -3,6 +3,7 @@ import createFilesCat from './cat'
 import createFilesGet from './get'
 import createFilesLs from './ls'
 import createFilesMkdir from './mkdir'
+import createFilesWrite from './write'
 
 export default function (opts) {
   return Object.assign(
@@ -10,6 +11,7 @@ export default function (opts) {
     createFilesCat(opts),
     createFilesGet(opts),
     createFilesLs(opts),
-    createFilesMkdir(opts)
+    createFilesMkdir(opts),
+    createFilesWrite(opts)
   )
 }

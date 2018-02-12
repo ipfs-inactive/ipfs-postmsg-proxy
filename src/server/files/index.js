@@ -3,6 +3,7 @@ import createFilesCat from './cat'
 import createFilesGet from './get'
 import createFilesLs from './ls'
 import createFilesMkdir from './mkdir'
+import createFilesWrite from './write'
 
 export default function (getIpfs, opts) {
   return Object.assign(
@@ -10,6 +11,7 @@ export default function (getIpfs, opts) {
     createFilesCat(getIpfs, opts),
     createFilesGet(getIpfs, opts),
     createFilesLs(getIpfs, opts),
-    createFilesMkdir(getIpfs, opts)
+    createFilesMkdir(getIpfs, opts),
+    createFilesWrite(getIpfs, opts)
   )
 }
