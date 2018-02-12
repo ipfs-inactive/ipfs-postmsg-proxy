@@ -6,6 +6,7 @@ import createDag from './dag'
 import createDht from './dht'
 import createFiles from './files'
 import createKey from './key'
+import createLs from './ls'
 import createObject from './object'
 import createPin from './pin'
 import createPubsub from './pubsub'
@@ -22,6 +23,7 @@ export default (opts) => {
     dht: createDht(opts),
     files: createFiles(opts),
     key: createKey(opts),
+    ls: createLs(opts),
     object: createObject(opts),
     pin: createPin(opts),
     pubsub: createPubsub(opts),
@@ -33,9 +35,6 @@ export default (opts) => {
   ipfs.add = ipfs.files.add
   ipfs.get = ipfs.files.get
   ipfs.cat = ipfs.files.cat
-  ipfs.ls = ipfs.files.ls
-  ipfs.lsReadableStream = ipfs.files.lsReadableStream
-  ipfs.lsPullStream = ipfs.files.lsPullStream
 
   return ipfs
 }

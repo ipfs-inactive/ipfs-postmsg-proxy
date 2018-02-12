@@ -6,6 +6,7 @@ import createDag from './dag'
 import createDht from './dht'
 import createFiles from './files'
 import createKey from './key'
+import createLs from './ls'
 import createObject from './object'
 import createPin from './pin'
 import createPubsub from './pubsub'
@@ -38,6 +39,7 @@ export default (getIpfs, opts) => {
     dht: createDht(getIpfs, opts),
     files: createFiles(getIpfs, opts),
     key: createKey(getIpfs, opts),
+    ls: createLs(getIpfs, opts),
     object: createObject(getIpfs, opts),
     pin: createPin(getIpfs, opts),
     pubsub: createPubsub(getIpfs, opts),
