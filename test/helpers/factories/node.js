@@ -1,12 +1,11 @@
 const { createProxyClient, createProxyServer, closeProxyServer } = require('../../../lib')
 const fakeWindows = require('../fake-windows')
-const IPFS = require('ipfs')
 const Async = require('async')
 const DaemonFactory = require('ipfsd-ctl')
 
 class NodeIpfsFactory {
-  constructor () {
-    this.df = DaemonFactory.create({ type: 'proc', exec: IPFS })
+  constructor (opts) {
+    this.df = DaemonFactory.create(opts)
     this.handles = []
   }
 
@@ -15,8 +14,9 @@ class NodeIpfsFactory {
   spawnNode () {
     const args = Array.from(arguments)
     const cb = args.pop()
+    const opts = args.pop()
 
-    this.df.spawn({
+    this.df.spawn(Object.assign({
       EXPERIMENTAL: {
         dht: true,
         pubsub: true
@@ -27,7 +27,7 @@ class NodeIpfsFactory {
           enabled: true
         }
       }
-    }, (err, ipfsd) => {
+    }, opts), (err, ipfsd) => {
       if (err) return cb(err)
 
       const [ serverWin, clientWin ] = fakeWindows()
