@@ -23,13 +23,14 @@ export default (opts) => {
     dht: createDht(opts),
     files: createFiles(opts),
     key: createKey(opts),
-    ls: createLs(opts),
     object: createObject(opts),
     pin: createPin(opts),
     pubsub: createPubsub(opts),
     swarm: createSwarm(opts),
     stop: callbackify(caller('ipfs.stop', opts))
   }
+
+  Object.assign(ipfs, createLs(opts))
 
   // Aliases
   ipfs.add = ipfs.files.add

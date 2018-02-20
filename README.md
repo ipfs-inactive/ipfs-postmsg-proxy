@@ -258,218 +258,193 @@ Returns an IPFS proxy client instance.
     ✓ with a multihash
     ✓ streams a large file
     ✓ with ipfs path
-    ✓ with ipfs path, nested value
+    1) with ipfs path, nested value
     ✓ Promise test
     ✓ errors on invalid key
     ✓ errors on unknown path
     ✓ errors on dir path
   .catReadableStream
-    ✓ returns a Readable Stream for a cid
+    2) "before all" hook
   .catPullStream
     ✓ returns a Pull Stream for a cid
   .get
-    ✓ with a base58 encoded multihash
-    ✓ with a multihash
-    ✓ large file
-    ✓ directory
-    ✓ with ipfs path, nested value
-    ✓ Promise test
-    ✓ errors on invalid key
-  .getReadableStream
-    ✓ returns a Readable Stream of Readable Streams
-  .getPullStream
-    ✓ returns a Pull Stream of Pull Streams
-  .ls
-    ✓ with a base58 encoded CID
-    ✓ should correctly handle a non existing hash
-    ✓ should correctly handle a non exiting path
-  .lsReadableStream
-    ✓ with a base58 encoded CID
-  .lsPullStream
-    ✓ with a base58 encoded CID
-
-.files (MFS Specific)
-  .mkdir
-Not supported in js-ipfs yet
-    ✓ make directory on root
-Not supported in js-ipfs yet
-    ✓ make directory and its parents
-Not supported in js-ipfs yet
-    ✓ make already existent directory
-  .write
-Not supported in js-ipfs yet
-    ✓ expect error
-Not supported in js-ipfs yet
-    ✓ expect no error
-  .cp
-Not supported in js-ipfs yet
-    ✓ copy file, expect error
-Not supported in js-ipfs yet
-    ✓ copy file, expect no error
-Not supported in js-ipfs yet
-    ✓ copy dir, expect error
-Not supported in js-ipfs yet
-    ✓ copy dir, expect no error
-  .mv
-Not supported in js-ipfs yet
-    ✓ move file, expect error
-Not supported in js-ipfs yet
-    ✓ move file, expect no error
-Not supported in js-ipfs yet
-    ✓ move dir, expect error
-Not supported in js-ipfs yet
-    ✓ move dir, expect no error
-  .rm
-Not supported in js-ipfs yet
-    ✓ remove file, expect error
-Not supported in js-ipfs yet
-    ✓ remove file, expect no error
-Not supported in js-ipfs yet
-    ✓ remove dir, expect error
-Not supported in js-ipfs yet
-    ✓ remove dir, expect no error
-  .stat
-Not supported in js-ipfs yet
-    ✓ stat not found, expect error
-Not supported in js-ipfs yet
-    ✓ stat file
-Not supported in js-ipfs yet
-    ✓ stat dir
-  .read
-Not supported in js-ipfs yet
-    ✓ read not found, expect error
-Not supported in js-ipfs yet
-    ✓ read file
-  .ls
-Not supported in js-ipfs yet
-    ✓ ls not found, expect error
-Not supported in js-ipfs yet
-    ✓ ls directory
-Not supported in js-ipfs yet
-    ✓ ls -l directory
-  .flush
-Not supported in js-ipfs yet
-    ✓ flush not found, expect error
-Not supported in js-ipfs yet
-    ✓ flush root
-Not supported in js-ipfs yet
-    ✓ flush specific dir
-
-.miscellaneous
-  ✓ .id
-  ✓ .version
-  ✓ .dns
-  ✓ .id Promises support
-  ✓ .version Promises support
-  ✓ .dns Promises support
-  1) .stop
-
-.object
-  callback API
-    .new
-      ✓ no layout
-      ✓ template unixfs-dir
-    .put
-      ✓ of object
-      ✓ of json encoded buffer
-      ✓ of protobuf encoded buffer
-      ✓ of buffer treated as Data field
-      ✓ of DAGNode
-      ✓ fails if String is passed
-      ✓ DAGNode with a link
-    .get
-      ✓ with multihash
-      ✓ with multihash (+ links)
-      ✓ with multihash base58 encoded
-      ✓ with multihash base58 encoded toString
-    .data
-      ✓ with multihash
-      ✓ with multihash base58 encoded
-      ✓ with multihash base58 encoded toString
-    .links
-      ✓ object.links with multihash
-      ✓ with multihash (+ links)
-      ✓ with multihash base58 encoded
-      ✓ with multihash base58 encoded toString
-    .stat
-      ✓ with multihash
-      ✓ with multihash (+ Links)
-      ✓ with multihash base58 encoded
-      ✓ with multihash base58 encoded toString
-    .patch
-      ✓ .addLink
-      ✓ .rmLink
-      ✓ .appendData
-      ✓ .setData
-  promise API
-    ✓ object.new
-    ✓ object.put
-    ✓ object.get
-    ✓ object.get multihash string
-    ✓ object.data
-    ✓ object.stat
-    ✓ object.links
-    object.patch
-      ✓ .addLink
-      ✓ .rmLink
-      ✓ .appendData
-      ✓ .setData
-
-.pubsub
-  single node
-    .publish
-      ✓ errors on string messags
-      ✓ message from buffer
-    .subscribe
-      ✓ to one topic
-      ✓ to one topic with Promise
-      ✓ to one topic with options and Promise
-      ✓ attaches multiple event listeners
-      ✓ discover options
-  multiple nodes connected
-    .peers
-      ✓ does not error when not subscribed to a topic
-      ✓ doesn't return extra peers
-      ✓ returns peers for a topic - one peer
-      ✓ lists peers for a topic - multiple peers
+    3) returns a Readable Stream for a cid
+    .getReadableStream
+      ✓ returns a Readable Stream of Readable Streams
+    .getPullStream
+      ✓ returns a Pull Stream of Pull Streams
+      ✓ with a multihash
     .ls
-      ✓ empty() list when no topics are subscribed
-      ✓ list with 1 subscribed topic
-      ✓ list with 3 subscribed topics
-    multiple nodes
-      ✓ receive messages from different node
-      ✓ round trips a non-utf8 binary buffer correctly
-      ✓ receive multiple messages
-    load tests
-      ✓ call publish 1k times
-      ✓ send/receive 10k messages
-      ✓ call subscribe/unsubscribe 1k times
+      ✓ with a base58 encoded CID
+      ✓ should correctly handle a non existing hash
+      ✓ should correctly handle a non exiting path
+    .lsReadableStream
+      ✓ with a base58 encoded CID
+    .lsPullStream
+      ✓ with a base58 encoded CID
+  .key
+    .gen
+      4) creates a new rsa key
+    .list
+      5) lists all the keys
+      ✓ contains the created keys
+    .rename
+      6) "before all" hook
+    .rm
+      7) removes a key
+      8) does not contain the removed name
+    exchange
+      9) exports
+      10) imports
+      11) removes
+  .miscellaneous
+    ✓ .id
+    ✓ .version
+    ✓ .dns
+    ✓ .id Promises support
+    ✓ .version Promises support
+    ✓ .dns Promises support
+    12) .stop
+  .object
+    callback API
+      .new
+        ✓ no layout
+        ✓ template unixfs-dir
+      .put
+        ✓ of object
+        ✓ of json encoded buffer
+        ✓ of protobuf encoded buffer
+        ✓ of buffer treated as Data field
+        ✓ of DAGNode
+        ✓ fails if String is passed
+        ✓ DAGNode with a link
+      .get
+        ✓ with multihash
+        ✓ with multihash (+ links)
+        ✓ with multihash base58 encoded
+        ✓ with multihash base58 encoded toString
+      .data
+        ✓ with multihash
+        ✓ with multihash base58 encoded
+        ✓ with multihash base58 encoded toString
+      .links
+        ✓ object.links with multihash
+        ✓ with multihash (+ links)
+        ✓ with multihash base58 encoded
+        ✓ with multihash base58 encoded toString
+      .stat
+        ✓ with multihash
+        ✓ with multihash (+ Links)
+        ✓ with multihash base58 encoded
+        ✓ with multihash base58 encoded toString
+      .patch
+        ✓ .addLink
+        ✓ .rmLink
+        ✓ .appendData
+        ✓ .setData
+    promise API
+      ✓ object.new
+      ✓ object.put
+      ✓ object.get
+      ✓ object.get multihash string
+      ✓ object.data
+      ✓ object.stat
+      ✓ object.links
+      object.patch
+        ✓ .addLink
+        ✓ .rmLink
+        ✓ .appendData
+        ✓ .setData
+  .pin
+    callback API
+      13) .ls type recursive
+      - .ls type indirect
+      14) .rm
+      15) .add
+      16) .ls
+      17) .ls type direct
+      18) .ls for a specific hash
+    promise API
+      19) .add
+      20) .ls
+      21) .ls hash
+      22) .rm
+  .pubsub
+    single node
+      .publish
+        ✓ errors on string messags
+        ✓ message from buffer
+      .subscribe
+        ✓ to one topic
+        ✓ to one topic with Promise
+        ✓ to one topic with options and Promise
+        ✓ attaches multiple event listeners
+        ✓ discover options
+    multiple nodes connected
+      .peers
+        ✓ does not error when not subscribed to a topic
+        ✓ doesn't return extra peers
+        ✓ returns peers for a topic - one peer
+        ✓ lists peers for a topic - multiple peers
+      .ls
+        ✓ empty() list when no topics are subscribed
+        ✓ list with 1 subscribed topic
+        ✓ list with 3 subscribed topics
+      multiple nodes
+        ✓ receive messages from different node
+        ✓ round trips a non-utf8 binary buffer correctly
+        ✓ receive multiple messages
+      load tests
+        ✓ call publish 1k times
+Send/Receive 10k messages took: 9589 ms, 1042 ops / s
 
-.swarm
-  callback API
-    ✓ .connect
-    ✓ time
-    ✓ .addrs
-    ✓ .localAddrs
-    ✓ .disconnect
-    .peers
-      ✓ default
-      ✓ verbose
-      Shows connected peers only once
-        2) Connecting two peers with one address each
-        ✓ Connecting two peers with two addresses each
-  promise API
-    ✓ .connect
-    ✓ time
-    ✓ .peers
-    ✓ .addrs
-    ✓ .localAddrs
-    ✓ .disconnect
+        ✓ send/receive 10k messages
+        ✓ call subscribe/unsubscribe 1k times
+  .repo
+    23) .version
+    24) .version Promise
+    25) .stat
+    26) .stat Promise
+    27) .gc
+    28) .gc Promise
+  .stats
+    29) .bitswap
+    30) .bitswap Promise
+Not supported in js-ipfs yet
+    ✓ .bw
+Not supported in js-ipfs yet
+    ✓ .bw Promise
+Not supported in js-ipfs yet
+    ✓ .bwReadableStream
+Not supported in js-ipfs yet
+    ✓ .bwPullStream
+    31) .repo
+    32) .repo Promise
+  .swarm
+    callback API
+      ✓ .connect
+      ✓ time
+      ✓ .addrs
+      ✓ .localAddrs
+      ✓ .disconnect
+      .peers
+        ✓ default
+        ✓ verbose
+        Shows connected peers only once
+          ✓ Connecting two peers with one address each
+          ✓ Connecting two peers with two addresses each
+    promise API
+      ✓ .connect
+      ✓ time
+      ✓ .peers
+      ✓ .addrs
+      ✓ .localAddrs
+      ✓ .disconnect
 
 
-189 passing
-13 pending
-2 failing
+159 passing
+14 pending
+32 failing
 ```
 
 ## Caveats

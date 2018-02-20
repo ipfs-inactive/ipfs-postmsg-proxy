@@ -49,7 +49,7 @@
     "browserify": "^16.0.0",
     "go-ipfs-dep": "^0.4.13",
     "hat": "0.0.3",
-    "interface-ipfs-core": "^0.48.0",
+    "interface-ipfs-core": "^0.52.0",
     "ipfs": "^0.27.7",
     "ipfs-repo": "^0.18.5",
     "ipfsd-ctl": "^0.27.3",

@@ -14,9 +14,7 @@ class NodeIpfsFactory {
   spawnNode () {
     const args = Array.from(arguments)
     const cb = args.pop()
-    const opts = args.pop()
-
-    this.df.spawn(Object.assign({
+    const config = Object.assign({
       EXPERIMENTAL: {
         dht: true,
         pubsub: true
@@ -27,7 +25,18 @@ class NodeIpfsFactory {
           enabled: true
         }
       }
-    }, opts), (err, ipfsd) => {
+    }, args.pop())
+
+    const opts = { config, args: [] }
+
+    if (config.EXPERIMENTAL.pubsub) {
+      opts.args.push('--enable-pubsub-experiment')
+    }
+
+    // https://github.com/ipfs/js-ipfsd-ctl/issues/208
+    opts.EXPERIMENTAL = config.EXPERIMENTAL
+
+    this.df.spawn(opts, (err, ipfsd) => {
       if (err) return cb(err)
 
       const [ serverWin, clientWin ] = fakeWindows()

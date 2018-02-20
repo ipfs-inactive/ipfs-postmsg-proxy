@@ -36,7 +36,19 @@ export default function (getIpfs, opts) {
       preCidFromJson(0),
       preArrayOfCidFromJson(0),
       opts.pre('dht.provide'),
-      (...args) => getIpfs().dht.provide(...args)
+      post(
+        (...args) => getIpfs().dht.provide(...args),
+        // js-ipfs returns undefined
+        // js-ipfs-api -> go-ipfs returns the request stream, with no data
+        //
+        // https://ipfs.io/docs/api/#api-v0-dht-provide
+        // ^ Docs say some response should be sent, but nothing is returned in
+        // current implementations.
+        //
+        // Returning null here so structured clone doesn't error trying to clone
+        // a stream.
+        () => null
+      )
     ), opts),
     query: expose('ipfs.dht.query', pre(
       prePeerIdFromJson(0),
