@@ -10,6 +10,7 @@ import createLs from './ls'
 import createObject from './object'
 import createPin from './pin'
 import createPubsub from './pubsub'
+import createRepo from './repo'
 import createSwarm from './swarm'
 
 export default (opts) => {
@@ -26,6 +27,7 @@ export default (opts) => {
     object: createObject(opts),
     pin: createPin(opts),
     pubsub: createPubsub(opts),
+    repo: createRepo(opts),
     swarm: createSwarm(opts),
     stop: callbackify(caller('ipfs.stop', opts))
   }
