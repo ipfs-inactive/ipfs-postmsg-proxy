@@ -1,9 +1,10 @@
 import { expose, caller } from 'postmsg-rpc'
 import { pre } from 'prepost'
 import { isFunctionJson } from '../serialization/function'
-import { preBufferFromJson } from '../serialization/buffer'
+import { isBuffer, bufferToJson, preBufferFromJson } from '../serialization/buffer'
 
 export default function (getIpfs, opts) {
+  // TODO: clean up subs on destroy
   const subs = [
   /*
     {
@@ -31,7 +32,22 @@ export default function (getIpfs, opts) {
           const handlerIndex = args.length === 3 ? 2 : 1
 
           if (isFunctionJson(args[handlerIndex])) {
-            const stubFn = caller(args[handlerIndex].name, opts)
+            const stubFn = pre(
+              (...args) => {
+                if (args[0]) {
+                  if (isBuffer(args[0].data)) {
+                    args[0].data = bufferToJson(args[0].data)
+                  }
+
+                  if (isBuffer(args[0].seqno)) {
+                    args[0].seqno = bufferToJson(args[0].seqno)
+                  }
+                }
+
+                return args
+              },
+              caller(args[handlerIndex].name, opts)
+            )
 
             sub = {
               topic,
@@ -82,10 +98,8 @@ export default function (getIpfs, opts) {
     ), opts),
     ls: expose('ipfs.pubsub.ls', pre(
       // FIXME: The interface-ipfs-core tests call ls straight after unsubscribe.
-      //
       // Unsubscribe in js-ipfs is synchronous but it HAS to be async in the
-      // proxy partly because of the way it is coded but mostly because
-      // window.postMessage is asynchronous.
+      // proxy because window.postMessage is asynchronous.
       (...args) => new Promise((resolve) => setTimeout(() => resolve(args))),
       opts.pre('pubsub.ls'),
       (...args) => getIpfs().pubsub.ls(...args)

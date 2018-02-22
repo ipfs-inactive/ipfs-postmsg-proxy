@@ -47,12 +47,14 @@ export default function (opts) {
               fnName,
               exposedFn: expose(fnName, pre(
                 (...args) => {
-                  if (isBufferJson(args[0].data)) {
-                    args[0].data = bufferFromJson(args[0].data)
-                  }
+                  if (args[0]) {
+                    if (isBufferJson(args[0].data)) {
+                      args[0].data = bufferFromJson(args[0].data)
+                    }
 
-                  if (isBufferJson(args[0].seqno)) {
-                    args[0].seqno = bufferFromJson(args[0].data)
+                    if (isBufferJson(args[0].seqno)) {
+                      args[0].seqno = bufferFromJson(args[0].seqno)
+                    }
                   }
 
                   return args
