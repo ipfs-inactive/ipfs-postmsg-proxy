@@ -48,8 +48,6 @@ export default function (opts) {
               exposedFn: expose(fnName, pre(
                 (...args) => {
                   if (args[0]) {
-                    args[0] = Object.assign({}, args[0])
-
                     if (isBufferJson(args[0].data)) {
                       args[0].data = bufferFromJson(args[0].data)
                     }

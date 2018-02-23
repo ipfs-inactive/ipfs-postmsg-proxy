@@ -35,6 +35,8 @@ export default function (getIpfs, opts) {
             const stubFn = pre(
               (...args) => {
                 if (args[0]) {
+                  args[0] = Object.assign({}, args[0])
+
                   if (isBuffer(args[0].data)) {
                     args[0].data = bufferToJson(args[0].data)
                   }
