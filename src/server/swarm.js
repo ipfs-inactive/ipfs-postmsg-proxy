@@ -1,6 +1,6 @@
 import { expose } from 'postmsg-rpc'
 import { pre, post } from 'prepost'
-import { peerInfoToJson } from '../serialization/peer'
+import { peerInfoToJson, peerIdToJson, isPeerInfo, isPeerId } from '../serialization/peer'
 import { preMultiaddrFromJson, multiaddrToJson } from '../serialization/multiaddr'
 import { preBufferFromJson } from '../serialization/buffer'
 
@@ -12,7 +12,12 @@ export default function (getIpfs, opts) {
         (...args) => getIpfs().swarm.peers(...args),
         (res) => res.map((item) => {
           item.addr = multiaddrToJson(item.addr)
-          item.peer = peerInfoToJson(item.peer)
+          // https://github.com/ipfs/js-ipfs/issues/1248
+          if (isPeerInfo(item.peer)) {
+            item.peer = peerInfoToJson(item.peer)
+          } else if (isPeerId(item.peer)) {
+            item.peer = peerIdToJson(item.peer)
+          }
           return item
         })
       )
