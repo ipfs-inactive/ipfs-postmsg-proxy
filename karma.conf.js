@@ -2,9 +2,9 @@ module.exports = (config) => {
   config.set({
     frameworks: ['mocha', 'browserify'],
     files: [
-      'test/browser.js',
+      'test/integration/browser.js',
       {
-        pattern: 'test/fixtures/public/**/*',
+        pattern: 'test/integration/fixtures/public/**/*',
         watched: true,
         included: false,
         served: true,
@@ -19,7 +19,7 @@ module.exports = (config) => {
       }
     ],
     preprocessors: {
-      'test/browser.js': ['browserify']
+      'test/integration/browser.js': ['browserify']
     },
     browserify: {
       debug: true

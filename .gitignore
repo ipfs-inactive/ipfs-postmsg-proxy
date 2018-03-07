@@ -1,5 +1,5 @@
 node_modules
 lib
-test/fixtures/public/iframe/bundle.js
+test/integration/fixtures/public/iframe/bundle.js
 .nyc_output
 coverage

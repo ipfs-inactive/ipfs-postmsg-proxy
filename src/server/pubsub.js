@@ -4,7 +4,6 @@ import { isFunctionJson } from '../serialization/function'
 import { isBuffer, bufferToJson, preBufferFromJson } from '../serialization/buffer'
 
 export default function (getIpfs, opts) {
-  // TODO: clean up subs on destroy
   const subs = [
   /*
     {
@@ -82,8 +81,15 @@ export default function (getIpfs, opts) {
 
         if (isFunctionJson(args[1])) {
           const sub = subs.find((s) => s.topic === topic && s.rpc.fnName === args[1].name)
-          args[1] = sub.rpc.stubFn
-          subs.splice(subs.indexOf(sub), 1)
+
+          if (sub) {
+            args[1] = sub.rpc.stubFn
+            subs.splice(subs.indexOf(sub), 1)
+          } else {
+            // Well, we don't have a reference to it, so the ipfs node won't
+            // either. We shouldn't error either because ipfs won't.
+            args[1] = () => {}
+          }
         }
 
         return args
@@ -107,6 +113,15 @@ export default function (getIpfs, opts) {
       (...args) => getIpfs().pubsub.ls(...args)
     ), opts)
   }
+
+  // Clean up any subscriptions on close
+  api.subscribe.close = pre(
+    (...args) => {
+      subs.forEach(sub => getIpfs().pubsub.unsubscribe(sub.topic, sub.rpc.stubFn))
+      return args
+    },
+    api.subscribe.close
+  )
 
   return api
 }

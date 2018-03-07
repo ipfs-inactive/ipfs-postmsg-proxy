@@ -1,4 +1,4 @@
-const { createProxyClient } = require('../../../lib')
+const { createProxyClient } = require('../../../../lib')
 const defaultConfig = { EXPERIMENTAL: { pubsub: true } }
 
 class BrowserIpfsFactory {

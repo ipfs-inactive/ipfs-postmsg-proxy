@@ -1,7 +1,7 @@
 console.log('CLIENT: main')
 
 const Ipfs = require('ipfs')
-const { createProxyServer, closeProxyServer } = require('../../../../lib')
+const { createProxyServer, closeProxyServer } = require('../../../../../lib')
 const sender = 'ipfs-postmsg-proxy:test:server'
 
 window.addEventListener('message', (e) => {

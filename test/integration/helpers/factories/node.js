@@ -1,5 +1,5 @@
-const { createProxyClient, createProxyServer, closeProxyServer } = require('../../../lib')
-const fakeWindows = require('../fake-windows')
+const { createProxyClient, createProxyServer, closeProxyServer } = require('../../../../lib')
+const mockWindow = require('../../../helpers/mock-window')
 const Async = require('async')
 const DaemonFactory = require('ipfsd-ctl')
 
@@ -39,12 +39,13 @@ class NodeIpfsFactory {
     this.df.spawn(opts, (err, ipfsd) => {
       if (err) return cb(err)
 
-      const [ serverWin, clientWin ] = fakeWindows()
+      const serverWin = mockWindow()
+      const clientWin = mockWindow()
 
       const ipfsServer = createProxyServer(() => ipfsd.api, {
         addListener: serverWin.addEventListener,
         removeListener: serverWin.removeEventListener,
-        postMessage: serverWin.postMessage
+        postMessage: clientWin.postMessage
       })
 
       this.handles.push({ ipfsd, ipfsServer })
@@ -52,7 +53,7 @@ class NodeIpfsFactory {
       const ipfsClient = createProxyClient({
         addListener: clientWin.addEventListener,
         removeListener: clientWin.removeEventListener,
-        postMessage: clientWin.postMessage
+        postMessage: serverWin.postMessage
       })
 
       cb(null, ipfsClient)
