@@ -12,6 +12,7 @@ import createObject from './object'
 import createPin from './pin'
 import createPubsub from './pubsub'
 import createRepo from './repo'
+import createStats from './stats'
 import createSwarm from './swarm'
 
 export default (getIpfs, opts) => {
@@ -43,6 +44,7 @@ export default (getIpfs, opts) => {
     pin: createPin(getIpfs, opts),
     pubsub: createPubsub(getIpfs, opts),
     repo: createRepo(getIpfs, opts),
+    stats: createStats(getIpfs, opts),
     stop: expose('ipfs.stop', pre(
       opts.pre('stop'),
       () => getIpfs().stop()

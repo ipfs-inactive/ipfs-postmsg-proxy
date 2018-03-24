@@ -12,6 +12,7 @@ import createObject from './object'
 import createPin from './pin'
 import createPubsub from './pubsub'
 import createRepo from './repo'
+import createStats from './stats'
 import createSwarm from './swarm'
 
 export default (opts) => {
@@ -29,6 +30,7 @@ export default (opts) => {
     pin: createPin(opts),
     pubsub: createPubsub(opts),
     repo: createRepo(opts),
+    stats: createStats(opts),
     stop: callbackify(caller('ipfs.stop', opts)),
     swarm: createSwarm(opts),
     version: callbackify(caller('ipfs.version', opts))
@@ -40,6 +42,8 @@ export default (opts) => {
   ipfs.add = ipfs.files.add
   ipfs.get = ipfs.files.get
   ipfs.cat = ipfs.files.cat
+  ipfs.stats.bitswap = ipfs.bitswap.stat
+  ipfs.stats.repo = ipfs.repo.stat
 
   return ipfs
 }
