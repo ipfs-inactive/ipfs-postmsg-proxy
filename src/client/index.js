@@ -1,5 +1,6 @@
 import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
+import createBitswap from './bitswap'
 import createBlock from './block'
 import createConfig from './config'
 import createDag from './dag'
@@ -15,21 +16,22 @@ import createSwarm from './swarm'
 
 export default (opts) => {
   const ipfs = {
-    id: callbackify(caller('ipfs.id', opts)),
-    version: callbackify(caller('ipfs.version', opts)),
-    dns: callbackify.variadic(caller('ipfs.dns', opts)),
+    bitswap: createBitswap(opts),
     block: createBlock(opts),
     config: createConfig(opts),
     dag: createDag(opts),
     dht: createDht(opts),
+    dns: callbackify.variadic(caller('ipfs.dns', opts)),
     files: createFiles(opts),
+    id: callbackify(caller('ipfs.id', opts)),
     key: createKey(opts),
     object: createObject(opts),
     pin: createPin(opts),
     pubsub: createPubsub(opts),
     repo: createRepo(opts),
+    stop: callbackify(caller('ipfs.stop', opts)),
     swarm: createSwarm(opts),
-    stop: callbackify(caller('ipfs.stop', opts))
+    version: callbackify(caller('ipfs.version', opts))
   }
 
   Object.assign(ipfs, createLs(opts))

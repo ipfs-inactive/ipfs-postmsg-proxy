@@ -1,5 +1,6 @@
 import { expose } from 'postmsg-rpc'
 import { pre } from 'prepost'
+import createBitswap from './bitswap'
 import createBlock from './block'
 import createConfig from './config'
 import createDag from './dag'
@@ -22,33 +23,34 @@ export default (getIpfs, opts) => {
   }
 
   return {
-    id: expose('ipfs.id', pre(
-      opts.pre('id'),
-      () => getIpfs().id()
-    ), opts),
-    version: expose('ipfs.version', pre(
-      opts.pre('version'),
-      () => getIpfs().version()
-    ), opts),
-    dns: expose('ipfs.dns', pre(
-      opts.pre('dns'),
-      (...args) => getIpfs().dns(...args)
-    ), opts),
+    bitswap: createBitswap(getIpfs, opts),
     block: createBlock(getIpfs, opts),
     config: createConfig(getIpfs, opts),
     dag: createDag(getIpfs, opts),
     dht: createDht(getIpfs, opts),
+    dns: expose('ipfs.dns', pre(
+      opts.pre('dns'),
+      (...args) => getIpfs().dns(...args)
+    ), opts),
     files: createFiles(getIpfs, opts),
+    id: expose('ipfs.id', pre(
+      opts.pre('id'),
+      () => getIpfs().id()
+    ), opts),
     key: createKey(getIpfs, opts),
     ls: createLs(getIpfs, opts),
     object: createObject(getIpfs, opts),
     pin: createPin(getIpfs, opts),
     pubsub: createPubsub(getIpfs, opts),
     repo: createRepo(getIpfs, opts),
-    swarm: createSwarm(getIpfs, opts),
     stop: expose('ipfs.stop', pre(
       opts.pre('stop'),
       () => getIpfs().stop()
+    ), opts),
+    swarm: createSwarm(getIpfs, opts),
+    version: expose('ipfs.version', pre(
+      opts.pre('version'),
+      () => getIpfs().version()
     ), opts)
   }
 }
