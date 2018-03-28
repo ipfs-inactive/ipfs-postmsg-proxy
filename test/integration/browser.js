@@ -14,12 +14,15 @@ const common = {
 }
 
 test.block(common)
+test.bootstrap(common)
 test.config(common)
 test.dag(common)
 test.dht(common) // (disabled for browser)
 test.files(common)
+test.filesMFS(common)
 test.key(common)
 test.miscellaneous(common)
+// test.name(common)
 test.object(common)
 test.pin(common)
 test.pubsub(common)

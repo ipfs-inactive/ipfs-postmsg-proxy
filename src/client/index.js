@@ -8,6 +8,7 @@ import createDht from './dht'
 import createFiles from './files'
 import createKey from './key'
 import createLs from './ls'
+import createName from './name'
 import createObject from './object'
 import createPin from './pin'
 import createPubsub from './pubsub'
@@ -26,6 +27,7 @@ export default (opts) => {
     files: createFiles(opts),
     id: callbackify(caller('ipfs.id', opts)),
     key: createKey(opts),
+    name: createName(opts),
     object: createObject(opts),
     pin: createPin(opts),
     pubsub: createPubsub(opts),

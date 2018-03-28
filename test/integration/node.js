@@ -17,12 +17,15 @@ const common = {
 }
 
 test.block(common)
+test.bootstrap(common)
 test.config(common)
 test.dag(common)
 test.dht(common)
 test.files(common)
+test.filesMFS(common)
 test.key(common) // (not implemented yet in js-ipfs)
 test.miscellaneous(common)
+// test.name(common)
 test.object(common)
 test.pin(common) // (not implemented yet in js-ipfs)
 test.pubsub(common)

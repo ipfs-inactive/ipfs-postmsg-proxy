@@ -8,6 +8,7 @@ import createDht from './dht'
 import createFiles from './files'
 import createKey from './key'
 import createLs from './ls'
+import createName from './name'
 import createObject from './object'
 import createPin from './pin'
 import createPubsub from './pubsub'
@@ -40,6 +41,7 @@ export default (getIpfs, opts) => {
     ), opts),
     key: createKey(getIpfs, opts),
     ls: createLs(getIpfs, opts),
+    name: createName(getIpfs, opts),
     object: createObject(getIpfs, opts),
     pin: createPin(getIpfs, opts),
     pubsub: createPubsub(getIpfs, opts),
