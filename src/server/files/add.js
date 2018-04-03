@@ -13,7 +13,7 @@ export default function (getIpfs, opts) {
         const fileFromJsonOpts = { pms: opts }
 
         args[0] = Array.isArray(args[0])
-          ? args[0].map(file => fileFromJson(file, fileFromJsonOpts))
+          ? args[0].map((file) => fileFromJson(file, fileFromJsonOpts))
           : fileFromJson(args[0], fileFromJsonOpts)
 
         return args
@@ -28,7 +28,7 @@ export default function (getIpfs, opts) {
 
         pull(
           PMS.source(args[0].name, opts),
-          pull.map(obj => fileFromJson(obj, { pms: opts })),
+          pull.map((obj) => fileFromJson(obj, { pms: opts })),
           getIpfs().files.addPullStream(...args.slice(1)),
           PMS.sink(readFnName, opts)
         )

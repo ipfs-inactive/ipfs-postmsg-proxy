@@ -24,7 +24,7 @@ export default function (getIpfs, opts) {
       opts.pre('files.catPullStream'),
       post(
         (...args) => getIpfs().files.catPullStream(...args),
-        (res) => new Promise(resolve => {
+        (res) => new Promise((resolve) => {
           const readFnName = shortid()
 
           pull(

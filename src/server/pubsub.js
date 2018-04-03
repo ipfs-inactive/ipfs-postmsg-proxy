@@ -117,7 +117,7 @@ export default function (getIpfs, opts) {
   // Clean up any subscriptions on close
   api.subscribe.close = pre(
     (...args) => {
-      subs.forEach(sub => getIpfs().pubsub.unsubscribe(sub.topic, sub.rpc.stubFn))
+      subs.forEach((sub) => getIpfs().pubsub.unsubscribe(sub.topic, sub.rpc.stubFn))
       return args
     },
     api.subscribe.close

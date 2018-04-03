@@ -21,7 +21,7 @@ export default function (getIpfs, opts) {
       opts.pre('lsPullStream'),
       post(
         (...args) => getIpfs().lsPullStream(...args),
-        (res) => new Promise(resolve => {
+        (res) => new Promise((resolve) => {
           const readFnName = shortid()
           pull(res, PMS.sink(readFnName, opts))
           resolve(functionToJson(readFnName))

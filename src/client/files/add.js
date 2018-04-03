@@ -27,7 +27,7 @@ export default function (opts) {
           }
 
           args[0] = Array.isArray(args[0])
-            ? args[0].map(file => fileToJson(file, fileToJsonOpts))
+            ? args[0].map((file) => fileToJson(file, fileToJsonOpts))
             : fileToJson(args[0], fileToJsonOpts)
 
           return args
@@ -85,7 +85,7 @@ export default function (opts) {
           .catch((err) => abortable.abort(err))
 
         return pull(
-          pull.map(file => fileToJson(file, fileToJsonOpts)),
+          pull.map((file) => fileToJson(file, fileToJsonOpts)),
           through,
           abortable
         )

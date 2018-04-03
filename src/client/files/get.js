@@ -47,7 +47,7 @@ export default function (opts) {
           caller('ipfs.files.getPullStream', opts),
           (res) => pull(
             PMS.source(res.name, opts),
-            pull.map(file => {
+            pull.map((file) => {
               if (file.content) {
                 file.content = PMS.source(file.content.name, Object.assign({}, opts, {
                   post (res) {

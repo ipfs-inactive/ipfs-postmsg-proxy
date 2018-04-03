@@ -30,12 +30,12 @@ export default function (getIpfs, opts) {
       opts.pre('files.getPullStream'),
       post(
         (...args) => getIpfs().files.getPullStream(...args),
-        (res) => new Promise(resolve => {
+        (res) => new Promise((resolve) => {
           const readFnName = shortid()
 
           pull(
             res,
-            pull.map(file => {
+            pull.map((file) => {
               if (file.content) {
                 const readFnName = shortid()
 
