@@ -17,7 +17,7 @@ export const dagNodeToJson = (dagNode) => ({
   data: bufferToJson(dagNode.data)
 })
 
-export const isDagNode = (obj) => obj && obj.constructor && obj.constructor.name === 'DAGNode'
+export const isDagNode = (obj) => DAGNode.isDAGNode(obj)
 export const isDagNodeJson = (obj) => obj && obj.__ipfsPostMsgProxyType === 'DAGNode'
 
 export const preDagNodeFromJson = (index) => {
@@ -49,7 +49,7 @@ export const dagLinkToJson = (link) => Object.assign(
   link.toJSON()
 )
 
-export const isDagLink = (obj) => obj && obj.constructor && obj.constructor.name === 'DAGLink'
+export const isDagLink = (obj) => DAGLink.isDAGLink(obj)
 export const isDagLinkJson = (obj) => obj && obj.__ipfsPostMsgProxyType === 'DAGLink'
 
 export const preDagLinkFromJson = (index) => {

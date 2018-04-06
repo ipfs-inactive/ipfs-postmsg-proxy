@@ -7,5 +7,5 @@ export const bigToJson = (big) => ({
   value: big.toJSON()
 })
 
-export const isBig = (obj) => obj && obj.constructor && obj.constructor.name === 'Big'
+export const isBig = (obj) => obj && obj.constructor && obj.constructor.DP != null
 export const isBigJson = (obj) => obj && obj.__ipfsPostMsgProxyType === 'Big'
