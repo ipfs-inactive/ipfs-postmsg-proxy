@@ -1,6 +1,6 @@
 {
   "name": "ipfs-postmsg-proxy",
-  "version": "2.13.1",
+  "version": "2.14.0",
   "description": "Proxy to an IPFS over window.postMessage",
   "main": "lib/index.js",
   "scripts": {
