@@ -5,6 +5,8 @@ import { isBigJson, bigFromJson } from '../serialization/big'
 
 export default function (opts) {
   return {
+    ledger: callbackify.variadic(caller('ipfs.bitswap.ledger', opts)),
+    reprovide: callbackify.variadic(caller('ipfs.bitswap.reprovide', opts)),
     stat: callbackify(
       post(
         caller('ipfs.bitswap.stat', opts),
@@ -38,6 +40,8 @@ export default function (opts) {
           return stats
         }
       )
-    )
+    ),
+    unwant: callbackify.variadic(caller('ipfs.bitswap.reprovide', opts)),
+    wantlist: callbackify.variadic(caller('ipfs.bitswap.reprovide', opts))
   }
 }
