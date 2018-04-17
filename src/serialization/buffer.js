@@ -1,4 +1,4 @@
-import preArrayOf from './utils/pre-array-of'
+import { preArrayOf } from './utils/prepost-array-of'
 
 export const bufferFromJson = (obj) => Buffer.from(obj.data)
 

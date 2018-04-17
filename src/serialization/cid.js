@@ -1,6 +1,6 @@
 import CID from 'cids'
 import { bufferFromJson, bufferToJson } from './buffer'
-import preArrayOf from './utils/pre-array-of'
+import { preArrayOf } from './utils/prepost-array-of'
 
 export const cidFromJson = (obj) => new CID(obj.version, obj.codec, bufferFromJson(obj.hash))
 

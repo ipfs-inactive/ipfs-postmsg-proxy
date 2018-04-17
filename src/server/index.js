@@ -2,6 +2,7 @@ import { expose } from 'postmsg-rpc'
 import { pre } from 'prepost'
 import createBitswap from './bitswap'
 import createBlock from './block'
+import createBootstrap from './bootstrap'
 import createConfig from './config'
 import createDag from './dag'
 import createDht from './dht'
@@ -27,6 +28,7 @@ export default (getIpfs, opts) => {
   return {
     bitswap: createBitswap(getIpfs, opts),
     block: createBlock(getIpfs, opts),
+    bootstrap: createBootstrap(getIpfs, opts),
     config: createConfig(getIpfs, opts),
     dag: createDag(getIpfs, opts),
     dht: createDht(getIpfs, opts),

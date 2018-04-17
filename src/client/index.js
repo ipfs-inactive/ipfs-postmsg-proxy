@@ -2,6 +2,7 @@ import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import createBitswap from './bitswap'
 import createBlock from './block'
+import createBootstrap from './bootstrap'
 import createConfig from './config'
 import createDag from './dag'
 import createDht from './dht'
@@ -20,6 +21,7 @@ export default (opts) => {
   const ipfs = {
     bitswap: createBitswap(opts),
     block: createBlock(opts),
+    bootstrap: createBootstrap(opts),
     config: createConfig(opts),
     dag: createDag(opts),
     dht: createDht(opts),
