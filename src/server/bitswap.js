@@ -4,8 +4,8 @@ import { isBig, bigToJson } from '../serialization/big'
 
 export default function (getIpfs, opts) {
   return {
-    ledger: expose('ipfs.bitswap.ledger', (...args) => getIpfs().bitswap.ledger(...args)),
-    reprovide: expose('ipfs.bitswap.reprovide', (...args) => getIpfs().bitswap.reprovide(...args)),
+    ledger: expose('ipfs.bitswap.ledger', (...args) => getIpfs().bitswap.ledger(...args), opts),
+    reprovide: expose('ipfs.bitswap.reprovide', (...args) => getIpfs().bitswap.reprovide(...args), opts),
     stat: expose('ipfs.bitswap.stat', post(
       (...args) => getIpfs().bitswap.stat(...args),
       (stats) => {
@@ -38,7 +38,7 @@ export default function (getIpfs, opts) {
         return stats
       }
     ), opts),
-    unwant: expose('ipfs.bitswap.unwant', (...args) => getIpfs().bitswap.unwant(...args)),
-    wantlist: expose('ipfs.bitswap.wantlist', (...args) => getIpfs().bitswap.wantlist(...args))
+    unwant: expose('ipfs.bitswap.unwant', (...args) => getIpfs().bitswap.unwant(...args), opts),
+    wantlist: expose('ipfs.bitswap.wantlist', (...args) => getIpfs().bitswap.wantlist(...args), opts)
   }
 }
