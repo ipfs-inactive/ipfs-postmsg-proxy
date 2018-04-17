@@ -16,6 +16,7 @@ import createPubsub from './pubsub'
 import createRepo from './repo'
 import createStats from './stats'
 import createSwarm from './swarm'
+import createTypes from './types'
 
 export default (opts) => {
   const ipfs = {
@@ -37,6 +38,7 @@ export default (opts) => {
     stats: createStats(opts),
     stop: callbackify(caller('ipfs.stop', opts)),
     swarm: createSwarm(opts),
+    types: createTypes(opts),
     version: callbackify(caller('ipfs.version', opts))
   }
 
