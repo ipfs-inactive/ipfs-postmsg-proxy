@@ -11,6 +11,20 @@ export default function (getIpfs, opts) {
         (...args) => getIpfs().bootstrap.add(...args),
         postArrayOf('Peers', isMultiaddr, multiaddrToJson)
       )
+    ), opts),
+    list: expose('ipfs.bootstrap.list', pre(
+      opts.pre('bootstrap.list'),
+      post(
+        (...args) => getIpfs().bootstrap.list(...args),
+        postArrayOf('Peers', isMultiaddr, multiaddrToJson)
+      )
+    ), opts),
+    rm: expose('ipfs.bootstrap.rm', pre(
+      opts.pre('bootstrap.rm'),
+      post(
+        (...args) => getIpfs().bootstrap.rm(...args),
+        postArrayOf('Peers', isMultiaddr, multiaddrToJson)
+      )
     ), opts)
   }
 }

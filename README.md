@@ -171,6 +171,19 @@ Returns an IPFS proxy client instance.
   .stat
     ✓ by CID
 
+.bootstrap
+  .add
+    ✓ returns an error when called with an invalid arg
+    ✓ returns a list of containing the bootstrap peer when called with a valid arg (ip4)
+    ✓ returns a list of bootstrap peers when called with the default option
+  .list
+    ✓ returns a list of peers
+  .rm
+    ✓ returns an error when called with an invalid arg
+    ✓ returns empty list because no peers removed when called without an arg or options
+    ✓ returns list containing the peer removed when called with a valid arg (ip4)
+    ✓ returns list of all peers removed when all option is passed
+
 .config
   .get
     ✓ retrieve the whole config

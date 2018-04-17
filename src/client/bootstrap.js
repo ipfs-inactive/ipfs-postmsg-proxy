@@ -14,6 +14,21 @@ export default function (opts) {
           postArrayOf('Peers', isMultiaddrJson, multiaddrFromJson)
         )
       )
+    ),
+    list: callbackify(
+      post(
+        caller('ipfs.bootstrap.list', opts),
+        postArrayOf('Peers', isMultiaddrJson, multiaddrFromJson)
+      )
+    ),
+    rm: callbackify.variadic(
+      pre(
+        preMultiaddrToJson(0),
+        post(
+          caller('ipfs.bootstrap.rm', opts),
+          postArrayOf('Peers', isMultiaddrJson, multiaddrFromJson)
+        )
+      )
     )
   }
 }
