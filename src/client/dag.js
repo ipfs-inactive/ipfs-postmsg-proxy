@@ -2,7 +2,7 @@ import { caller } from 'postmsg-rpc'
 import callbackify from 'callbackify'
 import { pre, post } from 'prepost'
 import { isDagNodeJson, preDagNodeToJson, dagNodeFromJson } from '../serialization/dag'
-import { cidFromJson, preCidToJson } from '../serialization/cid'
+import { isCid, cidFromJson, cidToJson, preCidToJson } from '../serialization/cid'
 import { isBuffer, isBufferJson, preBufferToJson, bufferToJson, bufferFromJson } from '../serialization/buffer'
 import convertValues from '../serialization/utils/convert-values'
 
@@ -14,6 +14,14 @@ export default function (opts) {
         (...args) => {
           if (args[0] && !isDagNodeJson(args[0])) {
             args[0] = convertValues(args[0], isBuffer, bufferToJson)
+          }
+
+          if (args[1] && args[1].cid) {
+            if (isBuffer(args[1].cid)) {
+              args[1].cid = bufferToJson(args[1].cid)
+            } else if (isCid(args[1].cid)) {
+              args[1].cid = cidToJson(args[1].cid)
+            }
           }
 
           return args
@@ -35,8 +43,9 @@ export default function (opts) {
               return dagNodeFromJson(res.value).then((value) => ({ value }))
             }
 
-            // TODO: CBOR node, is this correct?
-            if (res.value) {
+            if (isBufferJson(res.value)) {
+              res.value = bufferFromJson(res.value)
+            } else if (res.value) { // TODO: CBOR node, is this correct?
               res.value = convertValues(res.value, isBufferJson, bufferFromJson)
             }
 
