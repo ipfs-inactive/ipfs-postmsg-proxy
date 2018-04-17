@@ -95,17 +95,12 @@ window.ipfs = createProxyClient({
 
 Create a proxy server to a running IPFS instance.
 
-* `getIpfs` - a function that returns the IPFS instance
-* `options.postMessage` - function that posts a message
-    * default `window.postMessage`
-* `options.targetOrigin` - passed to postMessage (see [postMessage docs](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) for more info)
-    * default `'*'`
-* `options.addListener` - function that adds a listener
-    * default `window.addEventListener`
-* `options.removeListener` - function that removes a listener
-    * default `window.removeEventListener`
-* `options.getMessageData` - a function that extracts data from the event object passed to a `message` event handler
-    * default `(e) => e.data`
+* `getIpfs` - a function that returns the IPFS instance. Note this function will be called every time a function needs to be invoked and so shouldn't create a new instance each time!
+* `options.postMessage` - function that posts a message (default `window.postMessage`)
+* `options.targetOrigin` - passed to postMessage. See [postMessage docs](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) for more info (default `'*'`)
+* `options.addListener` - function that adds a listener (default `window.addEventListener`)
+* `options.removeListener` - function that removes a listener (default `window.removeEventListener`)
+* `options.getMessageData` - a function that extracts data from the event object passed to a `message` event handler (default `(e) => e.data`)
 * `options.pre` - an object or a function. If an object, it's values are functions to call prior to invoking functions on the exposed IPFS node. The pre-functions are passed arguments as they would be passed to the exposed IPFS node and are expected to return an array of possibly altered arguments or a promise that resolves to the arguments array. The keys for this object identify the function name on the IPFS node that this function should be run before. e.g.
 
     ```js
@@ -142,16 +137,11 @@ Close the passed proxy server (removes all listeners for `postMessage` message e
 
 Create a proxy client to the proxy server.
 
-* `options.postMessage` - function that posts a message
-    * default `window.postMessage`
-* `options.targetOrigin` - passed to postMessage (see [postMessage docs](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) for more info)
-    * default `'*'`
-* `options.addListener` - function that adds a listener
-    * default `window.addEventListener`
-* `options.removeListener` - function that removes a listener
-    * default `window.removeEventListener`
-* `options.getMessageData` - a function that extracts data from the event object passed to a `message` event handler
-    * default `(e) => e.data`
+* `options.postMessage` - function that posts a message (default `window.postMessage`)
+* `options.targetOrigin` - passed to postMessage. See [postMessage docs](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) for more info (default `'*'`)
+* `options.addListener` - function that adds a listener (default `window.addEventListener`)
+* `options.removeListener` - function that removes a listener (default `window.removeEventListener`)
+* `options.getMessageData` - a function that extracts data from the event object passed to a `message` event handler (default `(e) => e.data`)
 
 Returns an IPFS proxy client instance.
 
