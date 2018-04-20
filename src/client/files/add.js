@@ -15,26 +15,39 @@ import { functionToJson } from '../../serialization/function'
 
 export default function (opts) {
   const api = {
-    add: callbackify.variadic(
-      pre(
-        (...args) => {
-          const fileToJsonOpts = { pms: opts }
+    add: (() => {
+      const add = callbackify.variadic(
+        pre(
+          (...args) => {
+            const fileToJsonOpts = { pms: opts }
 
-          // FIXME: implement progress properly
-          if (args[1] && args[1].progress) {
-            fileToJsonOpts.onProgressIncrement = createOnProgressIncrement(args[1].progress)
-            delete args[1].progress
-          }
+            // FIXME: implement progress properly
+            if (args[1] && args[1].progress) {
+              fileToJsonOpts.onProgressIncrement = createOnProgressIncrement(args[1].progress)
+              delete args[1].progress
+            }
 
-          args[0] = Array.isArray(args[0])
-            ? args[0].map((file) => fileToJson(file, fileToJsonOpts))
-            : fileToJson(args[0], fileToJsonOpts)
+            args[0] = Array.isArray(args[0])
+              ? args[0].map((file) => fileToJson(file, fileToJsonOpts))
+              : fileToJson(args[0], fileToJsonOpts)
 
-          return args
-        },
-        caller('ipfs.files.add', opts)
+            return args
+          },
+          caller('ipfs.files.add', opts)
+        )
       )
-    ),
+
+      return (...args) => {
+        // Pull streams are just functions and so callbackify.variadic thinks
+        // the stream is a callback function! Instead explicitly pass null for
+        // the options arg.
+        if (args.length === 1 && isSource(args[0])) {
+          args = args.concat(null)
+        }
+
+        return add(...args)
+      }
+    })(),
     // FIXME: implement add readable stream properly
     addReadableStream (...args) {
       const content = []
