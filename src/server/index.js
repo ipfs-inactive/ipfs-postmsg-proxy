@@ -62,11 +62,10 @@ export default (getIpfs, opts) => {
 }
 
 export function closeProxyServer (obj) {
-  Object.keys(obj).forEach((k) => {
-    if (obj[k].close) {
-      obj[k].close()
-    } else {
-      closeProxyServer(obj[k])
-    }
-  })
+  return Promise.all(
+    Object.keys(obj).map((k) => {
+      if (obj[k].close) return Promise.resolve(obj[k].close())
+      return Promise.resolve(closeProxyServer(obj[k]))
+    })
+  )
 }

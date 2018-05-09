@@ -36,7 +36,6 @@ export default function (opts) {
 
       const stub = pre(
         (...args) => {
-          const handlerIndex = args.length === 3 ? 2 : 1
           const fnName = `ipfs.pubsub.subscribe.handler.${shortid()}`
 
           sub = {
@@ -68,7 +67,7 @@ export default function (opts) {
 
           subs.push(sub)
 
-          args[handlerIndex] = functionToJson(fnName)
+          args[1] = functionToJson(fnName)
 
           return args
         },
@@ -88,7 +87,7 @@ export default function (opts) {
           .then((res) => process.nextTick(() => cb(null, res)))
           .catch((err) => process.nextTick(() => cb(err)))
       } else {
-        return stub(topic, options, handler)
+        return stub(topic, handler, options)
       }
     },
     unsubscribe: pre(

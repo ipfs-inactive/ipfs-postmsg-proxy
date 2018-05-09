@@ -131,6 +131,8 @@ Close the passed proxy server (removes all listeners for `postMessage` message e
 
 * `server` - a proxy server created by `createProxyServer`
 
+Returns a `Promise` that resolves once the server is fully closed.
+
 #### `createProxyClient([options])`
 
 Create a proxy client to the proxy server.
