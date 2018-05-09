@@ -551,10 +551,6 @@ Not supported in js-ipfs yet
 
 The progress option for `files.add` currently tracks progress of data streamed to the IPFS node.
 
-### Pubsub unsubscribe
-
-The unsubscribe function is not synchronous as it is in js-ipfs. Instead it returns a promise that you can use to run code after the unsubscribe has happened.
-
 ## Contribute
 
 Feel free to dive in! [Open an issue](https://github.com/tableflip/ipfs-postmsg-proxy/issues/new) or submit PRs.

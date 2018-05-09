@@ -28,9 +28,8 @@ export default function (getIpfs, opts) {
       return pre(
         (...args) => {
           const topic = args[0]
-          const handlerIndex = args.length === 3 ? 2 : 1
 
-          if (isFunctionJson(args[handlerIndex])) {
+          if (isFunctionJson(args[1])) {
             const stubFn = pre(
               (...args) => {
                 if (args[0]) {
@@ -47,20 +46,20 @@ export default function (getIpfs, opts) {
 
                 return args
               },
-              caller(args[handlerIndex].name, opts)
+              caller(args[1].name, opts)
             )
 
             sub = {
               topic,
               rpc: {
-                fnName: args[handlerIndex].name,
+                fnName: args[1].name,
                 stubFn
               }
             }
 
             subs.push(sub)
 
-            args[handlerIndex] = stubFn
+            args[1] = stubFn
           }
 
           return args
@@ -95,10 +94,7 @@ export default function (getIpfs, opts) {
         return args
       },
       opts.pre('pubsub.unsubscribe'),
-      (...args) => new Promise((resolve) => {
-        getIpfs().pubsub.unsubscribe(...args)
-        resolve()
-      })
+      (...args) => getIpfs().pubsub.unsubscribe(...args)
     ), opts),
     peers: expose('ipfs.pubsub.peers', pre(
       opts.pre('pubsub.peers'),

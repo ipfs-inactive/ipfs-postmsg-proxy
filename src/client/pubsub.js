@@ -26,12 +26,11 @@ export default function (opts) {
         caller('ipfs.pubsub.publish', opts)
       )
     ),
-    subscribe: function (topic, options, handler, cb) {
+    subscribe: function (topic, handler, options, cb) {
       let sub
 
       if (typeof options === 'function') {
-        cb = handler
-        handler = options
+        cb = options
         options = {}
       }
 
@@ -85,7 +84,7 @@ export default function (opts) {
       )
 
       if (cb) {
-        stub(topic, options, handler)
+        stub(topic, handler, options)
           .then((res) => process.nextTick(() => cb(null, res)))
           .catch((err) => process.nextTick(() => cb(err)))
       } else {
