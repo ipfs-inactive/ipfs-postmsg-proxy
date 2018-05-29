@@ -1,11 +1,14 @@
 import { expose } from 'postmsg-rpc'
-import { pre } from 'prepost'
+import { pre, post } from 'prepost'
 
 export default function (getIpfs, opts) {
   return {
     mkdir: expose('ipfs.files.mkdir', pre(
       opts.pre('files.mkdir'),
-      (...args) => getIpfs().files.mkdir(...args)
+      post(
+        (...args) => getIpfs().files.mkdir(...args),
+        () => null
+      )
     ), opts)
   }
 }

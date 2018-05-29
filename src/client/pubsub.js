@@ -90,20 +90,22 @@ export default function (opts) {
         return stub(topic, handler, options)
       }
     },
-    unsubscribe: pre(
-      (...args) => {
-        const topic = args[0]
-        const sub = subs.find((s) => s.topic === topic && s.handler === args[1])
+    unsubscribe: callbackify.variadic(
+      pre(
+        (...args) => {
+          const topic = args[0]
+          const sub = subs.find((s) => s.topic === topic && s.handler === args[1])
 
-        if (sub) {
-          args[1] = functionToJson(sub.rpc.fnName)
-          sub.rpc.exposedFn.close()
-          subs.splice(subs.indexOf(sub), 1)
-        }
+          if (sub) {
+            args[1] = functionToJson(sub.rpc.fnName)
+            sub.rpc.exposedFn.close()
+            subs.splice(subs.indexOf(sub), 1)
+          }
 
-        return args
-      },
-      caller('ipfs.pubsub.unsubscribe', opts)
+          return args
+        },
+        caller('ipfs.pubsub.unsubscribe', opts)
+      )
     ),
     peers: callbackify.variadic(caller('ipfs.pubsub.peers', opts)),
     ls: callbackify.variadic(caller('ipfs.pubsub.ls', opts)),
