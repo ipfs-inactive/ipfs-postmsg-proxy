@@ -12,6 +12,7 @@ import createLs from './ls'
 import createName from './name'
 import createObject from './object'
 import createPin from './pin'
+import createPing from './ping'
 import createPubsub from './pubsub'
 import createRepo from './repo'
 import createStats from './stats'
@@ -40,7 +41,11 @@ export default (opts) => {
     version: callbackify(caller('ipfs.version', opts))
   }
 
-  Object.assign(ipfs, createLs(opts))
+  Object.assign(
+    ipfs,
+    createLs(opts),
+    createPing(opts)
+  )
 
   // Aliases
   ipfs.add = ipfs.files.add

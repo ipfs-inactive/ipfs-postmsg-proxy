@@ -12,6 +12,7 @@ import createLs from './ls'
 import createName from './name'
 import createObject from './object'
 import createPin from './pin'
+import createPing from './ping'
 import createPubsub from './pubsub'
 import createRepo from './repo'
 import createStats from './stats'
@@ -25,7 +26,7 @@ export default (getIpfs, opts) => {
     opts.pre = (fnName) => preObj[fnName]
   }
 
-  return {
+  const ipfs = {
     bitswap: createBitswap(getIpfs, opts),
     block: createBlock(getIpfs, opts),
     bootstrap: createBootstrap(getIpfs, opts),
@@ -42,7 +43,6 @@ export default (getIpfs, opts) => {
       () => getIpfs().id()
     ), opts),
     key: createKey(getIpfs, opts),
-    ls: createLs(getIpfs, opts),
     name: createName(getIpfs, opts),
     object: createObject(getIpfs, opts),
     pin: createPin(getIpfs, opts),
@@ -59,6 +59,14 @@ export default (getIpfs, opts) => {
       () => getIpfs().version()
     ), opts)
   }
+
+  Object.assign(
+    ipfs,
+    createLs(getIpfs, opts),
+    createPing(getIpfs, opts)
+  )
+
+  return ipfs
 }
 
 export function closeProxyServer (obj) {
