@@ -17,10 +17,10 @@ Web page                                               Browser extension
 |               |                 |                    |                   |                |
 |               |                 |                    |                   |                |
 |               |                 |                    |                   |                |
-+---------------+--------^--------+                    +-------------------+----------------+
-                         |
-                         +
-                interface-ipfs-core
++-------^-------+-----------------+                    +-------------------+----------------+
+        |
+        +
+interface-ipfs-core
 ```
 
 We're using `interface-ipfs-core` to test our call stubs which are hooked up to a `js-ipfs`/`js-ipfs-api` on the other end. If the tests pass we know that the proxy is doing a good job of passing messages over the boundary.
