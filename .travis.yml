@@ -1,5 +1,5 @@
 language: node_js
 node_js:
   - 8
-  - 9
-script: npm run build && npm run lint && npm run test:node:js
+  - 10
+script: npm run build && npm run lint && npm run test:integration:node:js
