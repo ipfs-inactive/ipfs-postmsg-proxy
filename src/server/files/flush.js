@@ -1,11 +1,14 @@
 import { expose } from 'postmsg-rpc'
-import { pre } from 'prepost'
+import { pre, post } from 'prepost'
 
 export default function (getIpfs, opts) {
   return {
     flush: expose('ipfs.files.flush', pre(
       opts.pre('files.flush'),
-      (...args) => getIpfs().files.flush(...args)
+      post(
+        (...args) => getIpfs().files.flush(...args),
+        () => null
+      )
     ), opts)
   }
 }

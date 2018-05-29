@@ -131,6 +131,8 @@ Close the passed proxy server (removes all listeners for `postMessage` message e
 
 * `server` - a proxy server created by `createProxyServer`
 
+Returns a `Promise` that resolves once the server is fully closed.
+
 #### `createProxyClient([options])`
 
 Create a proxy client to the proxy server.
@@ -550,10 +552,6 @@ Not supported in js-ipfs yet
 ### Progress option
 
 The progress option for `files.add` currently tracks progress of data streamed to the IPFS node.
-
-### Pubsub unsubscribe
-
-The unsubscribe function is not synchronous as it is in js-ipfs. Instead it returns a promise that you can use to run code after the unsubscribe has happened.
 
 ## Contribute
 

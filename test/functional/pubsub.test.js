@@ -11,8 +11,7 @@ describe('pubsub', () => {
     const mockIpfs = {
       _subs: [],
       pubsub: {
-        subscribe (topic, opts, handler) {
-          handler = handler || opts
+        subscribe (topic, handler) {
           mockIpfs._subs.push({ topic, handler })
           return Promise.resolve()
         },
@@ -20,6 +19,7 @@ describe('pubsub', () => {
           mockIpfs._subs = mockIpfs._subs.filter(sub => {
             return !(sub.topic === topic && sub.handler === handler)
           })
+          return Promise.resolve()
         }
       }
     }
@@ -46,7 +46,7 @@ describe('pubsub', () => {
     assert.equal(mockIpfs._subs[0].topic, topic)
 
     // Close the proxy server without unsubscribing
-    closeProxyServer(ipfsServer)
+    await closeProxyServer(ipfsServer)
 
     assert.equal(mockIpfs._subs.length, 0)
   })

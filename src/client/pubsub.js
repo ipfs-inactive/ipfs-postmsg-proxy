@@ -26,18 +26,16 @@ export default function (opts) {
         caller('ipfs.pubsub.publish', opts)
       )
     ),
-    subscribe: function (topic, options, handler, cb) {
+    subscribe: function (topic, handler, options, cb) {
       let sub
 
       if (typeof options === 'function') {
-        cb = handler
-        handler = options
+        cb = options
         options = {}
       }
 
       const stub = pre(
         (...args) => {
-          const handlerIndex = args.length === 3 ? 2 : 1
           const fnName = `ipfs.pubsub.subscribe.handler.${shortid()}`
 
           sub = {
@@ -69,7 +67,7 @@ export default function (opts) {
 
           subs.push(sub)
 
-          args[handlerIndex] = functionToJson(fnName)
+          args[1] = functionToJson(fnName)
 
           return args
         },
@@ -85,27 +83,29 @@ export default function (opts) {
       )
 
       if (cb) {
-        stub(topic, options, handler)
+        stub(topic, handler, options)
           .then((res) => process.nextTick(() => cb(null, res)))
           .catch((err) => process.nextTick(() => cb(err)))
       } else {
-        return stub(topic, options, handler)
+        return stub(topic, handler, options)
       }
     },
-    unsubscribe: pre(
-      (...args) => {
-        const topic = args[0]
-        const sub = subs.find((s) => s.topic === topic && s.handler === args[1])
+    unsubscribe: callbackify.variadic(
+      pre(
+        (...args) => {
+          const topic = args[0]
+          const sub = subs.find((s) => s.topic === topic && s.handler === args[1])
 
-        if (sub) {
-          args[1] = functionToJson(sub.rpc.fnName)
-          sub.rpc.exposedFn.close()
-          subs.splice(subs.indexOf(sub), 1)
-        }
+          if (sub) {
+            args[1] = functionToJson(sub.rpc.fnName)
+            sub.rpc.exposedFn.close()
+            subs.splice(subs.indexOf(sub), 1)
+          }
 
-        return args
-      },
-      caller('ipfs.pubsub.unsubscribe', opts)
+          return args
+        },
+        caller('ipfs.pubsub.unsubscribe', opts)
+      )
     ),
     peers: callbackify.variadic(caller('ipfs.pubsub.peers', opts)),
     ls: callbackify.variadic(caller('ipfs.pubsub.ls', opts)),

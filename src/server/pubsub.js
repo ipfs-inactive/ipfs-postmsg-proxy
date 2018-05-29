@@ -28,9 +28,8 @@ export default function (getIpfs, opts) {
       return pre(
         (...args) => {
           const topic = args[0]
-          const handlerIndex = args.length === 3 ? 2 : 1
 
-          if (isFunctionJson(args[handlerIndex])) {
+          if (isFunctionJson(args[1])) {
             const stubFn = pre(
               (...args) => {
                 if (args[0]) {
@@ -47,20 +46,20 @@ export default function (getIpfs, opts) {
 
                 return args
               },
-              caller(args[handlerIndex].name, opts)
+              caller(args[1].name, opts)
             )
 
             sub = {
               topic,
               rpc: {
-                fnName: args[handlerIndex].name,
+                fnName: args[1].name,
                 stubFn
               }
             }
 
             subs.push(sub)
 
-            args[handlerIndex] = stubFn
+            args[1] = stubFn
           }
 
           return args
@@ -95,20 +94,13 @@ export default function (getIpfs, opts) {
         return args
       },
       opts.pre('pubsub.unsubscribe'),
-      (...args) => new Promise((resolve) => {
-        getIpfs().pubsub.unsubscribe(...args)
-        resolve()
-      })
+      (...args) => getIpfs().pubsub.unsubscribe(...args)
     ), opts),
     peers: expose('ipfs.pubsub.peers', pre(
       opts.pre('pubsub.peers'),
       (...args) => getIpfs().pubsub.peers(...args)
     ), opts),
     ls: expose('ipfs.pubsub.ls', pre(
-      // FIXME: The interface-ipfs-core tests call ls straight after unsubscribe.
-      // Unsubscribe in js-ipfs is synchronous but it HAS to be async in the
-      // proxy because window.postMessage is asynchronous.
-      (...args) => new Promise((resolve) => setTimeout(() => resolve(args))),
       opts.pre('pubsub.ls'),
       (...args) => getIpfs().pubsub.ls(...args)
     ), opts)
@@ -117,8 +109,9 @@ export default function (getIpfs, opts) {
   // Clean up any subscriptions on close
   api.subscribe.close = pre(
     (...args) => {
-      subs.forEach((sub) => getIpfs().pubsub.unsubscribe(sub.topic, sub.rpc.stubFn))
-      return args
+      return Promise.all(
+        subs.map((sub) => getIpfs().pubsub.unsubscribe(sub.topic, sub.rpc.stubFn))
+      ).then(() => args)
     },
     api.subscribe.close
   )
