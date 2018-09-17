@@ -1,8 +1,6 @@
 import { preArrayOf } from './utils/prepost-array-of'
 
-export const bufferFromJson = (obj) => {
-  return Buffer.from(JSON.parse(obj.data).data)
-}
+export const bufferFromJson = (obj) => Buffer.from(JSON.parse(obj.data).data)
 
 export const bufferToJson = (buf) => ({
   __ipfsPostMsgProxyType: 'Buffer',
