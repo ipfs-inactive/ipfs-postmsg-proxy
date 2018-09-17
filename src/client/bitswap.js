@@ -41,7 +41,7 @@ export default function (opts) {
         }
       )
     ),
-    unwant: callbackify.variadic(caller('ipfs.bitswap.reprovide', opts)),
-    wantlist: callbackify.variadic(caller('ipfs.bitswap.reprovide', opts))
+    unwant: callbackify.variadic(caller('ipfs.bitswap.unwant', opts)),
+    wantlist: callbackify.variadic(caller('ipfs.bitswap.wantlist', opts))
   }
 }

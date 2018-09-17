@@ -1,12 +1,14 @@
 const { createProxyClient, createProxyServer, closeProxyServer } = require('../../../../lib')
 const mockWindow = require('../../../helpers/mock-window')
-const Async = require('async')
+const each = require('async/each')
 const DaemonFactory = require('ipfsd-ctl')
 
 class NodeIpfsFactory {
-  constructor (opts) {
-    this.df = DaemonFactory.create(opts)
+  constructor (options) {
+    options = options || {}
+    this.df = DaemonFactory.create(options.factory)
     this.handles = []
+    this._spawnOptions = options.spawn || {}
   }
 
   // When we spawn a new node, we give back ipfsClient
@@ -27,7 +29,7 @@ class NodeIpfsFactory {
       }
     }, args.pop())
 
-    const opts = { config, args: [] }
+    const opts = Object.assign({ config, args: [] }, this._spawnOptions)
 
     if (config.EXPERIMENTAL.pubsub) {
       opts.args.push('--enable-pubsub-experiment')
@@ -61,7 +63,7 @@ class NodeIpfsFactory {
   }
 
   dismantle (cb) {
-    Async.each(this.handles, (handle, cb) => {
+    each(this.handles, (handle, cb) => {
       closeProxyServer(handle.ipfsServer)
       handle.ipfsd.stop(cb)
     }, cb)

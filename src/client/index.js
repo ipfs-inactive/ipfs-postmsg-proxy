@@ -35,6 +35,7 @@ export default (opts) => {
     pin: createPin(opts),
     pubsub: createPubsub(opts),
     repo: createRepo(opts),
+    resolve: callbackify.variadic(caller('ipfs.resolve', opts)),
     stats: createStats(opts),
     stop: callbackify(caller('ipfs.stop', opts)),
     swarm: createSwarm(opts),

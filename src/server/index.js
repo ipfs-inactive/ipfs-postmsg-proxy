@@ -48,6 +48,10 @@ export default (getIpfs, opts) => {
     pin: createPin(getIpfs, opts),
     pubsub: createPubsub(getIpfs, opts),
     repo: createRepo(getIpfs, opts),
+    resolve: expose('ipfs.resolve', pre(
+      opts.pre('resolve'),
+      (...args) => getIpfs().resolve(...args)
+    ), opts),
     stats: createStats(getIpfs, opts),
     stop: expose('ipfs.stop', pre(
       opts.pre('stop'),

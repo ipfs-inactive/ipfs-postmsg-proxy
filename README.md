@@ -150,401 +150,494 @@ Returns an IPFS proxy client instance.
 ```
 $ npm run test:integration:node:js
 
-.block
-  .put
-    ✓ a buffer, using defaults
-    ✓ a buffer, using CID
-    ✓ a buffer, using options
-    ✓ a Block instance
-    ✓ error with array of blocks
-  .get
-    ✓ by CID object
-    ✓ by CID in Str
-  .stat
-    ✓ by CID
+.bitswap.stat
+  ✓ should get bitswap stats
+  ✓ should get bitswap stats (promised)
+  ✓ should not get bitswap stats when offline
 
-.bootstrap
-  .add
-    ✓ returns an error when called with an invalid arg
-    ✓ returns a list of containing the bootstrap peer when called with a valid arg (ip4)
-    ✓ returns a list of bootstrap peers when called with the default option
-  .list
-    ✓ returns a list of peers
-  .rm
-    ✓ returns an error when called with an invalid arg
-    ✓ returns empty list because no peers removed when called without an arg or options
-    ✓ returns list containing the peer removed when called with a valid arg (ip4)
-    ✓ returns list of all peers removed when all option is passed
+.bitswap.wantlist
+  ✓ should get the wantlist
+  ✓ should get the wantlist by peer ID for a diffreent node
+  ✓ should not get the wantlist when offline
 
-.config
-  .get
-    ✓ retrieve the whole config
-    ✓ retrieve a value through a key
-    ✓ retrieve a value through a nested key
-    ✓ fail on non valid key
-    ✓ fail on non exist()ent key
-    ✓ Promises support
-  .set
-    ✓ set a new key
-    ✓ set an already exist()ing key
-    ✓ set a JSON object
-    ✓ fail on non valid key
-    ✓ fail on non valid value
-    ✓ Promises support
-  .replace
-    - replace the whole config
-    - replace to empty config
+.block.put
+  ✓ should put a buffer, using defaults
+  ✓ should put a buffer, using CID
+  ✓ should put a buffer, using options
+  ✓ should put a Block instance
+  ✓ should error with array of blocks
 
-.dag
-  .put
-    ✓ dag-pb with default hash func (sha2-256)
-    ✓ dag-pb with custom hash func (sha3-512)
-    - dag-pb node with wrong multicodec
-    ✓ dag-cbor with default hash func (sha2-256)
-    ✓ dag-cbor with custom hash func (sha3-512)
-    ✓ dag-cbor node with wrong multicodec
-    ✓ returns the cid
-    - pass the cid instead of format and hashAlg
-  .get
-    ✓ dag-pb node
-    ✓ dag-cbor node
-    with path
-      ✓ dag-pb get the node
-      ✓ dag-pb local scope
-      - dag-pb one level
-      - dag-pb two levels
-      ✓ dag-cbor get the node
-      ✓ dag-cbor local scope
-      - dag-cbor one level
-      - dag-cbor two levels
-      - from dag-pb to dag-cbor
-      ✓ from dag-cbor to dag-pb
-      ✓ CID String
-      ✓ CID String + path
-  .tree
-    ✓ .tree with CID
-    ✓ .tree with CID and path
-    ✓ .tree with CID and path as String
-    ✓ .tree with CID recursive (accross different formats)
-    ✓ .tree with CID and path recursive
+.block.get
+  ✓ should get by CID object
+  ✓ should get by CID in string
+  ✓ should get an empty block
 
-.dht
-  .get and .put
-    ✓ errors when getting a non-existent key from the DHT
-    - fetches value after it was put on another node
-    ✓ Promises support
-  .findpeer
-    ✓ finds other peers
-    - fails to find other peer, if peer doesnt exist()s
-  .provide
-    1) regular
-    ✓ should not provide if block not found locally
-    2) allows multiple CIDs to be passed
-    3) should provide a CIDv1
-    ✓ errors on non CID arg
-    ✓ errors on array containing non CID arg
-    - recursive
-  findprovs
-    - basic
-    - Promises support
-  .query
-    - returns the other node in the query
+.block.stat
+  ✓ should stat by CID
 
-.files
-  .add
-    ✓ a Buffer
-    ✓ a BIG buffer
-    ✓ a BIG buffer with progress enabled
-    ✓ a Buffer as tuple
-    ✓ add by path fails
-    ✓ a Readable Stream
-    ✓ add a nested directory as array of tupples
-    ✓ add a nested directory as array of tuppled with progress
-    ✓ fails in invalid input
-    4) wrapWithDirectory
-    ✓ Promise test
-  .addReadableStream
-    ✓ stream of valid files and dirs
-  .addPullStream
-    ✓ stream of valid files and dirs
-  .cat
-    ✓ with a base58 string encoded multihash
-    ✓ with a multihash
-    ✓ with a cid object
-    ✓ streams a large file
-    ✓ with ipfs path
-    ✓ with ipfs path, nested value
-    ✓ Promise test
-    ✓ errors on invalid key
-    ✓ errors on unknown path
-    ✓ errors on dir path
-    5) exports a chunk of a file
-  .catReadableStream
-    ✓ returns a Readable Stream for a cid
-    6) exports a chunk of a file in a ReadableStream
-  .catPullStream
-    ✓ returns a Pull Stream for a cid
-    7) exports a chunk of a file in a PullStream
-  .get
-    ✓ with a base58 encoded multihash
-    ✓ with a multihash
-    ✓ large file
-    ✓ directory
-    ✓ with ipfs path, as object and nested value
-    ✓ with ipfs path, as array and nested value
-    ✓ Promise test
-    ✓ errors on invalid key
-  .getReadableStream
-    ✓ returns a Readable Stream of Readable Streams
-  .getPullStream
-    ✓ returns a Pull Stream of Pull Streams
-  .ls
-    ✓ with a base58 encoded CID
-    ✓ should correctly handle a non existing hash
-    ✓ should correctly handle a non exiting path
-  .lsReadableStream
-    ✓ with a base58 encoded CID
-  .lsPullStream
-    ✓ with a base58 encoded CID
-  .stat
-Not supported in js-ipfs or go-ipfs yet
-    - stat outside of mfs
+.bootstrap.add
+  ✓ should return an error when called with an invalid arg
+  ✓ should return a list containing the bootstrap peer when called with a valid arg (ip4)
+  ✓ should return a list of bootstrap peers when called with the default option
 
-.files (MFS Specific)
-  .mkdir
-Not supported in js-ipfs yet
-    - make directory on root
-Not supported in js-ipfs yet
-    - make directory and its parents
-Not supported in js-ipfs yet
-    - make already existent directory
-  .write
-Not supported in js-ipfs yet
-    - expect error
-Not supported in js-ipfs yet
-    - expect no error
-  .cp
-Not supported in js-ipfs yet
-    - copy file, expect error
-Not supported in js-ipfs yet
-    - copy file, expect no error
-Not supported in js-ipfs yet
-    - copy dir, expect error
-Not supported in js-ipfs yet
-    - copy dir, expect no error
-  .mv
-Not supported in js-ipfs yet
-    - move file, expect error
-Not supported in js-ipfs yet
-    - move file, expect no error
-Not supported in js-ipfs yet
-    - move dir, expect error
-Not supported in js-ipfs yet
-    - move dir, expect no error
-  .rm
-Not supported in js-ipfs yet
-    - remove file, expect error
-Not supported in js-ipfs yet
-    - remove file, expect no error
-Not supported in js-ipfs yet
-    - remove dir, expect error
-Not supported in js-ipfs yet
-    - remove dir, expect no error
-  .stat
-Not supported in js-ipfs yet
-    - stat not found, expect error
-Not supported in js-ipfs yet
-    - stat file
-Not supported in js-ipfs yet
-    - stat dir
-    - stat withLocal file
-    - stat withLocal dir
-  .read
-Not supported in js-ipfs yet
-    - read not found, expect error
-Not supported in js-ipfs yet
-    - read file
-  .ls
-Not supported in js-ipfs yet
-    - ls not found, expect error
-Not supported in js-ipfs yet
-    - ls directory
-Not supported in js-ipfs yet
-    - ls -l directory
-  .flush
-Not supported in js-ipfs yet
-    - flush not found, expect error
-Not supported in js-ipfs yet
-    - flush root
-Not supported in js-ipfs yet
-    - flush specific dir
+.bootstrap.list
+  ✓ should return a list of peers
 
-.key
-  .gen
-    8) creates a new rsa key
-  .list
-    9) lists all the keys
-    ✓ contains the created keys
-  .rename
-    10) "before all" hook
-  .rm
-    11) removes a key
-    12) does not contain the removed name
-  exchange
-    13) exports
-    14) imports
-    15) removes
+.bootstrap.rm
+  ✓ should return an error when called with an invalid arg
+  ✓ should return an empty list because no peers removed when called without an arg or options
+  ✓ should return a list containing the peer removed when called with a valid arg (ip4)
+  ✓ should return a list of all peers removed when all option is passed
 
-.miscellaneous
-  ✓ .id
-  ✓ .version
-  ✓ .dns
-  ✓ .id Promises support
-  ✓ .version Promises support
-  ✓ .dns Promises support
-  ✓ .stop
-  16) "after all" hook
+.config.get
+  ✓ should retrieve the whole config
+  ✓ should retrieve the whole config (promised)
+  ✓ should retrieve a value through a key
+  ✓ should retrieve a value through a nested key
+  ✓ should fail on non valid key
+  ✓ should fail on non existent key
 
-.object
-  callback API
-    .new
-      ✓ no layout
-      ✓ template unixfs-dir
-    .put
-      ✓ of object
-      ✓ of json encoded buffer
-      ✓ of protobuf encoded buffer
-      ✓ of buffer treated as Data field
-      ✓ of DAGNode
-      ✓ fails if String is passed
-      ✓ DAGNode with a link
-    .get
-      ✓ with multihash
-      ✓ with multihash (+ links)
-      ✓ with multihash base58 encoded
-      ✓ with multihash base58 encoded toString
-    .data
-      ✓ with multihash
-      ✓ with multihash base58 encoded
-      ✓ with multihash base58 encoded toString
-    .links
-      ✓ object.links with multihash
-      ✓ with multihash (+ links)
-      ✓ with multihash base58 encoded
-      ✓ with multihash base58 encoded toString
-    .stat
-      ✓ with multihash
-      ✓ with multihash (+ Links)
-      ✓ with multihash base58 encoded
-      ✓ with multihash base58 encoded toString
-    .patch
-      ✓ .addLink
-      ✓ .rmLink
-      ✓ .appendData
-      ✓ .setData
-  promise API
-    ✓ object.new
-    ✓ object.put
-    ✓ object.get
-    ✓ object.get multihash string
-    ✓ object.data
-    ✓ object.stat
-    ✓ object.links
-    object.patch
-      ✓ .addLink
-      ✓ .rmLink
-      ✓ .appendData
-      ✓ .setData
+.config.set
+  ✓ should set a new key
+  ✓ should set a new key (promised)
+  ✓ should set an already existing key
+  ✓ should set a JSON object
+  ✓ should fail on non valid key
+  ✓ should fail on non valid value
 
-.pin
-  callback API
-    17) .ls type recursive
-    - .ls type indirect
-    18) .rm
-    19) .add
-    20) .ls
-    21) .ls type direct
-    22) .ls for a specific hash
-  promise API
-    23) .add
-    24) .ls
-    25) .ls hash
-    26) .rm
+.config.replace
+  ✓ should replace the whole config
+  ✓ should replace to empty config
 
-.pubsub
+.dag.get
+  ✓ should get a dag-pb node
+  ✓ should get a dag-cbor node
+  ✓ should get a dag-pb node with path
+  ✓ should get a dag-pb node local value
+  - should get a dag-pb node value one level deep
+  - should get a dag-pb node value two levels deep
+  ✓ should get a dag-cbor node with path
+  ✓ should get a dag-cbor node local value
+  - should get dag-cbor node value one level deep
+  - should get dag-cbor node value two levels deep
+  - should get dag-cbor value via dag-pb node
+  ✓ should get dag-pb value via dag-cbor node
+  ✓ should get by CID string
+  ✓ should get by CID string + path
+
+.dag.put
+  ✓ should put dag-pb with default hash func (sha2-256)
+  ✓ should put dag-pb with custom hash func (sha3-512)
+  ✓ should put dag-cbor with default hash func (sha2-256)
+  ✓ should put dag-cbor with custom hash func (sha3-512)
+  ✓ should return the cid
+  ✓ should not fail when calling put without options
+  ✓ should not fail when calling put without options (promised)
+  ✓ should set defaults when calling put without options
+  ✓ should set defaults when calling put without options (promised)
+  ✓ should override hash algoritm default and resolve with it
+  - should put by passing the cid instead of format and hashAlg
+
+.dag.tree
+  ✓ should get tree with CID
+  ✓ should get tree with CID and path
+  ✓ should get tree with CID and path as String
+  ✓ should get tree with CID recursive (accross different formats)
+  ✓ should get tree with CID and path recursive
+
+.dht.get (TODO: DHT is not implemented in js-ipfs yet!)
+  - should error when getting a non-existent key from the DHT
+  - should get a value after it was put on another node
+
+.dht.put (TODO: DHT is not implemented in js-ipfs yet!)
+  - should put a value on the DHT
+
+.dht.findpeer (TODO: DHT is not implemented in js-ipfs yet!)
+  - should find other peers
+  - should fail to find other peer if peer does not exist
+
+.dht.provide (TODO: DHT is not implemented in js-ipfs yet!)
+  - should provide local CID
+  - should not provide if block not found locally
+  - should allow multiple CIDs to be passed
+  - should provide a CIDv1
+  - should error on non CID arg
+  - should error on array containing non CID arg
+
+.dht.findprovs (TODO: DHT is not implemented in js-ipfs yet!)
+  - should provide from one node and find it through another node
+  - should take options to override timeout config
+
+.dht.query (TODO: DHT is not implemented in js-ipfs yet!)
+  - should return the other node in the query
+
+.files.add
+  ✓ should add a Buffer
+  ✓ should add a Buffer (promised)
+  ✓ should add a BIG Buffer
+  ✓ should add a BIG Buffer with progress enabled
+  ✓ should add a Buffer as tuple
+  ✓ should not be able to add by path
+  ✓ should add readable stream
+  ✓ should add array of objects with readable stream content
+  ✓ should add pull stream
+  - should add pull stream (promised) (https://github.com/ipfs/js-ipfs/issues/1574)
+  ✓ should add array of objects with pull stream content (promised)
+  ✓ should add a nested directory as array of tupples
+  ✓ should add a nested directory as array of tupples with progress
+  ✓ should fail when passed invalid input
+  ✓ should wrap content in a directory
+  ✓ should add with only-hash=true (promised)
+
+.files.addReadableStream
+  ✓ should add readable stream of valid files and dirs
+
+.files.addPullStream
+  ✓ should add pull stream of valid files and dirs
+  ✓ should add with object chunks and pull stream content
+
+.files.cat
+  ✓ should cat with a base58 string encoded multihash
+  ✓ should cat with a base58 string encoded multihash (promised)
+  ✓ should cat with a Buffer multihash
+  ✓ should cat with a CID object
+  ✓ should cat a BIG file
+  ✓ should cat with IPFS path
+  ✓ should cat with IPFS path, nested value
+  ✓ should error on invalid key (promised)
+  ✓ should error on unknown path (promised)
+  ✓ should error on dir path (promised)
+  ✓ should export a chunk of a file
+
+.files.catReadableStream
+  ✓ should return a Readable Stream for a CID
+  ✓ should export a chunk of a file in a Readable Stream
+
+.files.catPullStream
+  ✓ should return a Pull Stream for a CID
+  ✓ should export a chunk of a file in a Pull Stream
+
+.files.get
+  ✓ should get with a base58 encoded multihash
+  ✓ should get with a base58 encoded multihash (promised)
+  ✓ should get with a Buffer multihash
+  ✓ should get a BIG file
+  ✓ should get a directory
+  ✓ should get with ipfs path, as object and nested value
+  ✓ should get with ipfs path, as array and nested value
+  ✓ should error on invalid key
+
+.files.getReadableStream
+  ✓ should return a Readable Stream of Readable Streams
+
+.files.getPullStream
+  ✓ should return a Pull Stream of Pull Streams
+
+.files.mkdir
+  ✓ should make directory on root
+  ✓ should make directory and its parents
+  ✓ should not make already existent directory
+
+.files.write
+  ✓ should not write to non existent file, expect error
+  ✓ should write to non existent file with create flag
+  ✓ should write to deeply nested non existent file with create and parents flags
+
+.files.cp
+  ✓ should copy file, expect error
+  ✓ should copy file, expect no error
+  ✓ should copy dir, expect error
+  ✓ should copy dir, expect no error
+
+.files.mv
+  ✓ should not move not found file/dir, expect error
+  ✓ should move file, expect no error
+  ✓ should move dir, expect no error
+
+.files.rm
+  ✓ should not remove not found file/dir, expect error
+  ✓ should remove file, expect no error
+  ✓ should remove dir, expect no error
+
+.files.stat
+  ✓ should not stat not found file/dir, expect error
+  - should stat file (https://github.com/ipfs/interface-ipfs-core/pull/365)
+  - should stat dir (https://github.com/ipfs/interface-ipfs-core/pull/365)
+  - should stat withLocal file
+  - should stat withLocal dir
+  - should stat outside of mfs (https://github.com/ipfs/interface-ipfs-core/pull/365)
+
+.files.read
+  ✓ should not read not found, expect error
+  ✓ should read file
+
+.files.readReadableStream
+  ✓ should not read not found, expect error
+  ✓ should read file
+
+.files.readPullStream
+  ✓ should not read not found, expect error
+  ✓ should read file
+
+.files.ls
+  ✓ should not ls not found file/dir, expect error
+  ✓ should ls directory
+  ✓ should ls -l directory
+
+.files.flush
+  ✓ should not flush not found file/dir, expect error
+  ✓ should flush root
+  ✓ should flush specific dir
+
+.key.gen
+  ✓ should generate a new rsa key
+
+.key.list
+  ✓ should list all the keys
+
+.key.rename
+  ✓ should rename a key
+
+.key.rm
+  ✓ should rm a key
+
+.key.export
+  ✓ should export "self" key
+
+.key.import
+  ✓ should import an exported key
+
+.ls
+  ✓ should ls with a base58 encoded CID
+  ✓ should correctly handle a non existing hash
+  ✓ should correctly handle a non exiting path
+
+.lsReadableStream
+  ✓ should readable stream ls with a base58 encoded CID
+
+.lsPullStream
+  ✓ should pull stream ls with a base58 encoded CID
+
+.id
+  ✓ should get the node ID
+  ✓ should get the node ID (promised)
+
+.version
+  ✓ should get the node version
+  ✓ should get the node version (promised)
+
+.dns
+  ✓ should resolve a DNS link
+
+.stop
+  ✓ should stop the node
+
+.resolve
+  ✓ should resolve an IPFS hash
+  ✓ should resolve an IPFS path link
+  ✓ should not resolve an IPFS path non-link
+  - should resolve an IPNS DNS link (TODO IPNS not implemented yet)
+  - should resolve IPNS link recursively (TODO IPNS not implemented yet)
+
+.name.publish
+  ✓ should publish an IPNS record with the default params
+  ✓ should publish correctly when the file was not added but resolve is disabled
+  ✓ should publish with a key received as param, instead of using the key of the node
+
+.name.resolve
+  ✓ should resolve a record with the default params after a publish
+  ✓ should not get the entry if its validity time expired
+  ✓ should recursively resolve to an IPFS hash
+
+.object.new
+  ✓ should create a new object with no template
+  ✓ should create a new object with no template (promised)
+  ✓ should create a new object with unixfs-dir template
+
+.object.put
+  ✓ should put an object
+  ✓ should put an object (promised)
+  ✓ should put a JSON encoded Buffer
+  ✓ should put a Protobuf encoded Buffer
+  ✓ should put a Buffer as data
+  ✓ should put a Protobuf DAGNode
+  ✓ should fail if a string is passed
+  ✓ should put a Protobuf DAGNode with a link
+
+.object.get
+  ✓ should get object by multihash
+  ✓ should get object by multihash (promised)
+  ✓ should get object by multihash string
+  ✓ should get object by multihash string (promised)
+  ✓ should get object with links by multihash string
+  ✓ should get object by base58 encoded multihash
+  ✓ should get object by base58 encoded multihash string
+  ✓ supplies unadulterated data
+
+.object.data
+  ✓ should get data by multihash
+  ✓ should get data by multihash (promised)
+  ✓ should get data by base58 encoded multihash
+  ✓ should get data by base58 encoded multihash string
+
+.object.links
+  ✓ should get empty links by multihash
+  ✓ should get empty links by multihash (promised)
+  ✓ should get links by multihash
+  ✓ should get links by base58 encoded multihash
+  ✓ should get links by base58 encoded multihash string
+
+.object.stat
+  ✓ should get stats by multihash
+  ✓ should get stats for object by multihash (promised)
+  ✓ should get stats for object with links by multihash
+  ✓ should get stats by base58 encoded multihash
+  ✓ should get stats by base58 encoded multihash string
+
+.object.patch.addLink
+  ✓ should add a link to an existing node
+  ✓ should add a link to an existing node (promised)
+
+.object.patch.rmLink
+  ✓ should remove a link from an existing node
+  ✓ should remove a link from an existing node (promised)
+
+.object.patch.appendData
+  ✓ should append data to an existing node
+  ✓ should append data to an existing node (promised)
+
+.object.patch.setData
+  ✓ should set data for an existing node
+  ✓ should set data for an existing node (promised)
+
+.pin.ls
+  ✓ should list recursive pins
+  ✓ should list indirect pins
+  ✓ should list pins
+  ✓ should list pins (promised)
+  ✓ should list direct pins
+  ✓ should list pins for a specific hash
+  ✓ should list pins for a specific hash (promised)
+
+.pin.rm
+  ✓ should remove a recursive pin
+  ✓ should remove a direct pin (promised)
+
+.pin.add
+  ✓ should add a pin
+  ✓ should add a pin (promised)
+
+.ping
+  ✓ should send the specified number of packets
+  - should fail when pinging an unknown peer (Timing out)
+  ✓ should fail when pinging an invalid peer
+
+.pingPullStream
+  ✓ should send the specified number of packets over pull stream
+  - should fail when pinging an unknown peer over pull stream (Timing out)
+  ✓ should fail when pinging an invalid peer over pull stream
+
+.pingReadableStream
+  ✓ should send the specified number of packets over readable stream
+  - should fail when pinging an unknown peer over readable stream (Timing out)
+  ✓ should fail when pinging an invalid peer over readable stream
+
+.pubsub.publish
+  ✓ should error on string messags
+  ✓ should publish message from buffer
+  ✓ should publish 10 times within time limit
+
+.pubsub.subscribe
   single node
-    .publish
-      ✓ errors on string messags
-      ✓ message from buffer
-    .subscribe
-      ✓ to one topic
-      ✓ to one topic with Promise
-      ✓ to one topic with options and Promise
-      ✓ attaches multiple event listeners
-      ✓ discover options
-  multiple nodes connected
-    .peers
-      ✓ does not error when not subscribed to a topic
-      ✓ doesn't return extra peers
-      ✓ returns peers for a topic - one peer
-      ✓ lists peers for a topic - multiple peers
-    .ls
-      ✓ empty() list when no topics are subscribed
-      ✓ list with 1 subscribed topic
-      ✓ list with 3 subscribed topics
-    multiple nodes
-      ✓ receive messages from different node
-      ✓ round trips a non-utf8 binary buffer correctly
-      ✓ receive multiple messages
-    load tests
-      ✓ call publish 1k times
-      ✓ call subscribe/unsubscribe 1k times
-      send/receive
-        ✓ send/receive 10k messages
+    ✓ should subscribe to one topic
+    ✓ should subscribe to one topic (promised)
+    ✓ should subscribe to one topic with options
+    ✓ should subscribe to one topic with options (promised)
+    ✓ should subscribe to topic multiple times with different handlers
+    ✓ should allow discover option to be passed
+  multiple connected nodes
+    ✓ should receive messages from a different node
+    ✓ should round trip a non-utf8 binary buffer
+    ✓ should receive multiple messages
+Send/Receive 100 messages took: 86 ms, 1162 ops / s
+    ✓ send/receive 100 messages
 
-.repo
-  ✓ .version
-  ✓ .version Promise
-  ✓ .stat
-  ✓ .stat Promise
-  27) .gc
-  28) .gc Promise
+.pubsub.unsubscribe
+  ✓ should subscribe and unsubscribe 10 times
 
-.stats
-  ✓ .bitswap
-  ✓ .bitswap Promise
-  ✓ .bw
-  ✓ .bw Promise
-  ✓ .bwReadableStream
-  ✓ .bwPullStream
-  ✓ .repo
-  ✓ .repo Promise
+.pubsub.peers
+  ✓ should not error when not subscribed to a topic
+  ✓ should not return extra peers
+  ✓ should return peers for a topic - one peer
+  ✓ should return peers for a topic - multiple peers
 
-.swarm
-  callback API
-    ✓ .connect
-    ✓ time
-    ✓ .addrs
-    ✓ .localAddrs
-    ✓ .disconnect
-    .peers
-      ✓ default
-      ✓ verbose
-      Shows connected peers only once
-        ✓ Connecting two peers with one address each
-        ✓ Connecting two peers with two addresses each
-  promise API
-    ✓ .connect
-    ✓ time
-    ✓ .peers
-    ✓ .addrs
-    ✓ .localAddrs
-    ✓ .disconnect
+.pubsub.ls
+  ✓ should return an empty list when no topics are subscribed
+  ✓ should return a list with 1 subscribed topic
+  ✓ should return a list with 3 subscribed topics
+
+.repo.version
+  ✓ should get the repo version
+  ✓ should get the repo version (promised)
+
+.repo.stat
+  ✓ should get repo stats
+  ✓ should get repo stats (promised)
+
+.repo.gc (TODO: repo.gc is not implemented in js-ipfs yet!)
+  - should run garbage collection
+  - should run garbage collection (promised)
+
+.stats.bitswap
+  ✓ should get bitswap stats
+  ✓ should get bitswap stats (promised)
+
+.stats.bw
+  ✓ should get bandwidth stats
+  ✓ should get bandwidth stats (promised)
+
+.stats.bwPullStream
+  ✓ should get bandwidth stats over pull stream
+
+.stats.bwReadableStream
+  ✓ should get bandwidth stats over readable stream
+
+.stats.repo
+  ✓ should get repo stats
+  ✓ should get repo stats (promised)
+
+.swarm.connect
+  ✓ should connect to a peer
+  ✓ should connect to a peer (promised)
+
+.swarm.peers
+  ✓ should list peers this node is connected to
+  ✓ should list peers this node is connected to (promised)
+  ✓ should list peers this node is connected to with verbose option
+  ✓ should list peers only once
+  ✓ should list peers only once even if they have multiple addresses
+
+.swarm.addrs
+  - should get a list of node addresses (Returning empty array)
+  - should get a list of node addresses (promised) (Returning empty array)
+
+.swarm.localAddrs
+  ✓ should list local addresses the node is listening on
+  ✓ should list local addresses the node is listening on (promised)
+
+.swarm.disconnect
+  ✓ should disconnect from a peer
+  ✓ should disconnect from a peer (promised)
+
+.types (FIXME: currently failing)
+  - should have a types object with the required values
+
+.util (FIXME: currently failing)
+  - should have a util object with the required values
 
 
-187 passing
-47 pending
-28 failing
+261 passing (2m)
+37 pending
 ```
 
 ## Caveats

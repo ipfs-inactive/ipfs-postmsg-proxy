@@ -3,9 +3,17 @@ import { pre } from 'prepost'
 
 export default function (getIpfs, opts) {
   return {
+    export: expose('ipfs.key.export', pre(
+      opts.pre('key.export'),
+      (...args) => getIpfs().key.export(...args)
+    ), opts),
     gen: expose('ipfs.key.gen', pre(
       opts.pre('key.gen'),
       (...args) => getIpfs().key.gen(...args)
+    ), opts),
+    import: expose('ipfs.key.import', pre(
+      opts.pre('key.import'),
+      (...args) => getIpfs().key.import(...args)
     ), opts),
     list: expose('ipfs.key.list', pre(
       opts.pre('key.list'),
