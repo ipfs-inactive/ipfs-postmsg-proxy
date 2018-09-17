@@ -42,12 +42,12 @@ describe('pubsub', () => {
     await ipfsClient.pubsub.subscribe(topic, handler)
 
     // Check the subscription was registered
-    assert.equal(mockIpfs._subs.length, 1)
-    assert.equal(mockIpfs._subs[0].topic, topic)
+    assert.strictEqual(mockIpfs._subs.length, 1)
+    assert.strictEqual(mockIpfs._subs[0].topic, topic)
 
     // Close the proxy server without unsubscribing
     await closeProxyServer(ipfsServer)
 
-    assert.equal(mockIpfs._subs.length, 0)
+    assert.strictEqual(mockIpfs._subs.length, 0)
   })
 })
