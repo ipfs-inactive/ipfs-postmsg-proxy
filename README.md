@@ -1,6 +1,6 @@
 # ipfs-postmsg-proxy
 
-[![Build Status](https://travis-ci.org/tableflip/ipfs-postmsg-proxy.svg?branch=master)](https://travis-ci.org/tableflip/ipfs-postmsg-proxy) [![dependencies Status](https://david-dm.org/tableflip/ipfs-postmsg-proxy/status.svg)](https://david-dm.org/tableflip/ipfs-postmsg-proxy) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![IPFS core API compatible](https://img.shields.io/badge/ipfs%20core%20api-compatible-brightgreen.svg)](https://github.com/ipfs/interface-ipfs-core)
+[![Build Status](https://travis-ci.org/ipfs-shipyard/ipfs-postmsg-proxy.svg?branch=master)](https://travis-ci.org/ipfs-shipyard/ipfs-postmsg-proxy) [![dependencies Status](https://david-dm.org/ipfs-shipyard/ipfs-postmsg-proxy/status.svg)](https://david-dm.org/ipfs-shipyard/ipfs-postmsg-proxy) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![IPFS core API compatible](https://img.shields.io/badge/ipfs%20core%20api-compatible-brightgreen.svg)](https://github.com/ipfs/interface-ipfs-core)
 
 > Proxy to an IPFS over window.postMessage
 
@@ -648,8 +648,8 @@ The progress option for `files.add` currently tracks progress of data streamed t
 
 ## Contribute
 
-Feel free to dive in! [Open an issue](https://github.com/tableflip/ipfs-postmsg-proxy/issues/new) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/ipfs-shipyard/ipfs-postmsg-proxy/issues/new) or submit PRs.
 
 ## License
 
-[MIT](LICENSE) © Alan Shaw
+[MIT](LICENSE) © Protocol Labs
