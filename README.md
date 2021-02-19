@@ -1,8 +1,8 @@
-# Deprecated
+# ⚠️ Deprecated ⚠️
 
 This library has been deprecated and replaced with more flexible universal libraries for sharing API instance across message port:
 
-- https://www.npmjs.com/package/ipfs-message-port-server
+- https://www.npmjs.com/package/ipfs-message-port-server 👈 💚
 - https://www.npmjs.com/package/ipfs-message-port-client
 
 *This library will not be maintained.*
@@ -13,7 +13,7 @@ This library has been deprecated and replaced with more flexible universal libra
 
 # ipfs-postmsg-proxy
 
-[![Build Status](https://travis-ci.org/ipfs-shipyard/ipfs-postmsg-proxy.svg?branch=master)](https://travis-ci.org/ipfs-shipyard/ipfs-postmsg-proxy) [![dependencies Status](https://david-dm.org/ipfs-shipyard/ipfs-postmsg-proxy/status.svg)](https://david-dm.org/ipfs-shipyard/ipfs-postmsg-proxy) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![IPFS core API compatible](https://img.shields.io/badge/ipfs%20core%20api-compatible-brightgreen.svg)](https://github.com/ipfs/interface-ipfs-core)
+[![Build Status](https://travis-ci.org/ipfs-shipyard/ipfs-postmsg-proxy.svg?branch=master)](https://travis-ci.org/ipfs-shipyard/ipfs-postmsg-proxy) [![dependencies Status](https://david-dm.org/ipfs-shipyard/ipfs-postmsg-proxy/status.svg)](https://david-dm.org/ipfs-shipyard/ipfs-postmsg-proxy)  [![deprecated](https://img.shields.io/badge/status-deprecated-red.svg)](https://www.npmjs.com/package/ipfs-message-port-server)
 
 > Proxy to an IPFS over window.postMessage
 
